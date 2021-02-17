@@ -11,7 +11,7 @@ with open(os.path.join("optic_object_wavefronts/version.py")) as f:
 setuptools.setup(
     name="optic_object_wavefronts",
     version=version["__version__"],
-    description="Creating the geometry of optical components",
+    description="Representing optical components using object wavefronts",
     long_description=long_description,
     long_description_content_type="text/markdown",
     author="Sebastian Achim Mueller",
