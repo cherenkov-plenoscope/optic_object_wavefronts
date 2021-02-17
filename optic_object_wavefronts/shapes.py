@@ -1,7 +1,8 @@
 from . import Mesh
+from . import regular_polygon
+from . import delaunay
+
 import numpy as np
-import scipy
-from scipy import spatial
 from . import geometry as optical_geometry
 
 HEXA = np.array([1.0, 0.0, 0.0])
@@ -93,25 +94,13 @@ def make_spherical_hex_cap(outer_hex_radius, curvature_radius, num_steps=10):
     return m
 
 
-def make_regular_polygon(ref="ring", n=16, phi_off=0.0):
-    vertices = {}
-    for nphi, phi in enumerate(
-        np.linspace(0.0, 2.0 * np.pi, n, endpoint=False)
-    ):
-        vertices[(ref, nphi)] = np.array(
-            [np.cos(phi_off + phi), np.sin(phi_off + phi), 0.0]
-        )
-    return vertices
-
-
 def make_disc_mesh(ref="disc", radius=1.0, n=6, phi_off=0.0):
-    inner_radius = radius * optical_geometry.inner_radius_of_regular_polygon(
-        n=n
-    )
+    inner_radius = radius * regular_polygon.inner_radius(n=n)
 
     mesh = Mesh.init()
-    mesh["vertices"] = make_regular_polygon(
-        ref=ref + "/" + "ring", n=n, phi_off=phi_off
+    mesh["vertices"] = regular_polygon.make_vertices_xy(
+        outer_radius=1.0,
+        ref=ref + "/" + "ring", n=n, rot=phi_off
     )
 
     for vkey in mesh["vertices"]:
@@ -121,8 +110,9 @@ def make_disc_mesh(ref="disc", radius=1.0, n=6, phi_off=0.0):
     next_radius = 0.8 * inner_radius
     v_inner_idx = 0
     while next_n >= 6:
-        inner_vertices = make_regular_polygon(
-            ref=ref + "/" + "inner", n=next_n, phi_off=phi_off
+        inner_vertices = regular_polygon.make_vertices_xy(
+            outer_radius=1.0,
+            ref=ref + "/" + "inner", n=next_n, rot=phi_off
         )
 
         for inner_vkey in inner_vertices:
@@ -136,24 +126,11 @@ def make_disc_mesh(ref="disc", radius=1.0, n=6, phi_off=0.0):
     vnkey = (ref, 0)
     mesh["vertex_normals"][vnkey] = np.array([0.0, 0.0, 1.0])
 
-    vs = []
-    vkeys = []
-    for vkey in mesh["vertices"]:
-        vkeys.append(vkey)
-        vs.append(mesh["vertices"][vkey][0:2])
-    vs = np.array(vs)
+    delfaces = delaunay.make_faces_xy(vertices=mesh["vertices"], ref=ref)
 
-    del_tri = spatial.Delaunay(points=vs)
-    del_faces = del_tri.simplices
-
-    for fidx, del_face in enumerate(del_faces):
-        fkey = (ref, fidx)
+    for fkey in delfaces:
         mesh["faces"][fkey] = {
-            "vertices": [
-                vkeys[del_face[0]],
-                vkeys[del_face[1]],
-                vkeys[del_face[2]],
-            ],
+            "vertices": delfaces[fkey]["vertices"],
             "vertex_normals": [vnkey, vnkey, vnkey],
         }
 

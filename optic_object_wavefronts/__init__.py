@@ -3,6 +3,9 @@ from . import plot
 from . import Mesh
 from . import geometry
 from . import shapes
+from . import lens
+from . import regular_polygon
+from . import delaunay
 
 
 def _mesh_to_obj(mesh):
@@ -49,6 +52,7 @@ def _obj_to_wavefront(obj):
     for vn in obj["vn"]:
         s.append("vn {:f} {:f} {:f}".format(vn[0], vn[1], vn[2]))
     s.append("# faces")
+    s.append("usemtl A")
     for f in obj["f"]:
         s.append(
             "f {:d}//{:d} {:d}//{:d} {:d}//{:d}".format(
