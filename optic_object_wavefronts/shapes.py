@@ -93,7 +93,7 @@ def make_spherical_hex_cap(outer_hex_radius, curvature_radius, num_steps=10):
     return m
 
 
-def make_vertices_ring(ref="ring", n=16, phi_off=0.0):
+def make_regular_polygon(ref="ring", n=16, phi_off=0.0):
     vertices = {}
     for nphi, phi in enumerate(
         np.linspace(0.0, 2.0 * np.pi, n, endpoint=False)
@@ -110,7 +110,7 @@ def make_disc_mesh(ref="disc", radius=1.0, n=6, phi_off=0.0):
     )
 
     mesh = Mesh.init()
-    mesh["vertices"] = make_vertices_ring(
+    mesh["vertices"] = make_regular_polygon(
         ref=ref + "/" + "ring", n=n, phi_off=phi_off
     )
 
@@ -121,7 +121,7 @@ def make_disc_mesh(ref="disc", radius=1.0, n=6, phi_off=0.0):
     next_radius = 0.8 * inner_radius
     v_inner_idx = 0
     while next_n >= 6:
-        inner_vertices = make_vertices_ring(
+        inner_vertices = make_regular_polygon(
             ref=ref + "/" + "inner", n=next_n, phi_off=phi_off
         )
 
