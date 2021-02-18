@@ -7,7 +7,6 @@ from .. import hexagonal_grid
 import numpy as np
 
 
-
 def make_round_mesh(
     outer_radius,
     curvature_radius,
@@ -48,7 +47,6 @@ def _make_mesh(
     ref="SphericalCap"
 ):
     outer_limits = polygon.limits(outer_polygon)
-    print(outer_limits)
     outer_radius_xy = np.max([
         np.max(np.abs(outer_limits[0])),
         np.max(np.abs(outer_limits[1]))
