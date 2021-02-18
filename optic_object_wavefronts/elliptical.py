@@ -1,10 +1,11 @@
 import numpy as np
 
+
 class QuadraticEquation:
     def __init__(self, p, q):
         self.p_over_2 = 0.5 * float(p)
         self.q = float(q)
-        self.inner_part_of_sqrt = self.p_over_2*self.p_over_2 - self.q
+        self.inner_part_of_sqrt = self.p_over_2 * self.p_over_2 - self.q
 
         if self.has_real_solution():
             self.sqrt = np.sqrt(inner_part_of_sqrt)
@@ -58,9 +59,9 @@ def ray_intersection(support, direction, radius_x, radius_y, radius_z):
     B = float(radius_y)
     C = float(radius_z)
 
-    iAA = 1.0/(A*A)
-    iBB = 1.0/(B*B)
-    iCC = 1.0/(C*C)
+    iAA = 1.0 / (A * A)
+    iBB = 1.0 / (B * B)
+    iCC = 1.0 / (C * C)
 
     bx = float(support[0])
     by = float(support[1])
@@ -70,17 +71,17 @@ def ray_intersection(support, direction, radius_x, radius_y, radius_z):
     dy = float(direction[1])
     dz = float(direction[2])
 
-    _a = (dx*dx)*iAA + (dy*dy)*iBB +  (dz*dz)*iCC;
-    _b = 2.0*( (bx*dx)*iAA + (by*dy)*iBB + dz*(bz-C)*iCC);
-    _c = (bx*bx)*iAA + (by*by)*iBB +  (bz*bz-2.0*bz*C)*iCC;
+    _a = (dx * dx) * iAA + (dy * dy) * iBB + (dz * dz) * iCC
+    _b = 2.0 * ((bx * dx) * iAA + (by * dy) * iBB + dz * (bz - C) * iCC)
+    _c = (bx * bx) * iAA + (by * by) * iBB + (bz * bz - 2.0 * bz * C) * iCC
 
-    return QuadraticEquation(p=_b/_a, q=_c/_a)
+    return QuadraticEquation(p=_b / _a, q=_c / _a)
 
 
 def surface_height(x, y, focal_length_x, focal_length_y):
     radius_x, radius_y, radius_z = _elliptic_radii(
-        focal_length_x,
-        focal_length_y)
+        focal_length_x, focal_length_y
+    )
     eq = ray_intersection(
         support=np.array([x, y, 0.0]),
         direction=np.array([0.0, 0.0, 1.0]),
@@ -104,22 +105,26 @@ def surface_normal(x, y, focal_length_x, focal_length_y):
     """
 
     radius_x, radius_y, radius_z = _elliptic_radii(
-        focal_length_x,
-        focal_length_y)
+        focal_length_x, focal_length_y
+    )
 
     A = float(radius_x)
     B = float(radius_y)
     C = float(radius_z)
 
-    iAA = 1.0/(A*A)
-    iBB = 1.0/(B*B)
-    iCC = 1.0/(C*C)
+    iAA = 1.0 / (A * A)
+    iBB = 1.0 / (B * B)
+    iCC = 1.0 / (C * C)
 
-    surface_normal_factor = C * 0.5 * np.sqrt(1.0 - (x*x)*iAA - (y*y)*iBB)
+    surface_normal_factor = (
+        C * 0.5 * np.sqrt(1.0 - (x * x) * iAA - (y * y) * iBB)
+    )
 
-    normal = np.array([
-        surface_normal_factor*(-2.0*x*iAA),
-        surface_normal_factor*(-2.0*y*iAA),
-        1.0
-    ])
-    return normal/np.linalg.norm(normal)
+    normal = np.array(
+        [
+            surface_normal_factor * (-2.0 * x * iAA),
+            surface_normal_factor * (-2.0 * y * iAA),
+            1.0,
+        ]
+    )
+    return normal / np.linalg.norm(normal)

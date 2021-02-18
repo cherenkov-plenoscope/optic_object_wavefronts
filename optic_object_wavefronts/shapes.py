@@ -68,7 +68,7 @@ def make_spherical_hex_cap(outer_hex_radius, curvature_radius, num_steps=10):
         m["vertices"][vkey][2] = spherical.surface_height(
             x=m["vertices"][vkey][0],
             y=m["vertices"][vkey][1],
-            curvature_radius=curvature_radius
+            curvature_radius=curvature_radius,
         )
 
     # vertex-normals
@@ -78,7 +78,8 @@ def make_spherical_hex_cap(outer_hex_radius, curvature_radius, num_steps=10):
         m["vertex_normals"][vnkey] = spherical.surface_normal(
             x=m["vertices"][vkey][0],
             y=m["vertices"][vkey][1],
-            curvature_radius=curvature_radius)
+            curvature_radius=curvature_radius,
+        )
 
     for fkey in m["faces"]:
         v0_key = m["faces"][fkey]["vertices"][0]
@@ -97,8 +98,7 @@ def make_disc_mesh(ref="disc", radius=1.0, n=6, phi_off=0.0):
 
     mesh = Mesh.init()
     mesh["vertices"] = regular_polygon.make_vertices_xy(
-        outer_radius=1.0,
-        ref=ref + "/" + "ring", n=n, rot=phi_off
+        outer_radius=1.0, ref=ref + "/" + "ring", n=n, rot=phi_off
     )
 
     for vkey in mesh["vertices"]:
@@ -109,8 +109,7 @@ def make_disc_mesh(ref="disc", radius=1.0, n=6, phi_off=0.0):
     v_inner_idx = 0
     while next_n >= 6:
         inner_vertices = regular_polygon.make_vertices_xy(
-            outer_radius=1.0,
-            ref=ref + "/" + "inner", n=next_n, rot=phi_off
+            outer_radius=1.0, ref=ref + "/" + "inner", n=next_n, rot=phi_off
         )
 
         for inner_vkey in inner_vertices:

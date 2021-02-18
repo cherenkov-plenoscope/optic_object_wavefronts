@@ -10,7 +10,7 @@ def make_vertices_xy(outer_radius=1.0, ref="ring", n=16, rot=0.0):
             [
                 outer_radius * np.cos(rot + phi),
                 outer_radius * np.sin(rot + phi),
-                0.0
+                0.0,
             ]
         )
     return vertices

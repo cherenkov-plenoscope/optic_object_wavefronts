@@ -14,7 +14,7 @@ HEXB = np.array([0.5, np.sqrt(3.0) / 2.0, 0.0])
 
 
 def make_hex_grid(outer_radius=1.0, ref="hex", n=10):
-    spacing = float(outer_radius/n)
+    spacing = float(outer_radius / n)
     N = int(n)
     vertices = {}
     for dA in np.arange(-N, N + 1, 1):
@@ -26,9 +26,18 @@ def make_hex_grid(outer_radius=1.0, ref="hex", n=10):
     return vertices
 
 
-def make_hex_mesh_in_regular_polygon(outer_radius, n_poly, n_hex, ref="HexGridInPoly"):
-    g = make_hex_grid(outer_radius=outer_radius*1.5, ref=os.path.join(ref, "hex"), n=n_hex)
-    r = regular_polygon.make_vertices_xy(outer_radius=outer_radius, ref=os.path.join(ref, "ring"), n=n_poly, rot=0.0)
+def make_hex_mesh_in_regular_polygon(
+    outer_radius, n_poly, n_hex, ref="HexGridInPoly"
+):
+    g = make_hex_grid(
+        outer_radius=outer_radius * 1.5, ref=os.path.join(ref, "hex"), n=n_hex
+    )
+    r = regular_polygon.make_vertices_xy(
+        outer_radius=outer_radius,
+        ref=os.path.join(ref, "ring"),
+        n=n_poly,
+        rot=0.0,
+    )
 
     mesh = Mesh.init()
 
@@ -47,7 +56,6 @@ def make_hex_mesh_in_regular_polygon(outer_radius, n_poly, n_hex, ref="HexGridIn
             "vertex_normals": [vnkey, vnkey, vnkey],
         }
     return mesh
-
 
 
 def mask_vertices_inside_polygon(vertices, polygon):
