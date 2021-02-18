@@ -9,7 +9,7 @@ from . import spherical
 from . import elliptical
 from . import primitives
 from . import inside_polygon
-
+from . import hexagonal_grid
 
 def _mesh_to_obj(mesh):
     """
