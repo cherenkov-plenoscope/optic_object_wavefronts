@@ -93,47 +93,6 @@ def make_spherical_hex_cap(outer_hex_radius, curvature_radius, num_steps=10):
     return m
 
 
-def make_disc_mesh(ref="disc", radius=1.0, n=6, phi_off=0.0):
-    inner_radius = radius * regular_polygon.inner_radius(n=n)
-
-    mesh = Mesh.init()
-    mesh["vertices"] = regular_polygon.make_vertices_xy(
-        outer_radius=1.0, ref=ref + "/" + "ring", n=n, rot=phi_off
-    )
-
-    for vkey in mesh["vertices"]:
-        mesh["vertices"][vkey] = radius * mesh["vertices"][vkey]
-
-    next_n = int(np.round(n / 3))
-    next_radius = 0.8 * inner_radius
-    v_inner_idx = 0
-    while next_n >= 6:
-        inner_vertices = regular_polygon.make_vertices_xy(
-            outer_radius=1.0, ref=ref + "/" + "inner", n=next_n, rot=phi_off
-        )
-
-        for inner_vkey in inner_vertices:
-            _vkey = (ref + "/inner", v_inner_idx)
-            mesh["vertices"][_vkey] = next_radius * inner_vertices[inner_vkey]
-            v_inner_idx += 1
-
-        next_radius = 0.8 * next_radius
-        next_n = int(np.round(next_n / 3))
-
-    vnkey = (ref, 0)
-    mesh["vertex_normals"][vnkey] = np.array([0.0, 0.0, 1.0])
-
-    delfaces = delaunay.make_faces_xy(vertices=mesh["vertices"], ref=ref)
-
-    for fkey in delfaces:
-        mesh["faces"][fkey] = {
-            "vertices": delfaces[fkey]["vertices"],
-            "vertex_normals": [vnkey, vnkey, vnkey],
-        }
-
-    return mesh
-
-
 def make_cylinder_mesh(
     ref="cylinder", radius=1.0, length=1.0, n=6, phi_off=0.0
 ):

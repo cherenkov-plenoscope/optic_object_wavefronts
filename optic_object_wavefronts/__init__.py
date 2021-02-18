@@ -7,6 +7,7 @@ from . import regular_polygon
 from . import delaunay
 from . import spherical
 from . import elliptical
+from . import primitives
 
 
 def _mesh_to_obj(mesh):
