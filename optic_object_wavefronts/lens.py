@@ -2,7 +2,7 @@ from . import Mesh
 from . import regular_polygon
 from . import delaunay
 from . import hexagonal_grid
-from . import inside_polygon
+from . import polygon
 import numpy as np
 
 
@@ -21,7 +21,7 @@ def make_hex_mesh_in_regular_polygon(
 
     mesh = Mesh.init()
 
-    mesh["vertices"] = inside_polygon.get_vertices(vertices=g, polygon=r)
+    mesh["vertices"] = polygon.get_vertices_inside(vertices=g, polygon=r)
     for vkey in r:
         mesh["vertices"][vkey] = r[vkey]
 
