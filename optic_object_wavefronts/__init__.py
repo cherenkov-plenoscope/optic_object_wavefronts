@@ -1,12 +1,12 @@
 from .version import __version__
 from . import plot
 from . import Mesh
-from . import geometry
 from . import shapes
 from . import lens
 from . import regular_polygon
 from . import delaunay
 from . import spherical
+from . import elliptical
 
 
 def _mesh_to_obj(mesh):

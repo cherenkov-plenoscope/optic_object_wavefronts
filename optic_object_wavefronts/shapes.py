@@ -4,7 +4,6 @@ from . import delaunay
 from . import spherical
 
 import numpy as np
-from . import geometry as optical_geometry
 
 HEXA = np.array([1.0, 0.0, 0.0])
 HEXB = np.array([0.5, np.sqrt(3.0) / 2.0, 0.0])
