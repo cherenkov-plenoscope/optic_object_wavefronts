@@ -29,7 +29,3 @@ def z_sphere(distance_to_z_axis, curvature_radius):
     return curvature_radius - np.sqrt(
         curvature_radius ** 2 - distance_to_z_axis ** 2
     )
-
-
-def inner_radius_of_regular_polygon(n):
-    return 1.0 * np.cos(np.pi / n)

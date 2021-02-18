@@ -1,6 +1,7 @@
 from . import Mesh
 from . import regular_polygon
 from . import delaunay
+from . import spherical
 
 import numpy as np
 from . import geometry as optical_geometry
@@ -65,22 +66,20 @@ def make_spherical_hex_cap(outer_hex_radius, curvature_radius, num_steps=10):
 
     # elevate z-axis
     for vkey in m["vertices"]:
-        distance_to_z_axis = np.hypot(
-            m["vertices"][vkey][0], m["vertices"][vkey][1]
-        )
-        m["vertices"][vkey][2] = optical_geometry.z_sphere(
-            distance_to_z_axis=distance_to_z_axis,
-            curvature_radius=curvature_radius,
+        m["vertices"][vkey][2] = spherical.surface_height(
+            x=m["vertices"][vkey][0],
+            y=m["vertices"][vkey][1],
+            curvature_radius=curvature_radius
         )
 
     # vertex-normals
     # --------------
-    center_of_curvature = np.array([0.0, 0.0, curvature_radius])
     for vkey in m["vertices"]:
-        diff = center_of_curvature - m["vertices"][vkey]
-        normal = diff / np.linalg.norm(diff)
         vnkey = (vkey[0], vkey[1], "c")
-        m["vertex_normals"][vnkey] = np.array(normal)
+        m["vertex_normals"][vnkey] = spherical.surface_normal(
+            x=m["vertices"][vkey][0],
+            y=m["vertices"][vkey][1],
+            curvature_radius=curvature_radius)
 
     for fkey in m["faces"]:
         v0_key = m["faces"][fkey]["vertices"][0]

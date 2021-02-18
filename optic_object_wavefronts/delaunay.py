@@ -4,6 +4,9 @@ from scipy import spatial as scipy_spatial
 
 
 def make_faces_xy(vertices, ref):
+    """
+    Create the faces based on the vertices x, and y components.
+    """
     vertices_xy = []
     vkeys = []
     for vkey in vertices:

@@ -6,6 +6,7 @@ from . import shapes
 from . import lens
 from . import regular_polygon
 from . import delaunay
+from . import spherical
 
 
 def _mesh_to_obj(mesh):
