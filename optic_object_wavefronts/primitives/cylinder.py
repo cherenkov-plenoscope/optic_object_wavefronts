@@ -15,8 +15,10 @@ def weave_cylinder_faces(
     mesh,
     ref,
     vkey_lower,
-    vkey_upper
+    vkey_upper,
+    norm_sign=1.0
 ):
+    assert np.abs(norm_sign) == 1.0
 
     num_v_lower = len(_find_keys(mesh["vertices"], vkey_lower))
     num_v_upper = len(_find_keys(mesh["vertices"], vkey_upper))
@@ -38,17 +40,17 @@ def weave_cylinder_faces(
         if (ref + "/side/top", n_a) not in mesh["vertex_normals"]:
             mesh["vertex_normals"][
                 (ref + "/side/top", n_a)
-            ] = va / np.linalg.norm(va)
+            ] = norm_sign * va / np.linalg.norm(va)
 
         if (ref + "/side/top", n_b) not in mesh["vertex_normals"]:
             mesh["vertex_normals"][
                 (ref + "/side/top", n_b)
-            ] = vb / np.linalg.norm(vb)
+            ] = norm_sign * vb / np.linalg.norm(vb)
 
         if (ref + "/side/bot", n_c) not in mesh["vertex_normals"]:
             mesh["vertex_normals"][
                 (ref + "/side/bot", n_c)
-            ] = vc / np.linalg.norm(vc)
+            ] = norm_sign * vc / np.linalg.norm(vc)
 
         side_fkey = (ref + "/side_ttb", ni)
         mesh["faces"][side_fkey] = {
@@ -81,17 +83,17 @@ def weave_cylinder_faces(
         if (ref + "/side/bot", n_a) not in mesh["vertex_normals"]:
             mesh["vertex_normals"][
                 (ref + "/side/bot", n_a)
-            ] = va / np.linalg.norm(va)
+            ] = norm_sign * va / np.linalg.norm(va)
 
         if (ref + "/side/bot", n_b) not in mesh["vertex_normals"]:
             mesh["vertex_normals"][
                 (ref + "/side/bot", n_b)
-            ] = vb / np.linalg.norm(vb)
+            ] = norm_sign * vb / np.linalg.norm(vb)
 
         if (ref + "/side/top", n_c) not in mesh["vertex_normals"]:
             mesh["vertex_normals"][
                 (ref + "/side/top", n_c)
-            ] = vc / np.linalg.norm(vc)
+            ] = norm_sign * vc / np.linalg.norm(vc)
 
         side_fkey = (ref + "/side_bbt", ni)
         mesh["faces"][side_fkey] = {

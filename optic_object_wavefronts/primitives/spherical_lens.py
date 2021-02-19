@@ -13,9 +13,11 @@ def make_mesh(
     n_hex_grid,
     rot,
     ref,
+    inner_radius=None
 ):
     top = spherical_cap.make_round_mesh(
         outer_radius=outer_radius,
+        inner_radius=inner_radius,
         curvature_radius=-1.0 * curvature_radius_top,
         ref=ref + "/top",
         n_polygon=n_polygon,
@@ -24,6 +26,7 @@ def make_mesh(
     )
     bot = spherical_cap.make_round_mesh(
         outer_radius=outer_radius,
+        inner_radius=inner_radius,
         curvature_radius=-1.0 * curvature_radius_bot,
         ref=ref + "/bot",
         n_polygon=n_polygon,
@@ -55,7 +58,17 @@ def make_mesh(
         mesh=mesh,
         vkey_lower=ref + "/bot/ring",
         vkey_upper=ref + "/top/ring",
-        ref=ref,
+        ref=ref + "/outer",
+        norm_sign=+1.0,
     )
+
+    if inner_radius is not None:
+        mesh = cylinder.weave_cylinder_faces(
+            mesh=mesh,
+            vkey_lower=ref + "/bot/inner_ring",
+            vkey_upper=ref + "/top/inner_ring",
+            ref=ref + "/inner",
+            norm_sign=-1.0,
+        )
 
     return mesh

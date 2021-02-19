@@ -25,6 +25,7 @@ def test_baker_nunn():
 
     mirror = oow.primitives.spherical_lens.make_mesh(
         outer_radius=mirror_radius,
+        inner_radius=0.0254,
         curvature_radius_top=-mirror_curvature_radius,
         curvature_radius_bot=-mirror_curvature_radius - mirror_thickness,
         offset=mirror_thickness,
