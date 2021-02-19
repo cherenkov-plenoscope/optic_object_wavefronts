@@ -146,9 +146,15 @@ def make_mesh(
     for vnkey in bot["vertex_normals"]:
         mesh["vertex_normals"][vnkey] = [0, 0, -1]
 
-    mesh = weave_cylinder_faces(mesh=mesh,
+    mesh = weave_cylinder_faces(
+        mesh=mesh,
         vkey_lower="cylinder/bot/ring",
-        vkey_upper="cylinder/top/ring"
+        vkey_upper="cylinder/top/ring",
+        ref=ref + "/outer",
     )
+
+    mesh["materials"][ref+"_top"] = ["top"]
+    mesh["materials"][ref+"_bottom"] = ["bot"]
+    mesh["materials"][ref+"_outer_side"] = ["outer"]
 
     return mesh

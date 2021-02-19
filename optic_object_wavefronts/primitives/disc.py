@@ -45,4 +45,6 @@ def make_mesh(outer_radius=1.0, n=6, rot=0.0, ref="disc"):
             "vertex_normals": [vnkey, vnkey, vnkey],
         }
 
+    mesh["materials"][ref] = [ref]
+
     return mesh

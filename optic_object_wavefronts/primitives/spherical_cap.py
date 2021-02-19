@@ -117,4 +117,6 @@ def _make_mesh(
         for fkey in fkeys_to_be_removed:
             mesh["faces"].pop(fkey)
 
+    mesh["materials"][ref] = [ref]
+
     return mesh

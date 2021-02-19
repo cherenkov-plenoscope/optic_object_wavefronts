@@ -71,4 +71,10 @@ def make_mesh(
             norm_sign=-1.0,
         )
 
+    mesh["materials"][ref+"_top"] = [ref + "/top"]
+    mesh["materials"][ref+"_bottom"] = [ref + "/bot"]
+    mesh["materials"][ref+"_outer_side"] = [ref + "/outer"]
+    if inner_radius is not None:
+        mesh["materials"][ref+"_inner_side"] = [ref + "/inner"]
+
     return mesh

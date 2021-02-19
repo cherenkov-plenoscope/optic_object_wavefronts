@@ -2,7 +2,7 @@ import copy
 
 
 def init():
-    return {"vertices": {}, "faces": {}, "vertex_normals": {}}
+    return {"vertices": {}, "faces": {}, "vertex_normals": {}, "materials": {}}
 
 
 def translate(mesh, v):
@@ -27,4 +27,8 @@ def merge(a, b):
     for fkey in b["faces"]:
         assert fkey not in out["faces"]
         out["faces"][fkey] = copy.deepcopy(b["faces"][fkey])
+
+    for mkey in b["materials"]:
+        assert mkey not in out["materials"]
+        out["materials"][mkey] = copy.deepcopy(b["materials"][mkey])
     return out
