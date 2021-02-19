@@ -13,10 +13,7 @@ def make_hex_mesh_in_regular_polygon(
         outer_radius=outer_radius * 1.5, ref=ref + "/hex", n=n_hex
     )
     r = regular_polygon.make_vertices_xy(
-        outer_radius=outer_radius,
-        ref=ref + "/ring",
-        n=n_poly,
-        rot=0.0,
+        outer_radius=outer_radius, ref=ref + "/ring", n=n_poly, rot=0.0,
     )
 
     mesh = Mesh.init()

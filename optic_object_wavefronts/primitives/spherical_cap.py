@@ -13,19 +13,22 @@ def make_round_mesh(
     inner_radius=None,
     n_polygon=17,
     n_hex_grid=10,
-    ref="SphericalCap"
+    ref="SphericalCap",
+    rot=0.0,
 ):
     outer_polygon = regular_polygon.make_vertices_xy(
         outer_radius=outer_radius,
         n=n_polygon,
-        ref=ref + "/OuterPolygon"
+        ref=ref + "/ring",
+        rot=rot,
     )
 
     if inner_radius is not None:
         inner_polygon = regular_polygon.make_vertices_xy(
             outer_radius=inner_radius,
             n=n_polygon,
-            ref=ref + "/InnerPolygon"
+            ref=ref + "/inner_ring",
+            rot=rot,
         )
     else:
         inner_polygon = None
@@ -53,9 +56,9 @@ def _make_mesh(
     ])
 
     hex_vertices = hexagonal_grid.make_vertices_xy(
-        outer_radius=outer_radius_xy*1.1,
+        outer_radius=outer_radius_xy*1.5,
         n=n_hex_grid,
-        ref=ref + "/grid"
+        ref=ref + "/Grid"
     )
 
     hex_vertices_valid = polygon.get_vertices_inside(
