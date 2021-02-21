@@ -20,6 +20,7 @@ setuptools.setup(
     license="GPL v3",
     packages=["optic_object_wavefronts"],
     python_requires=">=3",
+    install_requires=["shapely",],
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
