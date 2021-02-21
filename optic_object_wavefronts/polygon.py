@@ -1,5 +1,6 @@
 import numpy as np
 import shapely
+import collections
 from shapely import geometry as shapely_geometry
 
 
@@ -38,7 +39,7 @@ def mask_vertices_inside(vertices, polygon):
 
 
 def get_vertices_inside(vertices, polygon):
-    out = {}
+    out = collections.OrderedDict()
     mask = mask_vertices_inside(vertices, polygon)
     for i, vkey in enumerate(vertices):
         if mask[i]:
@@ -47,7 +48,7 @@ def get_vertices_inside(vertices, polygon):
 
 
 def get_vertices_outside(vertices, polygon):
-    out = {}
+    out = collections.OrderedDict()
     mask = mask_vertices_inside(vertices, polygon)
     for i, vkey in enumerate(vertices):
         if not mask[i]:
@@ -86,3 +87,36 @@ def mask_face_inside(vertices, faces, polygon):
             mask.append(False)
 
     return mask
+
+
+def add_vertices_in_between(vertices, step_length):
+    vout = collections.OrderedDict()
+    vkeys = list(vertices.keys())
+    for i in range(len(vkeys) - 1):
+        vkey_start = vkeys[i]
+        v_start = np.array(vertices[vkey_start])
+        vkey_stop = vkeys[i + 1]
+        v_stop = np.array(vertices[vkey_stop])
+
+        length_start_stop = np.linalg.norm(v_start - v_stop)
+        num_steps = int(np.ceil(length_start_stop/step_length))
+
+        xs = np.linspace(v_start[0], v_stop[0], num_steps, endpoint=False)
+        ys = np.linspace(v_start[1], v_stop[1], num_steps, endpoint=False)
+        zs = np.linspace(v_start[2], v_stop[2], num_steps, endpoint=False)
+
+        for n in range(num_steps):
+            vout[(vkey_start[0] + "_{:d}".format(n), vkey_start[1])] = np.array([
+                xs[i], ys[i], zs[i]
+            ])
+
+    vkey_start = vkeys[-1]
+    v_start = np.array(vertices[vkey_start])
+    vkey_stop = vkeys[0]
+    v_stop = np.array(vertices[vkey_stop])
+    for n in range(num_steps):
+        vout[(vkey_start[0] + "_{:d}".format(n), vkey_start[1])] = np.array([
+            xs[i], ys[i], zs[i]
+        ])
+
+    return vout
