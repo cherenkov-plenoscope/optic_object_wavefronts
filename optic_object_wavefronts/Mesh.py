@@ -36,3 +36,29 @@ def merge(a, b):
         assert mkey not in out["materials"]
         out["materials"][mkey] = copy.deepcopy(b["materials"][mkey])
     return out
+
+
+def remove_unused_vertices_and_vertex_normals(mesh):
+    out = init()
+    out["faces"] = copy.deepcopy(mesh["faces"])
+    out["materials"] = copy.deepcopy(mesh["materials"])
+
+    valid_vkeys = set()
+    for fkey in mesh["faces"]:
+        for vkey in mesh["faces"][fkey]["vertices"]:
+            valid_vkeys.add(vkey)
+
+    for vkey in mesh["vertices"]:
+        if vkey in valid_vkeys:
+            out["vertices"][vkey] = mesh["vertices"][vkey]
+
+    valid_vnkeys = set()
+    for fkey in mesh["faces"]:
+        for vnkey in mesh["faces"][fkey]["vertex_normals"]:
+            valid_vnkeys.add(vnkey)
+
+    for vnkey in mesh["vertex_normals"]:
+        if vnkey in valid_vnkeys:
+            out["vertex_normals"][vnkey] = mesh["vertex_normals"][vnkey]
+
+    return out
