@@ -1,27 +1,57 @@
+"""
+Polygons here are an ordered collection of vertices which are addressed
+by keys in an ordered.dict.
+"""
 import numpy as np
 import shapely
 import collections
 from shapely import geometry as shapely_geometry
 
 
-def to_np_array(polygon_vertices):
+def to_numpy_array(polygon):
+    """
+    Returns a numpy.array() of the vertices in the polygon.
+    All addressing keys are lost.
+
+    Parameters
+    ----------
+    polygon : dict
+            The vertices of a polygon addressed by keys in a dict.
+    """
     arr = []
-    for k in polygon_vertices:
-        arr.append(polygon_vertices[k])
+    for k in polygon:
+        arr.append(polygon[k])
     return np.array(arr)
 
 
-def limits(polygon_vertices):
-    a = to_np_array(polygon_vertices)
+def limits(polygon):
+    """
+    Returns the limits in x, y, and z of a polygon.
 
+    Parameters
+    ----------
+    polygon : dict
+            The vertices of a polygon addressed by keys in a dict.
+    """
+    p = to_numpy_array(polygon)
     return (
-        [np.min(a[:, 0]), np.max(a[:, 0])],
-        [np.min(a[:, 1]), np.max(a[:, 1])],
-        [np.min(a[:, 2]), np.max(a[:, 2])],
+        [np.min(p[:, 0]), np.max(p[:, 0])],
+        [np.min(p[:, 1]), np.max(p[:, 1])],
+        [np.min(p[:, 2]), np.max(p[:, 2])],
     )
 
 
-def _to_shapely_polygon(polygon):
+def to_shapely_polygon(polygon):
+    """
+    Returns a shapely.geometry.Polygon() of the vertices in the polygon.
+    All addressing keys are lost.
+
+    Parameters
+    ----------
+    polygon : dict
+            The vertices of a polygon addressed by keys in a dict.
+    """
+
     poly = []
     for pkey in polygon:
         poly.append((polygon[pkey][0], polygon[pkey][1]))
@@ -30,7 +60,18 @@ def _to_shapely_polygon(polygon):
 
 
 def mask_vertices_inside(vertices, polygon):
-    _polygon = _to_shapely_polygon(polygon)
+    """
+    Returns a list of bools, one bool for each vertex, to mark if it is
+    inside the polygon.
+
+    Parameters
+    ----------
+    vertices : dict
+            The vertices addressed by keys in a dict.
+    polygon : dict
+            The vertices of a polygon addressed by keys in a dict.
+    """
+    _polygon = to_shapely_polygon(polygon)
     mask = []
     for vkey in vertices:
         _point = shapely.geometry.Point(vertices[vkey][0], vertices[vkey][1])
@@ -39,6 +80,20 @@ def mask_vertices_inside(vertices, polygon):
 
 
 def get_vertices_inside(vertices, polygon):
+    """
+    Returns a new dict containing only the vertices inside the polygon.
+
+    Parameters
+    ----------
+    vertices : dict
+            The vertices addressed by keys in a dict.
+    polygon : dict
+            The vertices of a polygon addressed by keys in a dict.
+
+    Compare
+    -------
+    mask_vertices_inside()
+    """
     out = collections.OrderedDict()
     mask = mask_vertices_inside(vertices, polygon)
     for i, vkey in enumerate(vertices):
@@ -48,6 +103,21 @@ def get_vertices_inside(vertices, polygon):
 
 
 def get_vertices_outside(vertices, polygon):
+    """
+    Returns a new dict containing only the vertices outside the polygon.
+
+    Parameters
+    ----------
+    vertices : dict
+            The vertices addressed by keys in a dict.
+    polygon : dict
+            The vertices of a polygon addressed by keys in a dict.
+
+    Compare
+    -------
+    mask_vertices_inside()
+    get_vertices_inside()
+    """
     out = collections.OrderedDict()
     mask = mask_vertices_inside(vertices, polygon)
     for i, vkey in enumerate(vertices):
@@ -57,6 +127,21 @@ def get_vertices_outside(vertices, polygon):
 
 
 def mask_face_inside(vertices, faces, polygon):
+    """
+    Returns a list of bools, one pool for each face, to mask if it is
+    inside the polygon.
+
+    Parameters
+    ----------
+    vertices : dict
+            The vertices of the faces addressed by keys in a dict.
+    faces : dict
+            The faces which reference their vertices by keys.
+            Faces a addressed by keys themselves in a dict.
+    polygon : dict
+            The vertices of a polygon addressed by keys in a dict.
+    """
+
     shapely_poly = _to_shapely_polygon(polygon)
 
     mask = []
@@ -87,36 +172,3 @@ def mask_face_inside(vertices, faces, polygon):
             mask.append(False)
 
     return mask
-
-
-def add_vertices_in_between(vertices, step_length):
-    vout = collections.OrderedDict()
-    vkeys = list(vertices.keys())
-    for i in range(len(vkeys) - 1):
-        vkey_start = vkeys[i]
-        v_start = np.array(vertices[vkey_start])
-        vkey_stop = vkeys[i + 1]
-        v_stop = np.array(vertices[vkey_stop])
-
-        length_start_stop = np.linalg.norm(v_start - v_stop)
-        num_steps = int(np.ceil(length_start_stop/step_length))
-
-        xs = np.linspace(v_start[0], v_stop[0], num_steps, endpoint=False)
-        ys = np.linspace(v_start[1], v_stop[1], num_steps, endpoint=False)
-        zs = np.linspace(v_start[2], v_stop[2], num_steps, endpoint=False)
-
-        for n in range(num_steps):
-            vout[(vkey_start[0] + "_{:d}".format(n), vkey_start[1])] = np.array([
-                xs[i], ys[i], zs[i]
-            ])
-
-    vkey_start = vkeys[-1]
-    v_start = np.array(vertices[vkey_start])
-    vkey_stop = vkeys[0]
-    v_stop = np.array(vertices[vkey_stop])
-    for n in range(num_steps):
-        vout[(vkey_start[0] + "_{:d}".format(n), vkey_start[1])] = np.array([
-            xs[i], ys[i], zs[i]
-        ])
-
-    return vout
