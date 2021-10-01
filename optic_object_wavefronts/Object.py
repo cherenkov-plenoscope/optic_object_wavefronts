@@ -4,6 +4,12 @@ from . import Wavefront
 from . import version
 
 def init():
+    """
+    Returns an Object which describes meshes of triangular faces.
+    An Object can have multiple materials.
+    This is the basic building.
+    Finally it can be exported to an object-wavefront (.obj).
+    """
     return {
         "vertices": collections.OrderedDict(),
         "faces": collections.OrderedDict(),
@@ -13,6 +19,16 @@ def init():
 
 
 def translate(obj, v):
+    """
+    Returns a translated copy of the Object.
+
+    Parameters
+    ----------
+    obj : dict
+            The Object.
+    v : numpy.array
+            Three dimensional vector for translation.
+    """
     out = copy.deepcopy(obj)
     for vkey in out["vertices"]:
         out["vertices"][vkey] += v
@@ -20,6 +36,16 @@ def translate(obj, v):
 
 
 def merge(a, b):
+    """
+    Returns a new Object merged out of the objects a, and b.
+
+    Parameters
+    ----------
+    a : dict
+            The Object a.
+    b : dict
+            The Object b.
+    """
     out = copy.deepcopy(a)
     for vkey in b["vertices"]:
         assert vkey not in out["vertices"]
@@ -40,6 +66,14 @@ def merge(a, b):
 
 
 def remove_unused_vertices_and_vertex_normals(obj):
+    """
+    Returns a new Object with all unused vertices and vertex-normals removed.
+
+    Parameters
+    ----------
+    obj : dict
+            The Object.
+    """
     out = init()
     out["faces"] = copy.deepcopy(obj["faces"])
     out["materials"] = copy.deepcopy(obj["materials"])
@@ -66,6 +100,18 @@ def remove_unused_vertices_and_vertex_normals(obj):
 
 
 def write_to_wavefront(obj, path, header=True):
+    """
+    Writes the Object to a wavefront-file at path.
+
+    Parameters
+    ----------
+    obj : dict
+            The Object.
+    path : str
+            The output path.
+    header : bool
+            Add a header with version-number.
+    """
     wavefront = Wavefront.init_from_Object(obj)
     wavefront_str = Wavefront.to_string(wavefront)
     with open(path, "wt") as fout:
