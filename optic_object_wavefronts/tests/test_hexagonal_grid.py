@@ -3,7 +3,7 @@ import numpy as np
 
 
 def test_grid_vertices():
-    vs = oow.hexagonal_grid.make_vertices_xy(
+    vs = oow.geometry.hexagonal_grid.make_vertices_xy(
         outer_radius=8.0,
         n=10,
         ref="abc"
@@ -14,7 +14,7 @@ def test_grid_vertices():
 
 
 def test_grid_vertices_num():
-    vs = oow.hexagonal_grid.make_vertices_xy(
+    vs = oow.geometry.hexagonal_grid.make_vertices_xy(
         outer_radius=1.0,
         n=1,
         ref="abc"
@@ -23,7 +23,7 @@ def test_grid_vertices_num():
 
 
 def test_grid_vertices_ref():
-    vs = oow.hexagonal_grid.make_vertices_xy(
+    vs = oow.geometry.hexagonal_grid.make_vertices_xy(
         outer_radius=1.0,
         n=1,
         ref="abc"

@@ -1,14 +1,14 @@
 from .. import Mesh
-from .. import regular_polygon
+from .. import geometry
 from .. import delaunay
 import numpy as np
 
 
 def make_mesh(outer_radius=1.0, n=6, rot=0.0, ref="disc"):
-    inner_radius = outer_radius * regular_polygon.inner_radius(n=n)
+    inner_radius = outer_radius * geometry.regular_polygon.inner_radius(n=n)
 
     mesh = Mesh.init()
-    mesh["vertices"] = regular_polygon.make_vertices_xy(
+    mesh["vertices"] = geometry.regular_polygon.make_vertices_xy(
         outer_radius=outer_radius,
         ref=ref + "/" + "ring",
         n=n,
@@ -19,7 +19,7 @@ def make_mesh(outer_radius=1.0, n=6, rot=0.0, ref="disc"):
     next_radius = 0.9 * inner_radius
     v_inner_idx = 0
     while next_n >= 6:
-        inner_vertices = regular_polygon.make_vertices_xy(
+        inner_vertices = geometry.regular_polygon.make_vertices_xy(
             outer_radius=next_radius,
             ref=ref + "/" + "inner",
             n=next_n,

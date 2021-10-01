@@ -1,9 +1,7 @@
 from .. import Mesh
-from .. import regular_polygon
 from .. import delaunay
 from .. import geometry
 from .. import polygon
-from .. import hexagonal_grid
 import numpy as np
 
 
@@ -16,7 +14,7 @@ def make_round_mesh(
     ref="SphericalCap",
     rot=0.0,
 ):
-    outer_polygon = regular_polygon.make_vertices_xy(
+    outer_polygon = geometry.regular_polygon.make_vertices_xy(
         outer_radius=outer_radius,
         n=n_polygon,
         ref=ref + "/ring",
@@ -24,7 +22,7 @@ def make_round_mesh(
     )
 
     if inner_radius is not None:
-        inner_polygon = regular_polygon.make_vertices_xy(
+        inner_polygon = geometry.regular_polygon.make_vertices_xy(
             outer_radius=inner_radius,
             n=n_polygon,
             ref=ref + "/inner_ring",
@@ -55,7 +53,7 @@ def _make_mesh(
         np.max(np.abs(outer_limits[1]))
     ])
 
-    hex_vertices = hexagonal_grid.make_vertices_xy(
+    hex_vertices = geometry.hexagonal_grid.make_vertices_xy(
         outer_radius=outer_radius_xy*1.5,
         n=n_hex_grid,
         ref=ref + "/Grid"

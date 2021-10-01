@@ -1,9 +1,7 @@
 from .. import Mesh
-from .. import regular_polygon
 from .. import delaunay
 from .. import geometry
 from .. import polygon
-from .. import hexagonal_grid
 import numpy as np
 
 
@@ -15,7 +13,7 @@ def make_mesh(
     rot=0.0,
 ):
     mesh = Mesh.init()
-    mesh["vertices"] = hexagonal_grid.make_vertices_xy(
+    mesh["vertices"] = geometry.hexagonal_grid.make_vertices_xy(
         outer_radius=2.0 * outer_radius,
         ref="hex",
         n=n_hex_grid

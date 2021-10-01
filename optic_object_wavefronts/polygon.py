@@ -142,7 +142,7 @@ def mask_face_inside(vertices, faces, polygon):
             The vertices of a polygon addressed by keys in a dict.
     """
 
-    shapely_poly = _to_shapely_polygon(polygon)
+    shapely_poly = to_shapely_polygon(polygon)
 
     mask = []
     for fkey in faces:
