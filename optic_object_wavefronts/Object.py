@@ -1,6 +1,6 @@
 import copy
 import collections
-from . import ObjectWavefront
+from . import Wavefront
 from . import version
 
 def init():
@@ -12,8 +12,8 @@ def init():
     }
 
 
-def translate(mesh, v):
-    out = copy.deepcopy(mesh)
+def translate(obj, v):
+    out = copy.deepcopy(obj)
     for vkey in out["vertices"]:
         out["vertices"][vkey] += v
     return out
@@ -39,36 +39,36 @@ def merge(a, b):
     return out
 
 
-def remove_unused_vertices_and_vertex_normals(mesh):
+def remove_unused_vertices_and_vertex_normals(obj):
     out = init()
-    out["faces"] = copy.deepcopy(mesh["faces"])
-    out["materials"] = copy.deepcopy(mesh["materials"])
+    out["faces"] = copy.deepcopy(obj["faces"])
+    out["materials"] = copy.deepcopy(obj["materials"])
 
     valid_vkeys = set()
-    for fkey in mesh["faces"]:
-        for vkey in mesh["faces"][fkey]["vertices"]:
+    for fkey in obj["faces"]:
+        for vkey in obj["faces"][fkey]["vertices"]:
             valid_vkeys.add(vkey)
 
-    for vkey in mesh["vertices"]:
+    for vkey in obj["vertices"]:
         if vkey in valid_vkeys:
-            out["vertices"][vkey] = mesh["vertices"][vkey]
+            out["vertices"][vkey] = obj["vertices"][vkey]
 
     valid_vnkeys = set()
-    for fkey in mesh["faces"]:
-        for vnkey in mesh["faces"][fkey]["vertex_normals"]:
+    for fkey in obj["faces"]:
+        for vnkey in obj["faces"][fkey]["vertex_normals"]:
             valid_vnkeys.add(vnkey)
 
-    for vnkey in mesh["vertex_normals"]:
+    for vnkey in obj["vertex_normals"]:
         if vnkey in valid_vnkeys:
-            out["vertex_normals"][vnkey] = mesh["vertex_normals"][vnkey]
+            out["vertex_normals"][vnkey] = obj["vertex_normals"][vnkey]
 
     return out
 
 
-def write_to_object_wavefront(mesh, path, header=True):
-    obj = ObjectWavefront.init_from_mesh(mesh)
-    obj_str = ObjectWavefront.to_string(obj)
+def write_to_wavefront(obj, path, header=True):
+    wavefront = Wavefront.init_from_Object(obj)
+    wavefront_str = Wavefront.to_string(wavefront)
     with open(path, "wt") as fout:
         if header:
             fout.write("# {:s} v{:s}\n".format(__name__, version.__version__))
-        fout.write(obj_str)
+        fout.write(wavefront_str)

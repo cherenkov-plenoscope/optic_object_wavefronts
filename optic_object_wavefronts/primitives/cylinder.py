@@ -1,4 +1,4 @@
-from .. import Mesh
+from .. import Object
 from . import disc
 import numpy as np
 
@@ -12,7 +12,7 @@ def _find_keys(dic, key):
 
 
 def weave_cylinder_faces(
-    mesh,
+    obj,
     ref,
     vkey_lower,
     vkey_upper,
@@ -20,8 +20,8 @@ def weave_cylinder_faces(
 ):
     assert np.abs(norm_sign) == 1.0
 
-    num_v_lower = len(_find_keys(mesh["vertices"], vkey_lower))
-    num_v_upper = len(_find_keys(mesh["vertices"], vkey_upper))
+    num_v_lower = len(_find_keys(obj["vertices"], vkey_lower))
+    num_v_upper = len(_find_keys(obj["vertices"], vkey_upper))
     assert num_v_lower == num_v_upper
     n = num_v_upper
 
@@ -31,29 +31,29 @@ def weave_cylinder_faces(
         if n_b == n:
             n_b = 0
         n_c = int(ni)
-        va = np.array(mesh["vertices"][(vkey_upper, n_a)])
-        vb = np.array(mesh["vertices"][(vkey_upper, n_b)])
-        vc = np.array(mesh["vertices"][(vkey_lower, n_c)])
+        va = np.array(obj["vertices"][(vkey_upper, n_a)])
+        vb = np.array(obj["vertices"][(vkey_upper, n_b)])
+        vc = np.array(obj["vertices"][(vkey_lower, n_c)])
         va[2] = 0.0
         vb[2] = 0.0
         vc[2] = 0.0
-        if (ref + "/side/top", n_a) not in mesh["vertex_normals"]:
-            mesh["vertex_normals"][
+        if (ref + "/side/top", n_a) not in obj["vertex_normals"]:
+            obj["vertex_normals"][
                 (ref + "/side/top", n_a)
             ] = norm_sign * va / np.linalg.norm(va)
 
-        if (ref + "/side/top", n_b) not in mesh["vertex_normals"]:
-            mesh["vertex_normals"][
+        if (ref + "/side/top", n_b) not in obj["vertex_normals"]:
+            obj["vertex_normals"][
                 (ref + "/side/top", n_b)
             ] = norm_sign * vb / np.linalg.norm(vb)
 
-        if (ref + "/side/bot", n_c) not in mesh["vertex_normals"]:
-            mesh["vertex_normals"][
+        if (ref + "/side/bot", n_c) not in obj["vertex_normals"]:
+            obj["vertex_normals"][
                 (ref + "/side/bot", n_c)
             ] = norm_sign * vc / np.linalg.norm(vc)
 
         side_fkey = (ref + "/side_ttb", ni)
-        mesh["faces"][side_fkey] = {
+        obj["faces"][side_fkey] = {
             "vertices": [
                 (vkey_upper, n_a),
                 (vkey_upper, n_b),
@@ -74,29 +74,29 @@ def weave_cylinder_faces(
         n_c = int(ni + 1)
         if n_c == n:
             n_c = 0
-        va = np.array(mesh["vertices"][(vkey_lower, n_a)])
-        vb = np.array(mesh["vertices"][(vkey_lower, n_b)])
-        vc = np.array(mesh["vertices"][(vkey_upper, n_c)])
+        va = np.array(obj["vertices"][(vkey_lower, n_a)])
+        vb = np.array(obj["vertices"][(vkey_lower, n_b)])
+        vc = np.array(obj["vertices"][(vkey_upper, n_c)])
         va[2] = 0.0
         vb[2] = 0.0
         vc[2] = 0.0
-        if (ref + "/side/bot", n_a) not in mesh["vertex_normals"]:
-            mesh["vertex_normals"][
+        if (ref + "/side/bot", n_a) not in obj["vertex_normals"]:
+            obj["vertex_normals"][
                 (ref + "/side/bot", n_a)
             ] = norm_sign * va / np.linalg.norm(va)
 
-        if (ref + "/side/bot", n_b) not in mesh["vertex_normals"]:
-            mesh["vertex_normals"][
+        if (ref + "/side/bot", n_b) not in obj["vertex_normals"]:
+            obj["vertex_normals"][
                 (ref + "/side/bot", n_b)
             ] = norm_sign * vb / np.linalg.norm(vb)
 
-        if (ref + "/side/top", n_c) not in mesh["vertex_normals"]:
-            mesh["vertex_normals"][
+        if (ref + "/side/top", n_c) not in obj["vertex_normals"]:
+            obj["vertex_normals"][
                 (ref + "/side/top", n_c)
             ] = norm_sign * vc / np.linalg.norm(vc)
 
         side_fkey = (ref + "/side_bbt", ni)
-        mesh["faces"][side_fkey] = {
+        obj["faces"][side_fkey] = {
             "vertices": [
                 (vkey_lower, n_a),
                 (vkey_lower, n_b),
@@ -109,52 +109,52 @@ def weave_cylinder_faces(
             ],
         }
 
-    return mesh
+    return obj
 
 
-def make_mesh(
+def init(
     outer_radius=1.0, length=1.0, n=6, rot=0.0, ref="cylinder"
 ):
-    top = disc.make_mesh(
+    top = disc.init(
         outer_radius=outer_radius,
         ref="cylinder/top",
         n=n,
         rot=rot
     )
-    bot = disc.make_mesh(
+    bot = disc.init(
         outer_radius=outer_radius,
         ref="cylinder/bot",
         n=n,
         rot=(2 * np.pi) / (2 * n) + rot,
     )
 
-    mesh = Mesh.init()
+    obj = Object.init()
 
     for vkey in top["vertices"]:
         tmp_v = np.array(top["vertices"][vkey])
         tmp_v[2] = float(length)
-        mesh["vertices"][vkey] = tmp_v
+        obj["vertices"][vkey] = tmp_v
     for fkey in top["faces"]:
-        mesh["faces"][fkey] = top["faces"][fkey]
+        obj["faces"][fkey] = top["faces"][fkey]
     for vnkey in top["vertex_normals"]:
-        mesh["vertex_normals"][vnkey] = [0, 0, 1]
+        obj["vertex_normals"][vnkey] = [0, 0, 1]
 
     for vkey in bot["vertices"]:
-        mesh["vertices"][vkey] = bot["vertices"][vkey]
+        obj["vertices"][vkey] = bot["vertices"][vkey]
     for fkey in bot["faces"]:
-        mesh["faces"][fkey] = bot["faces"][fkey]
+        obj["faces"][fkey] = bot["faces"][fkey]
     for vnkey in bot["vertex_normals"]:
-        mesh["vertex_normals"][vnkey] = [0, 0, -1]
+        obj["vertex_normals"][vnkey] = [0, 0, -1]
 
-    mesh = weave_cylinder_faces(
-        mesh=mesh,
+    obj = weave_cylinder_faces(
+        obj=obj,
         vkey_lower="cylinder/bot/ring",
         vkey_upper="cylinder/top/ring",
         ref=ref + "/outer",
     )
 
-    mesh["materials"][ref+"_top"] = ["top"]
-    mesh["materials"][ref+"_bottom"] = ["bot"]
-    mesh["materials"][ref+"_outer_side"] = ["outer"]
+    obj["materials"][ref+"_top"] = ["top"]
+    obj["materials"][ref+"_bottom"] = ["bot"]
+    obj["materials"][ref+"_outer_side"] = ["outer"]
 
-    return mesh
+    return obj

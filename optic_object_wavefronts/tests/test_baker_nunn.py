@@ -37,7 +37,7 @@ def test_baker_nunn():
     z_focus_shield = z_mirror + focus_surface_curvature_radius + focus_shield_to_focus_surface
     z_focus_surfcae = z_mirror + focus_surface_curvature_radius
 
-    mirror = oow.primitives.spherical_lens.make_mesh(
+    mirror = oow.primitives.spherical_lens.init(
         outer_radius=mirror_radius,
         inner_radius=0.0254,
         curvature_radius_top=-mirror_curvature_radius,
@@ -49,7 +49,7 @@ def test_baker_nunn():
         ref="mirror",
     )
 
-    cor1 = oow.primitives.spherical_lens.make_mesh(
+    cor1 = oow.primitives.spherical_lens.init(
         outer_radius=corrector_radius,
         curvature_radius_top=-13.754,
         curvature_radius_bot=-2.589,
@@ -60,7 +60,7 @@ def test_baker_nunn():
         ref="corrector1",
     )
 
-    cor2 = oow.primitives.spherical_lens.make_mesh(
+    cor2 = oow.primitives.spherical_lens.init(
         outer_radius=corrector_radius,
         curvature_radius_top=-2.988818,
         curvature_radius_bot=2.988818,
@@ -71,7 +71,7 @@ def test_baker_nunn():
         ref="corrector2",
     )
 
-    cor3 = oow.primitives.spherical_lens.make_mesh(
+    cor3 = oow.primitives.spherical_lens.init(
         outer_radius=corrector_radius,
         curvature_radius_top=2.589,
         curvature_radius_bot=13.754,
@@ -95,49 +95,49 @@ def test_baker_nunn():
     focus_shield_bound[("f_shi", 2)] = [-focus_shield_width/2, -focus_shield_height/2, 0.0]
     focus_shield_bound[("f_shi", 3)] = [focus_shield_width/2, -focus_shield_height/2, 0.0]
 
-    f_shield = oow.primitives.spherical_cap._make_mesh(
+    f_shield = oow.primitives.spherical_cap.init(
         outer_polygon=focus_shield_bound,
         curvature_radius=focus_shield_curvature_radius,
         n_hex_grid=n_hex_grid,
         ref="focus_shield",
     )
-    f_surface = oow.primitives.spherical_cap._make_mesh(
+    f_surface = oow.primitives.spherical_cap.init(
         outer_polygon=focus_surface_bound,
         curvature_radius=focus_surface_curvature_radius,
         n_hex_grid=3 * n_hex_grid,
         ref="focus_surface",
     )
 
-    baker_nunn = oow.Mesh.init()
+    baker_nunn = oow.Object.init()
 
-    baker_nunn = oow.Mesh.merge(
+    baker_nunn = oow.Object.merge(
         baker_nunn,
-        oow.Mesh.translate(mirror, np.array([0.0, 0.0, z_mirror]))
+        oow.Object.translate(mirror, np.array([0.0, 0.0, z_mirror]))
     )
 
-    baker_nunn = oow.Mesh.merge(
+    baker_nunn = oow.Object.merge(
         baker_nunn,
-        oow.Mesh.translate(cor3, np.array([0.0, 0.0, z_corr3]))
+        oow.Object.translate(cor3, np.array([0.0, 0.0, z_corr3]))
     )
 
-    baker_nunn = oow.Mesh.merge(
+    baker_nunn = oow.Object.merge(
         baker_nunn,
-        oow.Mesh.translate(cor2, np.array([0.0, 0.0, z_corr2]))
+        oow.Object.translate(cor2, np.array([0.0, 0.0, z_corr2]))
     )
 
-    baker_nunn = oow.Mesh.merge(
+    baker_nunn = oow.Object.merge(
         baker_nunn,
-        oow.Mesh.translate(cor1, np.array([0.0, 0.0, z_corr1]))
+        oow.Object.translate(cor1, np.array([0.0, 0.0, z_corr1]))
     )
 
-    baker_nunn = oow.Mesh.merge(
+    baker_nunn = oow.Object.merge(
         baker_nunn,
-        oow.Mesh.translate(f_shield, np.array([0.0, 0.0, z_focus_shield + 0.02]))
+        oow.Object.translate(f_shield, np.array([0.0, 0.0, z_focus_shield + 0.02]))
     )
 
-    baker_nunn = oow.Mesh.merge(
+    baker_nunn = oow.Object.merge(
         baker_nunn,
-        oow.Mesh.translate(f_surface, np.array([0.0, 0.0, z_focus_surfcae]))
+        oow.Object.translate(f_surface, np.array([0.0, 0.0, z_focus_surfcae]))
     )
 
-    oow.Mesh.write_to_object_wavefront(mesh=baker_nunn, path="baker_nunn.obj")
+    oow.Object.write_to_wavefront(obj=baker_nunn, path="baker_nunn.obj")

@@ -1,4 +1,4 @@
-from .. import Mesh
+from .. import Object
 from .. import delaunay
 from .. import geometry
 from . import disc
@@ -6,15 +6,15 @@ import copy
 import numpy as np
 
 
-def make_mesh(
+def init(
     outer_radius,
     curvature_radius,
     n=10,
     ref="SphericalCapHexagonal"
 ):
-    mesh = Mesh.init()
+    obj = Object.init()
 
-    mesh["vertices"] = geometry.hexagonal_grid.make_vertices_xy(
+    obj["vertices"] = geometry.hexagonal_grid.make_vertices_xy(
         outer_radius=outer_radius,
         n=n,
         ref=ref + "/inner"
@@ -22,33 +22,33 @@ def make_mesh(
 
     # elevate z-axis
     # --------------
-    for vkey in mesh["vertices"]:
-        mesh["vertices"][vkey][2] = geometry.sphere.surface_height(
-            x=mesh["vertices"][vkey][0],
-            y=mesh["vertices"][vkey][1],
+    for vkey in obj["vertices"]:
+        obj["vertices"][vkey][2] = geometry.sphere.surface_height(
+            x=obj["vertices"][vkey][0],
+            y=obj["vertices"][vkey][1],
             curvature_radius=curvature_radius,
         )
 
     # vertex-normals
     # --------------
-    for vkey in mesh["vertices"]:
+    for vkey in obj["vertices"]:
         vnkey = tuple(vkey)
-        mesh["vertex_normals"][vnkey] = geometry.sphere.surface_normal(
-            x=mesh["vertices"][vkey][0],
-            y=mesh["vertices"][vkey][1],
+        obj["vertex_normals"][vnkey] = geometry.sphere.surface_normal(
+            x=obj["vertices"][vkey][0],
+            y=obj["vertices"][vkey][1],
             curvature_radius=curvature_radius,
         )
 
-    faces = delaunay.make_faces_xy(vertices=mesh["vertices"], ref=ref)
+    faces = delaunay.make_faces_xy(vertices=obj["vertices"], ref=ref)
 
     for fkey in faces:
-        mesh["faces"][fkey] = {
+        obj["faces"][fkey] = {
             "vertices": faces[fkey]["vertices"],
             "vertex_normals": faces[fkey]["vertices"],
         }
 
-    mesh["materials"][ref] = [ref]
-    return mesh
+    obj["materials"][ref] = [ref]
+    return obj
 
 
 def rotate_vertices_xy(vertices, phi):
@@ -65,7 +65,7 @@ def rotate_vertices_xy(vertices, phi):
     return vertices_out
 
 
-def weave_hexagon_edges(mesh, outer_radius, margin_width_on_edge, ref):
+def weave_hexagon_edges(obj, outer_radius, margin_width_on_edge, ref):
     assert outer_radius >= 0
     assert margin_width_on_edge >= 0
     inner_radius_hexagon = outer_radius * geometry.regular_polygon.inner_radius(n=6)
@@ -73,7 +73,7 @@ def weave_hexagon_edges(mesh, outer_radius, margin_width_on_edge, ref):
     rot_perp = np.pi / 2.0
 
     for irotz, phi in enumerate(np.linspace(0, 2*np.pi, 6, endpoint=False)):
-        i_vertices = rotate_vertices_xy(vertices=mesh["vertices"], phi=phi)
+        i_vertices = rotate_vertices_xy(vertices=obj["vertices"], phi=phi)
 
         i_combi_vertices = {}
         for fkey in i_vertices:
@@ -96,32 +96,32 @@ def weave_hexagon_edges(mesh, outer_radius, margin_width_on_edge, ref):
         ])
         i_vnkey = (ref, irotz)
 
-        mesh["vertex_normals"][i_vnkey] = i_normal
+        obj["vertex_normals"][i_vnkey] = i_normal
 
         for fkey in i_faces:
-            mesh["faces"][fkey] = {
+            obj["faces"][fkey] = {
                 "vertices": i_faces[fkey]["vertices"],
                 "vertex_normals": [i_vnkey, i_vnkey, i_vnkey],
             }
 
-    return mesh
+    return obj
 
 
-def make_front_spherical_back_plane_mesh(
+def make_front_spherical_back_plane_obj(
     outer_radius,
     curvature_radius,
     width,
     n=10,
     ref="SphericalPlaneHexagonalBody"
 ):
-    front_mesh = make_mesh(
+    front_obj = make_obj(
         outer_radius=outer_radius,
         curvature_radius=curvature_radius,
         n=n,
         ref=ref + "/front"
     )
 
-    back_mesh = disc.make_mesh(
+    back_obj = disc.make_obj(
         outer_radius=outer_radius,
         n=6,
         ref=ref + "/back",
@@ -130,16 +130,16 @@ def make_front_spherical_back_plane_mesh(
 
     center_of_curvature = np.array([0.0, 0.0, curvature_radius])
 
-    back_mesh = Mesh.translate(back_mesh, [0.0, 0.0, -width])
-    for vnkey in back_mesh["vertex_normals"]:
-        back_mesh["vertex_normals"][vnkey] = np.array([0.0, 0.0, -1.0])
+    back_obj = Object.translate(back_obj, [0.0, 0.0, -width])
+    for vnkey in back_obj["vertex_normals"]:
+        back_obj["vertex_normals"][vnkey] = np.array([0.0, 0.0, -1.0])
 
-    mesh = Mesh.merge(front_mesh, back_mesh)
+    obj = Object.merge(front_obj, back_obj)
 
     hexagonal_grid_spacing = outer_radius / n
 
-    mesh = weave_hexagon_edges(
-        mesh=mesh,
+    obj = weave_hexagon_edges(
+        obj=obj,
         outer_radius=outer_radius,
         margin_width_on_edge=0.1 * hexagonal_grid_spacing,
         ref=ref + "/side",
@@ -147,18 +147,18 @@ def make_front_spherical_back_plane_mesh(
 
     # remove /side faces inside of curvature-sphere
     side_fkeys = []
-    for fkey in mesh["faces"]:
+    for fkey in obj["faces"]:
         if str.find(fkey[0], ref + "/side") >= 0:
             side_fkeys.append(fkey)
 
     for fkey in side_fkeys:
-        va_key = mesh["faces"][fkey]["vertices"][0]
-        vb_key = mesh["faces"][fkey]["vertices"][1]
-        vc_key = mesh["faces"][fkey]["vertices"][2]
+        va_key = obj["faces"][fkey]["vertices"][0]
+        vb_key = obj["faces"][fkey]["vertices"][1]
+        vc_key = obj["faces"][fkey]["vertices"][2]
 
-        va = mesh["vertices"][va_key]
-        vb = mesh["vertices"][vb_key]
-        vc = mesh["vertices"][vc_key]
+        va = obj["vertices"][va_key]
+        vb = obj["vertices"][vb_key]
+        vc = obj["vertices"][vc_key]
 
         mid_ab = 0.5 * (va + vb)
         mid_bc = 0.5 * (vb + vc)
@@ -173,11 +173,11 @@ def make_front_spherical_back_plane_mesh(
         mid_ca_inside = r_mid_ca <= curvature_radius
 
         if np.sum([mid_ab_inside, mid_bc_inside, mid_ca_inside]) > 1:
-            mesh["faces"].pop(fkey)
+            obj["faces"].pop(fkey)
 
-    mesh["materials"] = {}
-    mesh["materials"][ref+"_front"] = [ref + "/front"]
-    mesh["materials"][ref+"_back"] = [ref + "/back"]
-    mesh["materials"][ref+"_side"] = [ref + "/side"]
+    obj["materials"] = {}
+    obj["materials"][ref+"_front"] = [ref + "/front"]
+    obj["materials"][ref+"_back"] = [ref + "/back"]
+    obj["materials"][ref+"_side"] = [ref + "/side"]
 
-    return mesh
+    return obj

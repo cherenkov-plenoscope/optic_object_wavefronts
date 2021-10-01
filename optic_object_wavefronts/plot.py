@@ -10,18 +10,18 @@ def _add_face(ax, vertices, alpha=None, color="blue"):
     ax.add_patch(p)
 
 
-def plot_mesh(mesh):
+def plot_Object(obj):
     fig = plt.figure()
     ax = fig.add_axes([0.1, 0.1, 0.8, 0.8])
     ax.set_aspect("equal")
-    for vkey in mesh["vertices"]:
-        ax.plot(mesh["vertices"][vkey][0], mesh["vertices"][vkey][1], "xb")
+    for vkey in obj["vertices"]:
+        ax.plot(obj["vertices"][vkey][0], obj["vertices"][vkey][1], "xb")
 
-    for fkey in mesh["faces"]:
+    for fkey in obj["faces"]:
         vs = []
         for ii in range(3):
-            vkey = mesh["faces"][fkey]["vertices"][ii]
-            vs.append(mesh["vertices"][vkey][0:2])
+            vkey = obj["faces"][fkey]["vertices"][ii]
+            vs.append(obj["vertices"][vkey][0:2])
         vs = np.array(vs)
         _add_face(ax=ax, vertices=vs, alpha=0.5, color="green")
     plt.show()

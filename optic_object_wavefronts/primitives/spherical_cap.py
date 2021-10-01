@@ -1,46 +1,11 @@
-from .. import Mesh
+from .. import Object
 from .. import delaunay
 from .. import geometry
 from .. import polygon
 import numpy as np
 
 
-def make_round_mesh(
-    outer_radius,
-    curvature_radius,
-    inner_radius=None,
-    n_polygon=17,
-    n_hex_grid=10,
-    ref="SphericalCap",
-    rot=0.0,
-):
-    outer_polygon = geometry.regular_polygon.make_vertices_xy(
-        outer_radius=outer_radius,
-        n=n_polygon,
-        ref=ref + "/ring",
-        rot=rot,
-    )
-
-    if inner_radius is not None:
-        inner_polygon = geometry.regular_polygon.make_vertices_xy(
-            outer_radius=inner_radius,
-            n=n_polygon,
-            ref=ref + "/inner_ring",
-            rot=rot,
-        )
-    else:
-        inner_polygon = None
-
-    return _make_mesh(
-        outer_polygon=outer_polygon,
-        inner_polygon=inner_polygon,
-        n_hex_grid=n_hex_grid,
-        curvature_radius=curvature_radius,
-        ref=ref
-    )
-
-
-def _make_mesh(
+def init(
     outer_polygon,
     curvature_radius,
     inner_polygon=None,
@@ -70,51 +35,51 @@ def _make_mesh(
             polygon=inner_polygon
         )
 
-    mesh = Mesh.init()
+    obj = Object.init()
 
     for k in hex_vertices_valid:
-        mesh["vertices"][k] = hex_vertices_valid[k]
+        obj["vertices"][k] = hex_vertices_valid[k]
     for k in outer_polygon:
-        mesh["vertices"][k] = outer_polygon[k]
+        obj["vertices"][k] = outer_polygon[k]
     if inner_polygon is not None:
         for k in inner_polygon:
-            mesh["vertices"][k] = inner_polygon[k]
+            obj["vertices"][k] = inner_polygon[k]
 
-    for k in mesh["vertices"]:
-        mesh["vertices"][k][2] = geometry.sphere.surface_height(
-            x=mesh["vertices"][k][0],
-            y=mesh["vertices"][k][1],
+    for k in obj["vertices"]:
+        obj["vertices"][k][2] = geometry.sphere.surface_height(
+            x=obj["vertices"][k][0],
+            y=obj["vertices"][k][1],
             curvature_radius=curvature_radius,
         )
 
-    for k in mesh["vertices"]:
-        mesh["vertex_normals"][k] = geometry.sphere.surface_normal(
-            x=mesh["vertices"][k][0],
-            y=mesh["vertices"][k][1],
+    for k in obj["vertices"]:
+        obj["vertex_normals"][k] = geometry.sphere.surface_normal(
+            x=obj["vertices"][k][0],
+            y=obj["vertices"][k][1],
             curvature_radius=curvature_radius,
         )
 
-    faces = delaunay.make_faces_xy(vertices=mesh["vertices"], ref=ref)
+    faces = delaunay.make_faces_xy(vertices=obj["vertices"], ref=ref)
 
     for fkey in faces:
-        mesh["faces"][fkey] = {
+        obj["faces"][fkey] = {
             "vertices": faces[fkey]["vertices"],
             "vertex_normals": faces[fkey]["vertices"],
         }
 
     if inner_polygon is not None:
         mask_faces_in_inner = polygon.mask_face_inside(
-            vertices=mesh["vertices"],
-            faces=mesh["faces"],
+            vertices=obj["vertices"],
+            faces=obj["faces"],
             polygon=inner_polygon
         )
         fkeys_to_be_removed = []
-        for idx, fkey in enumerate(mesh["faces"]):
+        for idx, fkey in enumerate(obj["faces"]):
             if mask_faces_in_inner[idx]:
                 fkeys_to_be_removed.append(fkey)
         for fkey in fkeys_to_be_removed:
-            mesh["faces"].pop(fkey)
+            obj["faces"].pop(fkey)
 
-    mesh["materials"][ref] = [ref]
+    obj["materials"][ref] = [ref]
 
-    return mesh
+    return obj
