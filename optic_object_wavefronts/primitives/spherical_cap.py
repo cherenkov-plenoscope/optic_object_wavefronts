@@ -1,7 +1,7 @@
 from .. import Mesh
 from .. import regular_polygon
 from .. import delaunay
-from .. import spherical
+from .. import geometry
 from .. import polygon
 from .. import hexagonal_grid
 import numpy as np
@@ -83,14 +83,14 @@ def _make_mesh(
             mesh["vertices"][k] = inner_polygon[k]
 
     for k in mesh["vertices"]:
-        mesh["vertices"][k][2] = spherical.surface_height(
+        mesh["vertices"][k][2] = geometry.sphere.surface_height(
             x=mesh["vertices"][k][0],
             y=mesh["vertices"][k][1],
             curvature_radius=curvature_radius,
         )
 
     for k in mesh["vertices"]:
-        mesh["vertex_normals"][k] = spherical.surface_normal(
+        mesh["vertex_normals"][k] = geometry.sphere.surface_normal(
             x=mesh["vertices"][k][0],
             y=mesh["vertices"][k][1],
             curvature_radius=curvature_radius,

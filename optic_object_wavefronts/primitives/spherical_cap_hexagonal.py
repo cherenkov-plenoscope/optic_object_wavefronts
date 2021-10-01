@@ -1,6 +1,6 @@
 from .. import Mesh
 from .. import delaunay
-from .. import spherical
+from .. import geometry
 from . import disc
 from .. import regular_polygon
 from .. import hexagonal_grid
@@ -25,7 +25,7 @@ def make_mesh(
     # elevate z-axis
     # --------------
     for vkey in mesh["vertices"]:
-        mesh["vertices"][vkey][2] = spherical.surface_height(
+        mesh["vertices"][vkey][2] = geometry.sphere.surface_height(
             x=mesh["vertices"][vkey][0],
             y=mesh["vertices"][vkey][1],
             curvature_radius=curvature_radius,
@@ -35,7 +35,7 @@ def make_mesh(
     # --------------
     for vkey in mesh["vertices"]:
         vnkey = tuple(vkey)
-        mesh["vertex_normals"][vnkey] = spherical.surface_normal(
+        mesh["vertex_normals"][vnkey] = geometry.sphere.surface_normal(
             x=mesh["vertices"][vkey][0],
             y=mesh["vertices"][vkey][1],
             curvature_radius=curvature_radius,

@@ -4,10 +4,9 @@ from . import Mesh
 from . import lens
 from . import regular_polygon
 from . import delaunay
-from . import spherical
-from . import elliptical
 from . import primitives
 from . import optics
+from . import geometry
 from . import hexagonal_grid
 from . import polygon
 
