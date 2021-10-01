@@ -1,5 +1,4 @@
 from .version import __version__
-from . import plot
 from . import Mesh
 from . import lens
 from . import regular_polygon
