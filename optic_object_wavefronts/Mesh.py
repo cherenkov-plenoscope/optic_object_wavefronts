@@ -1,6 +1,7 @@
 import copy
 import collections
-
+from . import ObjectWavefront
+from . import version
 
 def init():
     return {
@@ -62,3 +63,12 @@ def remove_unused_vertices_and_vertex_normals(mesh):
             out["vertex_normals"][vnkey] = mesh["vertex_normals"][vnkey]
 
     return out
+
+
+def write_to_object_wavefront(mesh, path, header=True):
+    obj = ObjectWavefront.init_from_mesh(mesh)
+    obj_str = ObjectWavefront.to_string(obj)
+    with open(path, "wt") as fout:
+        if header:
+            fout.write("# {:s} v{:s}\n".format(__name__, version.__version__))
+        fout.write(obj_str)

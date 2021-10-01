@@ -140,4 +140,4 @@ def test_baker_nunn():
         oow.Mesh.translate(f_surface, np.array([0.0, 0.0, z_focus_surfcae]))
     )
 
-    oow.write_mesh("baker_nunn.obj", baker_nunn)
+    oow.Mesh.write_to_object_wavefront(mesh=baker_nunn, path="baker_nunn.obj")
