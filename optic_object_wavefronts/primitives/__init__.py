@@ -5,4 +5,5 @@ from . import spherical_cap_regular
 from . import spherical_cap_hexagonal
 from . import spherical_lens
 from . import spherical_lens_hexagonal
+from . import spherical_planar_lens_hexagonal
 from . import spherical_cap_pixels

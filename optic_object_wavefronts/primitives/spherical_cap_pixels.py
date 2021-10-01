@@ -5,7 +5,7 @@ from .. import polygon
 import numpy as np
 
 
-def make_obj(
+def init(
     outer_radius,
     curvature_radius,
     n_hex_grid=10,

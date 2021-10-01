@@ -8,7 +8,7 @@ def estimate_height_of_cap(curvature_radius, outer_radius):
     return curvature_radius - np.sqrt(curvature_radius**2 - outer_radius**2)
 
 
-def make_obj(
+def init(
     outer_radius,
     curvature_radius,
     n,
@@ -17,13 +17,13 @@ def make_obj(
     assert curvature_radius > 0.0
     assert outer_radius > 0.0
 
-    top = spherical_cap_hexagonal.make_obj(
+    top = spherical_cap_hexagonal.init(
         outer_radius=outer_radius,
         curvature_radius=-1.0 * curvature_radius,
         ref=ref + "/top",
         n=n,
     )
-    bot = spherical_cap_hexagonal.make_obj(
+    bot = spherical_cap_hexagonal.init(
         outer_radius=outer_radius,
         curvature_radius=1.0 * curvature_radius,
         ref=ref + "/bot",
