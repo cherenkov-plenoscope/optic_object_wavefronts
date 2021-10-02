@@ -117,13 +117,13 @@ def init(
 ):
     top = disc.init(
         outer_radius=outer_radius,
-        ref="cylinder/top",
+        ref=ref + "/top",
         n=n,
         rot=rot
     )
     bot = disc.init(
         outer_radius=outer_radius,
-        ref="cylinder/bot",
+        ref=ref + "/bot",
         n=n,
         rot=(2 * np.pi) / (2 * n) + rot,
     )
@@ -148,8 +148,8 @@ def init(
 
     obj = weave_cylinder_faces(
         obj=obj,
-        vkey_lower="cylinder/bot/ring",
-        vkey_upper="cylinder/top/ring",
+        vkey_lower=ref + "/bot/ring",
+        vkey_upper=ref + "/top/ring",
         ref=ref + "/outer",
     )
 
