@@ -10,7 +10,6 @@ def init(
     curvature_radius,
     n_hex_grid=10,
     ref="SphericalPixelCap",
-    rot=0.0,
 ):
     obj = Object.init()
     obj["vertices"] = geometry.hexagonal_grid.make_vertices_xy(
