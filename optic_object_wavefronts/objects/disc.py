@@ -9,10 +9,7 @@ def init(outer_radius=1.0, n=6, rot=0.0, ref="disc"):
 
     obj = Object.init()
     obj["vertices"] = geometry.regular_polygon.make_vertices_xy(
-        outer_radius=outer_radius,
-        ref=ref + "/" + "ring",
-        n=n,
-        rot=rot
+        outer_radius=outer_radius, ref=ref + "/" + "ring", n=n, rot=rot
     )
 
     next_n = int(np.round(n / 3))
@@ -23,7 +20,7 @@ def init(outer_radius=1.0, n=6, rot=0.0, ref="disc"):
             outer_radius=next_radius,
             ref=ref + "/" + "inner",
             n=next_n,
-            rot=rot
+            rot=rot,
         )
 
         for inner_vkey in inner_vertices:

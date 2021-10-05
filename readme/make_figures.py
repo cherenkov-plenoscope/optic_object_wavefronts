@@ -24,7 +24,7 @@ def my_fig_ax():
 
 def my_fig_ax_3d():
     fig = plt.figure(figsize=(4, 4), dpi=320)
-    ax = fig.add_subplot(111, projection='3d')
+    ax = fig.add_subplot(111, projection="3d")
     ax.grid(False)
     ax.axes.set_xlim3d(left=-1, right=1)
     ax.axes.set_ylim3d(bottom=-1, top=1)
@@ -35,15 +35,16 @@ def my_fig_ax_3d():
     return fig, ax
 
 
-
 def ax_aspect_equal_3d(ax):
-    extents = np.array([getattr(ax, 'get_{}lim'.format(dim))() for dim in 'xyz'])
-    sz = extents[:,1] - extents[:,0]
+    extents = np.array(
+        [getattr(ax, "get_{}lim".format(dim))() for dim in "xyz"]
+    )
+    sz = extents[:, 1] - extents[:, 0]
     centers = np.mean(extents, axis=1)
     maxsize = max(abs(sz))
-    r = maxsize/2
-    for ctr, dim in zip(centers, 'xyz'):
-        getattr(ax, 'set_{}lim'.format(dim))(ctr - r, ctr + r)
+    r = maxsize / 2
+    for ctr, dim in zip(centers, "xyz"):
+        getattr(ax, "set_{}lim".format(dim))(ctr - r, ctr + r)
 
 
 # Every object
@@ -60,7 +61,7 @@ objs = {
         "curvature_radius": 4.0,
         "n_polygon": 31,
         "rot": 0.0,
-        "n_hex_grid":5,
+        "n_hex_grid": 5,
     },
     "spherical_cap_hexagonal": {
         "outer_radius": 1.0,
@@ -95,7 +96,7 @@ objs = {
         "n": 11,
         "width": 0.3,
         "ref": "lens",
-    }
+    },
 }
 
 
@@ -105,16 +106,18 @@ for obj_key in objs:
 
     fig, ax = my_fig_ax_3d()
     oow.plot.ax_add_object_xyz(
-        ax=ax,
-        obj=obj,
-        face_alpha=0.9,
-        face_color="w",
-        face_edge_width=0.3,
+        ax=ax, obj=obj, face_alpha=0.9, face_color="w", face_edge_width=0.3,
     )
     ax_aspect_equal_3d(ax=ax)
     ax.view_init(elev=30, azim=50)
     fig.savefig("{:s}.jpg".format(obj_key))
 
     subprocess.call(
-        ["convert", "-crop", "640x480+340+370", "{:s}.jpg".format(obj_key), "{:s}.jpg".format(obj_key)]
+        [
+            "convert",
+            "-crop",
+            "640x480+340+370",
+            "{:s}.jpg".format(obj_key),
+            "{:s}.jpg".format(obj_key),
+        ]
     )

@@ -6,16 +6,11 @@ import numpy as np
 
 
 def init(
-    outer_radius,
-    curvature_radius,
-    n_hex_grid=10,
-    ref="SphericalPixelCap",
+    outer_radius, curvature_radius, n_hex_grid=10, ref="SphericalPixelCap",
 ):
     obj = Object.init()
     obj["vertices"] = geometry.hexagonal_grid.make_vertices_xy(
-        outer_radius=2.0 * outer_radius,
-        ref="hex",
-        n=n_hex_grid
+        outer_radius=2.0 * outer_radius, ref="hex", n=n_hex_grid
     )
 
     for k in obj["vertices"]:
@@ -32,10 +27,7 @@ def init(
             curvature_radius=curvature_radius,
         )
 
-    all_grid_faces = delaunay.make_faces_xy(
-        vertices=obj["vertices"],
-        ref=ref
-    )
+    all_grid_faces = delaunay.make_faces_xy(vertices=obj["vertices"], ref=ref)
 
     for fkey in all_grid_faces:
         vkey_a = all_grid_faces[fkey]["vertices"][0]
@@ -53,9 +45,7 @@ def init(
         if ra <= outer_radius and rb <= outer_radius and rc <= outer_radius:
             obj["faces"][fkey] = all_grid_faces[fkey]
 
-            obj["faces"][fkey]["vertex_normals"] = [
-                vkey_a, vkey_b, vkey_c
-            ]
+            obj["faces"][fkey]["vertex_normals"] = [vkey_a, vkey_b, vkey_c]
 
     obj["materials"][ref] = [ref]
 

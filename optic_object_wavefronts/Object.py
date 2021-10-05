@@ -3,6 +3,7 @@ import collections
 from . import Wavefront
 from . import version
 
+
 def init():
     """
     Returns an Object which describes meshes of triangular faces.

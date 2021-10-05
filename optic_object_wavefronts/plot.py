@@ -1,12 +1,20 @@
 import optic_object_wavefronts as oow
 import matplotlib.pyplot as plt
 from matplotlib.patches import Polygon as plt_Polygon
-from mpl_toolkits.mplot3d.art3d import Poly3DCollection, Line3DCollection, Line3D
+from mpl_toolkits.mplot3d.art3d import (
+    Poly3DCollection,
+    Line3DCollection,
+    Line3D,
+)
 import numpy as np
 
 
 def ax_add_face(
-    ax, vertices, face_color="green", face_alpha=0.5, face_edge_color="black",
+    ax,
+    vertices,
+    face_color="green",
+    face_alpha=0.5,
+    face_edge_color="black",
     face_edge_width=0.2,
 ):
     p = plt_Polygon(
@@ -106,28 +114,24 @@ def ax_add_object_xyz(
             else:
                 facecolors.append(face_color)
 
-
     # normals
     # -------
     for material in wavefront["materials"]:
         for face in wavefront["materials"][material]:
             for n in range(3):
-                normal =  vertex_normal_length * np.array(wavefront["vn"][face["vn"][n]])
+                normal = vertex_normal_length * np.array(
+                    wavefront["vn"][face["vn"][n]]
+                )
                 start = wavefront["v"][face["v"][n]]
                 stop = start + normal
 
                 polygons.append(
-                    [
-                        start,
-                        stop,
-                        stop,
-                    ]
+                    [start, stop, stop,]
                 )
 
                 edgecolors.append(vertex_normal_color)
                 linewidths.append(vertex_normal_width)
                 facecolors.append("None")
-
 
     ax.add_collection3d(
         Poly3DCollection(
@@ -139,4 +143,3 @@ def ax_add_object_xyz(
             zorder=zorder,
         )
     )
-

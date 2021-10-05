@@ -6,18 +6,11 @@ import copy
 import numpy as np
 
 
-def init(
-    outer_radius,
-    curvature_radius,
-    n=10,
-    ref="SphericalCapHexagonal"
-):
+def init(outer_radius, curvature_radius, n=10, ref="SphericalCapHexagonal"):
     obj = Object.init()
 
     obj["vertices"] = geometry.hexagonal_grid.make_vertices_xy(
-        outer_radius=outer_radius,
-        n=n,
-        ref=ref + "/inner"
+        outer_radius=outer_radius, n=n, ref=ref + "/inner"
     )
 
     # elevate z-axis
@@ -68,32 +61,29 @@ def rotate_vertices_xy(vertices, phi):
 def weave_hexagon_edges(obj, outer_radius, margin_width_on_edge, ref):
     assert outer_radius >= 0
     assert margin_width_on_edge >= 0
-    inner_radius_hexagon = outer_radius * geometry.regular_polygon.inner_radius(n=6)
+    inner_radius_hexagon = (
+        outer_radius * geometry.regular_polygon.inner_radius(n=6)
+    )
     inner_radius_threshold = inner_radius_hexagon - margin_width_on_edge
     rot_perp = np.pi / 2.0
 
-    for irotz, phi in enumerate(np.linspace(0, 2*np.pi, 6, endpoint=False)):
+    for irotz, phi in enumerate(np.linspace(0, 2 * np.pi, 6, endpoint=False)):
         i_vertices = rotate_vertices_xy(vertices=obj["vertices"], phi=phi)
 
         i_combi_vertices = {}
         for fkey in i_vertices:
             if i_vertices[fkey][1] > 0.99 * inner_radius_hexagon:
-                i_combi_vertices[fkey] = np.array([
-                    i_vertices[fkey][0],
-                    i_vertices[fkey][2],
-                    0.0,
-                ])
+                i_combi_vertices[fkey] = np.array(
+                    [i_vertices[fkey][0], i_vertices[fkey][2], 0.0,]
+                )
 
         i_faces = delaunay.make_faces_xy(
-            vertices=i_combi_vertices,
-            ref=ref + "_{:d}".format(irotz)
+            vertices=i_combi_vertices, ref=ref + "_{:d}".format(irotz)
         )
 
-        i_normal = np.array([
-            np.cos(-phi + rot_perp),
-            np.sin(-phi + rot_perp),
-            0.0
-        ])
+        i_normal = np.array(
+            [np.cos(-phi + rot_perp), np.sin(-phi + rot_perp), 0.0]
+        )
         i_vnkey = (ref, irotz)
 
         obj["vertex_normals"][i_vnkey] = i_normal

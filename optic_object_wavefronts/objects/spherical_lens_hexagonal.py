@@ -5,14 +5,13 @@ from . import spherical_cap_hexagonal
 
 
 def estimate_height_of_cap(curvature_radius, outer_radius):
-    return curvature_radius - np.sqrt(curvature_radius**2 - outer_radius**2)
+    return curvature_radius - np.sqrt(
+        curvature_radius ** 2 - outer_radius ** 2
+    )
 
 
 def init(
-    outer_radius,
-    curvature_radius,
-    n,
-    ref,
+    outer_radius, curvature_radius, n, ref,
 ):
     assert curvature_radius > 0.0
     assert outer_radius > 0.0
@@ -61,8 +60,8 @@ def init(
         ref=ref + "/side",
     )
 
-    obj["materials"][ref+"_top"] = [ref + "/top"]
-    obj["materials"][ref+"_bottom"] = [ref + "/bot"]
-    obj["materials"][ref+"_side"] = [ref + "/side"]
+    obj["materials"][ref + "_top"] = [ref + "/top"]
+    obj["materials"][ref + "_bottom"] = [ref + "/bot"]
+    obj["materials"][ref + "_side"] = [ref + "/side"]
 
     return obj

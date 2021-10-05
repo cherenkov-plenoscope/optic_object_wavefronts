@@ -10,29 +10,24 @@ def init(
     curvature_radius,
     inner_polygon=None,
     n_hex_grid=10,
-    ref="SphericalCap"
+    ref="SphericalCap",
 ):
     outer_limits = polygon.limits(outer_polygon)
-    outer_radius_xy = np.max([
-        np.max(np.abs(outer_limits[0])),
-        np.max(np.abs(outer_limits[1]))
-    ])
+    outer_radius_xy = np.max(
+        [np.max(np.abs(outer_limits[0])), np.max(np.abs(outer_limits[1]))]
+    )
 
     hex_vertices = geometry.hexagonal_grid.make_vertices_xy(
-        outer_radius=outer_radius_xy*1.5,
-        n=n_hex_grid,
-        ref=ref + "/Grid"
+        outer_radius=outer_radius_xy * 1.5, n=n_hex_grid, ref=ref + "/Grid"
     )
 
     hex_vertices_valid = polygon.get_vertices_inside(
-        vertices=hex_vertices,
-        polygon=outer_polygon
+        vertices=hex_vertices, polygon=outer_polygon
     )
 
     if inner_polygon is not None:
         hex_vertices_valid = polygon.get_vertices_outside(
-            vertices=hex_vertices_valid,
-            polygon=inner_polygon
+            vertices=hex_vertices_valid, polygon=inner_polygon
         )
 
     obj = Object.init()
@@ -69,9 +64,7 @@ def init(
 
     if inner_polygon is not None:
         mask_faces_in_inner = polygon.mask_face_inside(
-            vertices=obj["vertices"],
-            faces=obj["faces"],
-            polygon=inner_polygon
+            vertices=obj["vertices"], faces=obj["faces"], polygon=inner_polygon
         )
         fkeys_to_be_removed = []
         for idx, fkey in enumerate(obj["faces"]):

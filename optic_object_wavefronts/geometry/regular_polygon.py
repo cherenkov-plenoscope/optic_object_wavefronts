@@ -1,6 +1,7 @@
 import numpy as np
 import collections
 
+
 def make_vertices_xy(outer_radius=1.0, ref="ring", n=16, rot=0.0):
     vertices = collections.OrderedDict()
     for nphi, phi in enumerate(

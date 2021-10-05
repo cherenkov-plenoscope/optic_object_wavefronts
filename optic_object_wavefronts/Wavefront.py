@@ -1,4 +1,3 @@
-
 def _key_contains_any_of_patterns(key, patterns):
     for pattern in patterns:
         if str.find(key, pattern) >= 0:
@@ -37,16 +36,18 @@ def init_from_Object(obj):
         wavefront["materials"][mkey] = []
 
         for fkey in obj["faces"]:
-            if _key_contains_any_of_patterns(key=fkey[0], patterns=obj["materials"][mkey]):
+            if _key_contains_any_of_patterns(
+                key=fkey[0], patterns=obj["materials"][mkey]
+            ):
                 vs = []
                 for dim in range(3):
                     vs.append(v_dict[obj["faces"][fkey]["vertices"][dim]])
                 vns = []
                 for dim in range(3):
-                    vns.append(vn_dict[obj["faces"][fkey]["vertex_normals"][dim]])
-                wavefront["materials"][mkey].append(
-                    {"v": vs, "vn": vns}
-                )
+                    vns.append(
+                        vn_dict[obj["faces"][fkey]["vertex_normals"][dim]]
+                    )
+                wavefront["materials"][mkey].append({"v": vs, "vn": vns})
 
     return wavefront
 

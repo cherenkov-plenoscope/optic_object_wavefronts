@@ -11,13 +11,7 @@ def _find_keys(dic, key):
     return out
 
 
-def weave_cylinder_faces(
-    obj,
-    ref,
-    vkey_lower,
-    vkey_upper,
-    norm_sign=1.0
-):
+def weave_cylinder_faces(obj, ref, vkey_lower, vkey_upper, norm_sign=1.0):
     assert np.abs(norm_sign) == 1.0
 
     num_v_lower = len(_find_keys(obj["vertices"], vkey_lower))
@@ -38,19 +32,19 @@ def weave_cylinder_faces(
         vb[2] = 0.0
         vc[2] = 0.0
         if (ref + "/side/top", n_a) not in obj["vertex_normals"]:
-            obj["vertex_normals"][
-                (ref + "/side/top", n_a)
-            ] = norm_sign * va / np.linalg.norm(va)
+            obj["vertex_normals"][(ref + "/side/top", n_a)] = (
+                norm_sign * va / np.linalg.norm(va)
+            )
 
         if (ref + "/side/top", n_b) not in obj["vertex_normals"]:
-            obj["vertex_normals"][
-                (ref + "/side/top", n_b)
-            ] = norm_sign * vb / np.linalg.norm(vb)
+            obj["vertex_normals"][(ref + "/side/top", n_b)] = (
+                norm_sign * vb / np.linalg.norm(vb)
+            )
 
         if (ref + "/side/bot", n_c) not in obj["vertex_normals"]:
-            obj["vertex_normals"][
-                (ref + "/side/bot", n_c)
-            ] = norm_sign * vc / np.linalg.norm(vc)
+            obj["vertex_normals"][(ref + "/side/bot", n_c)] = (
+                norm_sign * vc / np.linalg.norm(vc)
+            )
 
         side_fkey = (ref + "/side_ttb", ni)
         obj["faces"][side_fkey] = {
@@ -81,19 +75,19 @@ def weave_cylinder_faces(
         vb[2] = 0.0
         vc[2] = 0.0
         if (ref + "/side/bot", n_a) not in obj["vertex_normals"]:
-            obj["vertex_normals"][
-                (ref + "/side/bot", n_a)
-            ] = norm_sign * va / np.linalg.norm(va)
+            obj["vertex_normals"][(ref + "/side/bot", n_a)] = (
+                norm_sign * va / np.linalg.norm(va)
+            )
 
         if (ref + "/side/bot", n_b) not in obj["vertex_normals"]:
-            obj["vertex_normals"][
-                (ref + "/side/bot", n_b)
-            ] = norm_sign * vb / np.linalg.norm(vb)
+            obj["vertex_normals"][(ref + "/side/bot", n_b)] = (
+                norm_sign * vb / np.linalg.norm(vb)
+            )
 
         if (ref + "/side/top", n_c) not in obj["vertex_normals"]:
-            obj["vertex_normals"][
-                (ref + "/side/top", n_c)
-            ] = norm_sign * vc / np.linalg.norm(vc)
+            obj["vertex_normals"][(ref + "/side/top", n_c)] = (
+                norm_sign * vc / np.linalg.norm(vc)
+            )
 
         side_fkey = (ref + "/side_bbt", ni)
         obj["faces"][side_fkey] = {
@@ -112,15 +106,8 @@ def weave_cylinder_faces(
     return obj
 
 
-def init(
-    outer_radius=1.0, length=1.0, n=6, rot=0.0, ref="cylinder"
-):
-    top = disc.init(
-        outer_radius=outer_radius,
-        ref=ref + "/top",
-        n=n,
-        rot=rot
-    )
+def init(outer_radius=1.0, length=1.0, n=6, rot=0.0, ref="cylinder"):
+    top = disc.init(outer_radius=outer_radius, ref=ref + "/top", n=n, rot=rot)
     bot = disc.init(
         outer_radius=outer_radius,
         ref=ref + "/bot",
@@ -153,8 +140,8 @@ def init(
         ref=ref + "/outer",
     )
 
-    obj["materials"][ref+"_top"] = ["top"]
-    obj["materials"][ref+"_bottom"] = ["bot"]
-    obj["materials"][ref+"_outer_side"] = ["outer"]
+    obj["materials"][ref + "_top"] = ["top"]
+    obj["materials"][ref + "_bottom"] = ["bot"]
+    obj["materials"][ref + "_outer_side"] = ["outer"]
 
     return obj

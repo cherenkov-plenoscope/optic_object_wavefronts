@@ -9,20 +9,17 @@ def init(
     curvature_radius,
     width,
     n=10,
-    ref="SphericalPlaneHexagonalBody"
+    ref="SphericalPlaneHexagonalBody",
 ):
     front_obj = spherical_cap_hexagonal.init(
         outer_radius=outer_radius,
         curvature_radius=curvature_radius,
         n=n,
-        ref=ref + "/front"
+        ref=ref + "/front",
     )
 
     back_obj = disc.init(
-        outer_radius=outer_radius,
-        n=6,
-        ref=ref + "/back",
-        rot=0.0,
+        outer_radius=outer_radius, n=6, ref=ref + "/back", rot=0.0,
     )
 
     center_of_curvature = np.array([0.0, 0.0, curvature_radius])
@@ -73,8 +70,8 @@ def init(
             obj["faces"].pop(fkey)
 
     obj["materials"] = {}
-    obj["materials"][ref+"_front"] = [ref + "/front"]
-    obj["materials"][ref+"_back"] = [ref + "/back"]
-    obj["materials"][ref+"_side"] = [ref + "/side"]
+    obj["materials"][ref + "_front"] = [ref + "/front"]
+    obj["materials"][ref + "_back"] = [ref + "/back"]
+    obj["materials"][ref + "_side"] = [ref + "/side"]
 
     return obj

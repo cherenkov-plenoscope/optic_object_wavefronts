@@ -13,7 +13,7 @@ def init(
     n_hex_grid,
     rot,
     ref,
-    inner_radius=None
+    inner_radius=None,
 ):
     top = spherical_cap_regular.init(
         outer_radius=outer_radius,
@@ -22,7 +22,7 @@ def init(
         ref=ref + "/top",
         n_polygon=n_polygon,
         n_hex_grid=n_hex_grid,
-        rot=rot
+        rot=rot,
     )
     bot = spherical_cap_regular.init(
         outer_radius=outer_radius,
@@ -71,10 +71,10 @@ def init(
             norm_sign=-1.0,
         )
 
-    obj["materials"][ref+"_top"] = [ref + "/top"]
-    obj["materials"][ref+"_bottom"] = [ref + "/bot"]
-    obj["materials"][ref+"_outer_side"] = [ref + "/outer"]
+    obj["materials"][ref + "_top"] = [ref + "/top"]
+    obj["materials"][ref + "_bottom"] = [ref + "/bot"]
+    obj["materials"][ref + "_outer_side"] = [ref + "/outer"]
     if inner_radius is not None:
-        obj["materials"][ref+"_inner_side"] = [ref + "/inner"]
+        obj["materials"][ref + "_inner_side"] = [ref + "/inner"]
 
     return obj

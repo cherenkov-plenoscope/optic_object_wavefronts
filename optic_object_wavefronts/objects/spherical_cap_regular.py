@@ -1,6 +1,7 @@
 from .. import geometry
 from . import spherical_cap
 
+
 def init(
     outer_radius,
     curvature_radius,
@@ -11,10 +12,7 @@ def init(
     rot=0.0,
 ):
     outer_polygon = geometry.regular_polygon.make_vertices_xy(
-        outer_radius=outer_radius,
-        n=n_polygon,
-        ref=ref + "/ring",
-        rot=rot,
+        outer_radius=outer_radius, n=n_polygon, ref=ref + "/ring", rot=rot,
     )
 
     if inner_radius is not None:
@@ -32,5 +30,5 @@ def init(
         inner_polygon=inner_polygon,
         n_hex_grid=n_hex_grid,
         curvature_radius=curvature_radius,
-        ref=ref
+        ref=ref,
     )
