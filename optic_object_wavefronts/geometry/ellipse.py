@@ -8,7 +8,7 @@ class QuadraticEquation:
         self.inner_part_of_sqrt = self.p_over_2 * self.p_over_2 - self.q
 
         if self.has_real_solution():
-            self.sqrt = np.sqrt(inner_part_of_sqrt)
+            self.sqrt = np.sqrt(self.inner_part_of_sqrt)
 
     def has_real_solution(self):
         return self.inner_part_of_sqrt >= 0.0
