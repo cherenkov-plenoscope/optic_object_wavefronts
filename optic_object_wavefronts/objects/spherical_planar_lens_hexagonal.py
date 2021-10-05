@@ -8,18 +8,18 @@ def init(
     outer_radius,
     curvature_radius,
     width,
-    n=10,
+    fn=10,
     ref="SphericalPlaneHexagonalBody",
 ):
     front_obj = spherical_cap_hexagonal.init(
         outer_radius=outer_radius,
         curvature_radius=curvature_radius,
-        n=n,
+        fn=fn,
         ref=ref + "/front",
     )
 
     back_obj = disc.init(
-        outer_radius=outer_radius, n=6, ref=ref + "/back", rot=0.0,
+        outer_radius=outer_radius, fn=6, ref=ref + "/back", rot=0.0,
     )
 
     center_of_curvature = np.array([0.0, 0.0, curvature_radius])
@@ -30,7 +30,7 @@ def init(
 
     obj = Object.merge(front_obj, back_obj)
 
-    hexagonal_grid_spacing = outer_radius / n
+    hexagonal_grid_spacing = outer_radius / fn
 
     obj = spherical_cap_hexagonal.weave_hexagon_edges(
         obj=obj,

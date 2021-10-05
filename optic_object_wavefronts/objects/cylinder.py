@@ -106,13 +106,36 @@ def weave_cylinder_faces(obj, ref, vkey_lower, vkey_upper, norm_sign=1.0):
     return obj
 
 
-def init(outer_radius=1.0, length=1.0, n=6, rot=0.0, ref="cylinder"):
-    top = disc.init(outer_radius=outer_radius, ref=ref + "/top", n=n, rot=rot)
+def init(
+    outer_radius=1.0, length=1.0, fn=6, rot=0.0, ref="cylinder",
+):
+    """
+    Returns a cylinder-object.
+
+    3D volume
+    3 Materials: top / outer_side / bottom
+
+    Parameters
+    ----------
+    outer_radius : float
+            Outer radius of the regular polygon defining the disc.
+    length : float
+            Length of cylinder.
+    fn : int
+            Number of vertices in outer regular polygon.
+    rot : float
+            Rotation in z of regular polygon.
+    ref : str
+            Key for the material.
+    """
+    top = disc.init(
+        outer_radius=outer_radius, ref=ref + "/top", fn=fn, rot=rot,
+    )
     bot = disc.init(
         outer_radius=outer_radius,
         ref=ref + "/bot",
-        n=n,
-        rot=(2 * np.pi) / (2 * n) + rot,
+        fn=fn,
+        rot=(2 * np.pi) / (2 * fn) + rot,
     )
 
     obj = Object.init()

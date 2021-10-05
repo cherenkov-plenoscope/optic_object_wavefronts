@@ -2,10 +2,10 @@ import numpy as np
 import collections
 
 
-def make_vertices_xy(outer_radius=1.0, ref="ring", n=16, rot=0.0):
+def make_vertices_xy(outer_radius=1.0, ref="ring", fn=16, rot=0.0):
     vertices = collections.OrderedDict()
     for nphi, phi in enumerate(
-        np.linspace(0.0, 2.0 * np.pi, n, endpoint=False)
+        np.linspace(0.0, 2.0 * np.pi, fn, endpoint=False)
     ):
         vertices[(ref, nphi)] = np.array(
             [
@@ -17,5 +17,5 @@ def make_vertices_xy(outer_radius=1.0, ref="ring", n=16, rot=0.0):
     return vertices
 
 
-def inner_radius(n):
-    return 1.0 * np.cos(np.pi / n)
+def inner_radius(fn):
+    return 1.0 * np.cos(np.pi / fn)

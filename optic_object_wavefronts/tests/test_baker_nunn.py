@@ -5,8 +5,8 @@ import collections
 
 def test_baker_nunn():
     # baker nunn
-    n_polygon = 71
-    n_hex_grid = 17
+    fn_polygon = 71
+    fn_hex_grid = 17
 
     corrector_radius = 0.508 / 2.0
     mirror_radius = 0.7600 / 2.0
@@ -49,8 +49,8 @@ def test_baker_nunn():
         curvature_radius_top=-mirror_curvature_radius,
         curvature_radius_bot=-mirror_curvature_radius - mirror_thickness,
         offset=mirror_thickness,
-        n_polygon=n_polygon,
-        n_hex_grid=n_hex_grid,
+        fn_polygon=fn_polygon,
+        fn_hex_grid=fn_hex_grid,
         rot=0.0,
         ref="mirror",
     )
@@ -60,8 +60,8 @@ def test_baker_nunn():
         curvature_radius_top=-13.754,
         curvature_radius_bot=-2.589,
         offset=0.02654,
-        n_polygon=n_polygon,
-        n_hex_grid=n_hex_grid,
+        fn_polygon=fn_polygon,
+        fn_hex_grid=fn_hex_grid,
         rot=0.0,
         ref="corrector1",
     )
@@ -71,8 +71,8 @@ def test_baker_nunn():
         curvature_radius_top=-2.988818,
         curvature_radius_bot=2.988818,
         offset=0.01425,
-        n_polygon=n_polygon,
-        n_hex_grid=n_hex_grid,
+        fn_polygon=fn_polygon,
+        fn_hex_grid=fn_hex_grid,
         rot=0.0,
         ref="corrector2",
     )
@@ -82,8 +82,8 @@ def test_baker_nunn():
         curvature_radius_top=2.589,
         curvature_radius_bot=13.754,
         offset=0.02654,
-        n_polygon=n_polygon,
-        n_hex_grid=n_hex_grid,
+        fn_polygon=fn_polygon,
+        fn_hex_grid=fn_hex_grid,
         rot=0.0,
         ref="corrector3",
     )
@@ -136,13 +136,13 @@ def test_baker_nunn():
     f_shield = oow.objects.spherical_cap.init(
         outer_polygon=focus_shield_bound,
         curvature_radius=focus_shield_curvature_radius,
-        n_hex_grid=n_hex_grid,
+        fn_hex_grid=fn_hex_grid,
         ref="focus_shield",
     )
     f_surface = oow.objects.spherical_cap.init(
         outer_polygon=focus_surface_bound,
         curvature_radius=focus_surface_curvature_radius,
-        n_hex_grid=3 * n_hex_grid,
+        fn_hex_grid=3 * fn_hex_grid,
         ref="focus_surface",
     )
 

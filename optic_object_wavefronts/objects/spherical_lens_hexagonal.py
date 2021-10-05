@@ -11,7 +11,7 @@ def estimate_height_of_cap(curvature_radius, outer_radius):
 
 
 def init(
-    outer_radius, curvature_radius, n, ref,
+    outer_radius, curvature_radius, fn, ref,
 ):
     assert curvature_radius > 0.0
     assert outer_radius > 0.0
@@ -20,13 +20,13 @@ def init(
         outer_radius=outer_radius,
         curvature_radius=-1.0 * curvature_radius,
         ref=ref + "/top",
-        n=n,
+        fn=fn,
     )
     bot = spherical_cap_hexagonal.init(
         outer_radius=outer_radius,
         curvature_radius=1.0 * curvature_radius,
         ref=ref + "/bot",
-        n=n,
+        fn=fn,
     )
 
     cap_height = estimate_height_of_cap(curvature_radius, outer_radius)
@@ -51,7 +51,7 @@ def init(
     for vnkey in bot["vertex_normals"]:
         obj["vertex_normals"][vnkey] = -1.0 * bot["vertex_normals"][vnkey]
 
-    hexagonal_grid_spacing = outer_radius / n
+    hexagonal_grid_spacing = outer_radius / fn
 
     obj = spherical_cap_hexagonal.weave_hexagon_edges(
         obj=obj,

@@ -9,8 +9,8 @@ def init(
     curvature_radius_top,
     curvature_radius_bot,
     offset,
-    n_polygon,
-    n_hex_grid,
+    fn_polygon,
+    fn_hex_grid,
     rot,
     ref,
     inner_radius=None,
@@ -20,8 +20,8 @@ def init(
         inner_radius=inner_radius,
         curvature_radius=-1.0 * curvature_radius_top,
         ref=ref + "/top",
-        n_polygon=n_polygon,
-        n_hex_grid=n_hex_grid,
+        fn_polygon=fn_polygon,
+        fn_hex_grid=fn_hex_grid,
         rot=rot,
     )
     bot = spherical_cap_regular.init(
@@ -29,9 +29,9 @@ def init(
         inner_radius=inner_radius,
         curvature_radius=-1.0 * curvature_radius_bot,
         ref=ref + "/bot",
-        n_polygon=n_polygon,
-        n_hex_grid=n_hex_grid,
-        rot=(2 * np.pi) / (2 * n_polygon) + rot,
+        fn_polygon=fn_polygon,
+        fn_hex_grid=fn_hex_grid,
+        rot=(2 * np.pi) / (2 * fn_polygon) + rot,
     )
 
     obj = Object.init()

@@ -6,11 +6,11 @@ import numpy as np
 
 
 def init(
-    outer_radius, curvature_radius, n_hex_grid=10, ref="SphericalPixelCap",
+    outer_radius, curvature_radius, fn_hex_grid=10, ref="SphericalPixelCap",
 ):
     obj = Object.init()
     obj["vertices"] = geometry.hexagonal_grid.make_vertices_xy(
-        outer_radius=2.0 * outer_radius, ref="hex", n=n_hex_grid
+        outer_radius=2.0 * outer_radius, ref="hex", fn=fn_hex_grid
     )
 
     for k in obj["vertices"]:

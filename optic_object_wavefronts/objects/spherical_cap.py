@@ -9,7 +9,7 @@ def init(
     outer_polygon,
     curvature_radius,
     inner_polygon=None,
-    n_hex_grid=10,
+    fn_hex_grid=10,
     ref="SphericalCap",
 ):
     outer_limits = polygon.limits(outer_polygon)
@@ -18,7 +18,7 @@ def init(
     )
 
     hex_vertices = geometry.hexagonal_grid.make_vertices_xy(
-        outer_radius=outer_radius_xy * 1.5, n=n_hex_grid, ref=ref + "/Grid"
+        outer_radius=outer_radius_xy * 1.5, fn=fn_hex_grid, ref=ref + "/Grid"
     )
 
     hex_vertices_valid = polygon.get_vertices_inside(
