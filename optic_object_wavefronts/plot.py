@@ -72,7 +72,32 @@ def plot_Object(obj):
     plt.show()
 
 
-def ax_add_object_xyz(
+def fig_ax_3d(figsize=(4, 4), dpi=320):
+    fig = plt.figure(figsize=figsize, dpi=dpi)
+    ax = fig.add_subplot(111, projection="3d")
+    ax.grid(False)
+    ax.axes.set_xlim3d(left=-1, right=1)
+    ax.axes.set_ylim3d(bottom=-1, top=1)
+    ax.axes.set_zlim3d(bottom=-1, top=1)
+    ax.set_xticks([])
+    ax.set_yticks([])
+    ax.set_zticks([])
+    return fig, ax
+
+
+def ax_aspect_equal_3d(ax):
+    extents = np.array(
+        [getattr(ax, "get_{}lim".format(dim))() for dim in "xyz"]
+    )
+    sz = extents[:, 1] - extents[:, 0]
+    centers = np.mean(extents, axis=1)
+    maxsize = max(abs(sz))
+    r = maxsize / 2
+    for ctr, dim in zip(centers, "xyz"):
+        getattr(ax, "set_{}lim".format(dim))(ctr - r, ctr + r)
+
+
+def ax_add_object_3d(
     ax,
     obj,
     face_edge_width=1.0,
