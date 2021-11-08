@@ -1,4 +1,5 @@
 from . import template_curved_surface
+from . import template_cylinder
 from . import disc
 from . import cylinder
 from . import spherical_cap
