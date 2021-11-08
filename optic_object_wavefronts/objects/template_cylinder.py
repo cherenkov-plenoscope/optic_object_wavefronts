@@ -138,8 +138,8 @@ def init(
 
     obj = cylinder.weave_cylinder_faces(
         obj=obj,
-        vkey_lower=ref + "/bot/ring",
-        vkey_upper=ref + "/top/ring",
+        vkey_lower=ref + "/bot/outer_bound",
+        vkey_upper=ref + "/top/outer_bound",
         ref=ref + "/outer",
         norm_sign=+1.0,
     )
@@ -147,8 +147,8 @@ def init(
     if weave_inner_polygon:
         obj = cylinder.weave_cylinder_faces(
             obj=obj,
-            vkey_lower=ref + "/bot/inner_ring",
-            vkey_upper=ref + "/top/inner_ring",
+            vkey_lower=ref + "/bot/inner_bound",
+            vkey_upper=ref + "/top/inner_bound",
             ref=ref + "/inner",
             norm_sign=-1.0,
         )

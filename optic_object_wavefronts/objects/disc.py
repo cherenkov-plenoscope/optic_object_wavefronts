@@ -35,7 +35,7 @@ def init(
 
     obj = Object.init()
     obj["vertices"] = geometry.regular_polygon.make_vertices_xy(
-        outer_radius=outer_radius, ref=ref + "/" + "ring", fn=fn, rot=rot,
+        outer_radius=outer_radius, ref=ref + "/" + "outer_bound", fn=fn, rot=rot,
     )
 
     if prevent_many_faces_share_same_vertex:
@@ -45,13 +45,13 @@ def init(
         while next_fn >= 6:
             inner_vertices = geometry.regular_polygon.make_vertices_xy(
                 outer_radius=next_radius,
-                ref=ref + "/" + "inner",
+                ref=ref + "/" + "aux",
                 fn=next_fn,
                 rot=rot,
             )
 
             for inner_vkey in inner_vertices:
-                _vkey = (ref + "/inner", v_inner_idx)
+                _vkey = (ref + "/aux", v_inner_idx)
                 obj["vertices"][_vkey] = inner_vertices[inner_vkey]
                 v_inner_idx += 1
 
