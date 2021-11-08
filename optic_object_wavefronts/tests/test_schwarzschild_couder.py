@@ -47,7 +47,7 @@ FN_POLYGON = 71
 FN_HEX_GRID = 17
 
 def test_init():
-    m1 = oow.objects.schwarzschild_couder.init(
+    m1 = oow.objects.schwarzschild_couder_cap.init(
         outer_polygon=oow.geometry.regular_polygon.make_vertices_xy(
             outer_radius=c["M1"]["outer_radius"],
             fn=FN_POLYGON,
@@ -63,7 +63,7 @@ def test_init():
         ref="M1",
     )
 
-    m2 = oow.objects.schwarzschild_couder.init(
+    m2 = oow.objects.schwarzschild_couder_cap.init(
         outer_polygon=oow.geometry.regular_polygon.make_vertices_xy(
             outer_radius=c["M2"]["outer_radius"],
             fn=FN_POLYGON,
