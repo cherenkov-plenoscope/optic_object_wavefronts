@@ -35,7 +35,10 @@ def init(
 
     obj = Object.init()
     obj["vertices"] = geometry.regular_polygon.make_vertices_xy(
-        outer_radius=outer_radius, ref=ref + "/" + "outer_bound", fn=fn, rot=rot,
+        outer_radius=outer_radius,
+        ref=ref + "/" + "outer_bound",
+        fn=fn,
+        rot=rot,
     )
 
     if prevent_many_faces_share_same_vertex:

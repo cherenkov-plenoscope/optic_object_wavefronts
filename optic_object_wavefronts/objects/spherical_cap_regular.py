@@ -12,7 +12,10 @@ def init(
     rot=0.0,
 ):
     outer_polygon = geometry.regular_polygon.make_vertices_xy(
-        outer_radius=outer_radius, fn=fn_polygon, ref=ref + "/outer_bound", rot=rot,
+        outer_radius=outer_radius,
+        fn=fn_polygon,
+        ref=ref + "/outer_bound",
+        rot=rot,
     )
 
     if inner_radius is not None:

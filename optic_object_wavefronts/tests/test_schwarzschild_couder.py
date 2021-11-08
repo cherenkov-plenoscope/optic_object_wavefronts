@@ -9,14 +9,14 @@ c = {
         "curvature_config": {
             "k": 0.0,
             "c": 1.0 / -4.111,
-            "a1": -8.682E-10,
-            "a2": 7.391E-12,
-            "a3": -2.2E-18,
-            "a4": 3.292E-24,
-            "a5": -6.324E-30,
-            "a6": 1.735E-35,
-            "a7": -1.762E-41,
-            "a8": 6.565E-48,
+            "a1": -8.682e-10,
+            "a2": 7.391e-12,
+            "a3": -2.2e-18,
+            "a4": 3.292e-24,
+            "a5": -6.324e-30,
+            "a6": 1.735e-35,
+            "a7": -1.762e-41,
+            "a8": 6.565e-48,
         },
         "z": 1.2944,
     },
@@ -25,26 +25,23 @@ c = {
         "curvature_config": {
             "k": 0.0,
             "c": 1.0 / +1.089,
-            "a1": -7.308E-011,
-            "a2": 1.3E-010,
-            "a3": -9.276E-016,
-            "a4": 1.125E-021,
-            "a5": 1.50E-027,
-            "a6": -1.96E-034,
-            "a7": -1.541E-038,
-            "a8": 1.946E-044,
+            "a1": -7.308e-011,
+            "a2": 1.3e-010,
+            "a3": -9.276e-016,
+            "a4": 1.125e-021,
+            "a5": 1.50e-027,
+            "a6": -1.96e-034,
+            "a7": -1.541e-038,
+            "a8": 1.946e-044,
         },
         "z": -0.26,
     },
-    "DET": {
-        "outer_radius": 0.1,
-        "curvature_radius": 1.06,
-        "z": 0.0,
-    }
+    "DET": {"outer_radius": 0.1, "curvature_radius": 1.06, "z": 0.0,},
 }
 
 FN_POLYGON = 71
 FN_HEX_GRID = 17
+
 
 def test_init():
     m1 = oow.objects.schwarzschild_couder_cap.init(
@@ -59,7 +56,7 @@ def test_init():
             ref="M1_inner",
         ),
         curvature_config=c["M1"]["curvature_config"],
-        fn_hex_grid=FN_HEX_GRID*2,
+        fn_hex_grid=FN_HEX_GRID * 2,
         ref="M1",
     )
 
@@ -83,7 +80,7 @@ def test_init():
         ),
         curvature_radius=c["DET"]["curvature_radius"],
         ref="DET",
-        fn_hex_grid=FN_HEX_GRID//3,
+        fn_hex_grid=FN_HEX_GRID // 3,
     )
 
     telescope = oow.Object.init()

@@ -1,9 +1,10 @@
 import numpy as np
 
+
 def surface_height(x, y, k, c, a1, a2, a3, a4, a5, a6, a7, a8):
     r = np.hypot(x, y)
     z = 0.0
-    z += (c*r ** 2) / (1 + np.sqrt((1 - (1 + k) * c ** 2 * r ** 2)))
+    z += (c * r ** 2) / (1 + np.sqrt((1 - (1 + k) * c ** 2 * r ** 2)))
     z += a1 * r ** 2
     z += a2 * r ** 4
     z += a3 * r ** 6
@@ -30,4 +31,4 @@ def surface_normal(x, y, k, c, a1, a2, a3, a4, a5, a6, a7, a8, delta=1e-6):
     dzdx = (z_xp - z_xm) / (2 * delta)
     dzdy = (z_yp - z_ym) / (2 * delta)
     normal = [-dzdx, -dzdy, 1.0]
-    return normal/np.linalg.norm(normal)
+    return normal / np.linalg.norm(normal)
