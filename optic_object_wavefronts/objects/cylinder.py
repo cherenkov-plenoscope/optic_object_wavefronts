@@ -56,8 +56,8 @@ def init(
 
     obj = template_cylinder.weave_cylinder_faces(
         obj=obj,
-        vkey_lower=ref + "/bot/ring",
-        vkey_upper=ref + "/top/ring",
+        vkey_lower=ref + "/bot/outer_bound",
+        vkey_upper=ref + "/top/outer_bound",
         ref=ref + "/outer",
     )
 

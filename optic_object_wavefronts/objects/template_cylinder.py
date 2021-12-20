@@ -13,8 +13,8 @@ def _find_keys(dic, key):
 def weave_cylinder_faces(obj, ref, vkey_lower, vkey_upper, norm_sign=1.0):
     assert np.abs(norm_sign) == 1.0
 
-    num_v_lower = len(_find_keys(obj["vertices"], vkey_lower))
-    num_v_upper = len(_find_keys(obj["vertices"], vkey_upper))
+    num_v_lower = len(_find_keys(dic=obj["vertices"], key=vkey_lower))
+    num_v_upper = len(_find_keys(dic=obj["vertices"], key=vkey_upper))
     assert num_v_lower == num_v_upper
     n = num_v_upper
 
@@ -137,7 +137,7 @@ def init(
     for vnkey in bot["vertex_normals"]:
         obj["vertex_normals"][vnkey] = -1.0 * bot["vertex_normals"][vnkey]
 
-    obj = cylinder.weave_cylinder_faces(
+    obj = weave_cylinder_faces(
         obj=obj,
         vkey_lower=ref + "/bot/outer_bound",
         vkey_upper=ref + "/top/outer_bound",
@@ -146,7 +146,7 @@ def init(
     )
 
     if weave_inner_polygon:
-        obj = cylinder.weave_cylinder_faces(
+        obj = weave_cylinder_faces(
             obj=obj,
             vkey_lower=ref + "/bot/inner_bound",
             vkey_upper=ref + "/top/inner_bound",
