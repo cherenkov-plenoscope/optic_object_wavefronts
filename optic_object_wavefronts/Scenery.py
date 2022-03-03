@@ -5,6 +5,19 @@ import json
 from . import Wavefront
 
 
+EXAMPLE_MEDIA_VACUUM = {
+    "refraction": [[200e-9, 1.0], [1.2e-6, 1.0]],
+    "absorbtion": [[200e-9, 1e99], [1.2e-6, 1e99]]
+}
+
+EXAMPLE_SURFACE_MIRROR = {
+    "material": "Phong",
+    "specular_reflection": [[200e-9, 1.0], [1.2e-6, 1.0]],
+    "diffuse_reflection": [[200e-9, 0.0], [1.2e-6, 0.0]],
+    "color": [200, 200, 200]
+}
+
+
 def init():
     """
     Returns a Scenery.
