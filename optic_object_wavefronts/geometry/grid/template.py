@@ -1,4 +1,5 @@
 import numpy as np
+import collections
 
 
 def init(fN, vector_A, vector_B, ref="grid", spacing=1.0):
@@ -16,7 +17,7 @@ def init(fN, vector_A, vector_B, ref="grid", spacing=1.0):
     ref : str
             Key in the references for the vertices.
     """
-    grid = {}
+    grid = collections.OrderedDict()
     for dA in np.arange(-fN, fN + 1, 1):
         for dB in np.arange(-fN, fN + 1, 1):
             key = (ref, (dA, dB))
