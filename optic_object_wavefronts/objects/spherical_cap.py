@@ -13,8 +13,8 @@ def init(
     return template_curved_surface.init(
         outer_polygon=outer_polygon,
         curvature_config={"curvature_radius": curvature_radius},
-        curvature_height_function=Geometry.sphere.surface_height,
-        curvature_surface_normal_function=Geometry.sphere.surface_normal,
+        curvature_height_function=Geometry.Sphere.surface_height,
+        curvature_surface_normal_function=Geometry.Sphere.surface_normal,
         inner_polygon=inner_polygon,
         fn_hex_grid=fn_hex_grid,
         ref=ref,

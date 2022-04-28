@@ -5,8 +5,12 @@ from ... import Geometry
 
 
 def init_facet_supports_on_principal_aperture_plane(
-    aperture_outer_polygon=Geometry.regular_polygon.make_vertices_xy(outer_radius=1.0),
-    aperture_inner_polygon=Geometry.regular_polygon.make_vertices_xy(outer_radius=0.5),
+    aperture_outer_polygon=Geometry.RegularPolygon.make_vertices_xy(
+        outer_radius=1.0
+    ),
+    aperture_inner_polygon=Geometry.RegularPolygon.make_vertices_xy(
+        outer_radius=0.5
+    ),
     grid_spacing=0.1,
     grid_style="hexagonal",
     center_of_grid=[0.0, 0.0],
@@ -20,7 +24,7 @@ def init_facet_supports_on_principal_aperture_plane(
     fN = 2 * int(np.ceil(outer_radius / grid_spacing))
 
     if grid_style == "hexagonal":
-        _grid = Geometry.grid.hexagonal.init_from_spacing(
+        _grid = Geometry.Grid.hexagonal.init_from_spacing(
             spacing=grid_spacing, ref=ref, fN=fN
         )
     elif grid_style == "rectangular":
@@ -45,14 +49,12 @@ def init_facet_supports_on_principal_aperture_plane(
 
 def elevate_facet_supports(
     facet_supports,
-    curvature_height_function=Geometry.parabola.surface_height,
+    curvature_height_function=Geometry.Parabola.surface_height,
     curvature_config={"focal_length": 10.0},
 ):
     out = collections.OrderedDict(facet_supports)
     for fkey in out:
         out[fkey][2] = curvature_height_function(
-            x=out[fkey][0],
-            y=out[fkey][1],
-            **curvature_config,
+            x=out[fkey][0], y=out[fkey][1], **curvature_config,
         )
     return out
