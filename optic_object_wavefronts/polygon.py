@@ -172,3 +172,40 @@ def mask_face_inside(vertices, faces, polygon):
             mask.append(False)
 
     return mask
+
+
+def find_min_max_distant_to_point(polygon, point):
+    """
+    Parameters
+    ----------
+    polygon : dict
+            The vertices of a polygon addressed by keys in a dict.
+    point : array
+            The x (point[0]) and y (point[1]) coordinates of the point.
+
+    Returns
+    -------
+    (keys, distances) : tuple
+        Keys itself is a tuple of the closest and furthest key of a vertex in
+        the polygon.
+        Distances is also a tuple of the closest and furthest distances.
+    """
+    max_distance = 0.0
+    max_vkey = ""
+    min_distance = float("inf")
+    min_vkey = ""
+    for vkey in polygon:
+        vertex_x = polygon[vkey][0]
+        vertex_y = polygon[vkey][1]
+        delta_x = vertex_x - point[0]
+        delta_y = vertex_y - point[1]
+        distance = np.hypot(delta_x, delta_y)
+        if distance >= max_distance:
+            max_distance = distance
+            max_vkey = str(vkey)
+        if distance < min_distance:
+            min_distance = distance
+            min_vkey = str(vkey)
+
+    return (min_vkey, max_vkey), (min_distance, max_distance)
+

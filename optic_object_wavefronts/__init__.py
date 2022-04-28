@@ -4,6 +4,7 @@ from . import Scenery
 from . import Wavefront
 from . import delaunay
 from . import objects
+from . import assembly
 from . import optics
 from . import geometry
 from . import polygon
