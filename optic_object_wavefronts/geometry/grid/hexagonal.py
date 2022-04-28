@@ -30,6 +30,18 @@ def init_from_spacing(spacing=1.0, ref="hex", fN=10):
             The number of vertices along the radius of the grid.
     ref : str
             Key in the references for the vertices.
+
+    The vertices are the centers of the hexagons.
+    The central vertex is in the origin.
+
+          Y
+         _|_
+     ___/ | \___
+    /   \_|_/   \
+    \___/ |_\___/____ x
+    /   \___/   \
+    \___/   \___/
+        \___/
     """
     return template.init(
         fN, vector_A=HEXA, vector_B=HEXB, ref=ref, spacing=spacing
