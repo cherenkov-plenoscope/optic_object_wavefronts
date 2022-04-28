@@ -1,15 +1,16 @@
 import numpy as np
+import collections
 from ... import polygon
 from ... import geometry
 
 
 def init_facet_supports_on_principal_aperture_plane(
-    aperture_outer_polygon,
-    aperture_inner_polygon,
-    grid_spacing,
+    aperture_outer_polygon=geometry.regular_polygon.make_vertices_xy(outer_radius=1.0),
+    aperture_inner_polygon=geometry.regular_polygon.make_vertices_xy(outer_radius=0.5),
+    grid_spacing=0.1,
     grid_style="hexagonal",
     center_of_grid=[0.0, 0.0],
-    ref="hex",
+    ref="grid",
 ):
     _, min_max_distances = polygon.find_min_max_distant_to_point(
         polygon=aperture_outer_polygon, point=center_of_grid
@@ -20,7 +21,11 @@ def init_facet_supports_on_principal_aperture_plane(
 
     if grid_style == "hexagonal":
         _grid = geometry.grid.hexagonal.init_from_spacing(
-            spacing=grid_spacing, ref=ref, fn=fN
+            spacing=grid_spacing, ref=ref, fN=fN
+        )
+    elif grid_style == "rectangular":
+        _grid = geometry.grid.rectangular.init_from_spacing(
+            spacing=grid_spacing, ref=ref, fN=fN
         )
     else:
         assert False, "Grid style {:s} is unknown.".format(grid_style)
@@ -33,11 +38,6 @@ def init_facet_supports_on_principal_aperture_plane(
     )
     mask_outside_inner = np.logical_not(mask_inside_inner)
 
-    mask_valid = np.logical_and(mask_inside_outer, mask_outside_inner)
+    mask = np.logical_and(mask_inside_outer, mask_outside_inner)
 
-    grid = []
-    for i in range(len(_grid)):
-        if mask_valid[i]:
-            grid.append(_grid[i])
-    grid = np.array(grid)
-    return grid
+    return polygon.keep_vertices_in_mask(vertices=_grid, mask=mask)
