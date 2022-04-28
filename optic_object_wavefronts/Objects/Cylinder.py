@@ -1,6 +1,6 @@
 from .. import Object
-from . import disc
-from . import template_cylinder
+from . import Disc
+from . import TemplateCylinder
 import numpy as np
 
 
@@ -16,9 +16,9 @@ def init(
     Parameters
     ----------
     outer_radius : float
-            Outer radius of the regular polygon defining the disc.
+            Outer radius of the regular polygon defining the Disc.
     length : float
-            Length of cylinder.
+            Length of Cylinder.
     fn : int
             Number of vertices in outer regular polygon.
     rot : float
@@ -26,10 +26,10 @@ def init(
     ref : str
             Key for the material.
     """
-    top = disc.init(
+    top = Disc.init(
         outer_radius=outer_radius, ref=ref + "/top", fn=fn, rot=rot,
     )
-    bot = disc.init(
+    bot = Disc.init(
         outer_radius=outer_radius,
         ref=ref + "/bot",
         fn=fn,
@@ -54,7 +54,7 @@ def init(
     for vnkey in bot["vertex_normals"]:
         obj["vertex_normals"][vnkey] = [0, 0, -1]
 
-    obj = template_cylinder.weave_cylinder_faces(
+    obj = TemplateCylinder.weave_cylinder_faces(
         obj=obj,
         vkey_lower=ref + "/bot/outer_bound",
         vkey_upper=ref + "/top/outer_bound",

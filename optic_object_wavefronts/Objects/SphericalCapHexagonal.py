@@ -1,7 +1,7 @@
 from .. import Object
 from .. import delaunay
 from .. import Geometry
-from . import disc
+from . import Disc
 import copy
 import numpy as np
 

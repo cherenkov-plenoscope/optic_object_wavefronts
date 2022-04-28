@@ -1,5 +1,5 @@
-from . import spherical_cap_hexagonal
-from . import disc
+from . import SphericalCapHexagonal
+from . import Disc
 from .. import Object
 import numpy as np
 
@@ -11,14 +11,14 @@ def init(
     fn=10,
     ref="SphericalPlaneHexagonalBody",
 ):
-    front_obj = spherical_cap_hexagonal.init(
+    front_obj = SphericalCapHexagonal.init(
         outer_radius=outer_radius,
         curvature_radius=curvature_radius,
         fn=fn,
         ref=ref + "/front",
     )
 
-    back_obj = disc.init(
+    back_obj = Disc.init(
         outer_radius=outer_radius, fn=6, ref=ref + "/back", rot=0.0,
     )
 
@@ -32,7 +32,7 @@ def init(
 
     hexagonal_grid_spacing = outer_radius / fn
 
-    obj = spherical_cap_hexagonal.weave_hexagon_edges(
+    obj = SphericalCapHexagonal.weave_hexagon_edges(
         obj=obj,
         outer_radius=outer_radius,
         margin_width_on_edge=0.1 * hexagonal_grid_spacing,

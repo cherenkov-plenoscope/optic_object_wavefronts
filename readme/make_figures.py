@@ -24,7 +24,7 @@ objs = {
         "rot": 0.0,
         "fn_hex_grid": 5,
     },
-    "spherical_cap_hexagonal": {
+    "SphericalCapHexagonal": {
         "outer_radius": 1.0,
         "curvature_radius": 4.0,
         "fn": 5,

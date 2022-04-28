@@ -1,7 +1,7 @@
 import numpy as np
 from .. import Object
-from . import template_cylinder
-from . import spherical_cap_regular
+from . import TemplateCylinder
+from . import SphericalCapRegular
 
 
 def init(
@@ -15,7 +15,7 @@ def init(
     ref,
     inner_radius=None,
 ):
-    top = spherical_cap_regular.init(
+    top = SphericalCapRegular.init(
         outer_radius=outer_radius,
         inner_radius=inner_radius,
         curvature_radius=-1.0 * curvature_radius_top,
@@ -24,7 +24,7 @@ def init(
         fn_hex_grid=fn_hex_grid,
         rot=rot,
     )
-    bot = spherical_cap_regular.init(
+    bot = SphericalCapRegular.init(
         outer_radius=outer_radius,
         inner_radius=inner_radius,
         curvature_radius=-1.0 * curvature_radius_bot,
@@ -54,7 +54,7 @@ def init(
     for vnkey in bot["vertex_normals"]:
         obj["vertex_normals"][vnkey] = -1.0 * bot["vertex_normals"][vnkey]
 
-    obj = template_cylinder.weave_cylinder_faces(
+    obj = TemplateCylinder.weave_cylinder_faces(
         obj=obj,
         vkey_lower=ref + "/bot/outer_bound",
         vkey_upper=ref + "/top/outer_bound",
@@ -63,7 +63,7 @@ def init(
     )
 
     if inner_radius is not None:
-        obj = template_cylinder.weave_cylinder_faces(
+        obj = TemplateCylinder.weave_cylinder_faces(
             obj=obj,
             vkey_lower=ref + "/bot/inner_bound",
             vkey_upper=ref + "/top/inner_bound",

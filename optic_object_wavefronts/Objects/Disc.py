@@ -20,7 +20,7 @@ def init(
     Parameters
     ----------
     outer_radius : float
-            Outer radius of the regular polygon defining the disc.
+            Outer radius of the regular polygon defining the Disc.
     fn : int
             Number of vertices in outer regular polygon.
     rot : float

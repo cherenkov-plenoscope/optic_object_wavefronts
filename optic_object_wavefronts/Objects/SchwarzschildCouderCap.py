@@ -1,5 +1,5 @@
 from .. import Geometry
-from . import template_curved_surface
+from . import TemplateCurvedSurface
 import numpy as np
 
 
@@ -10,7 +10,7 @@ def init(
     fn_hex_grid=10,
     ref="SchwartzschildCouder",
 ):
-    return template_curved_surface.init(
+    return TemplateCurvedSurface.init(
         outer_polygon=outer_polygon,
         curvature_config=curvature_config,
         curvature_height_function=Geometry.SchwarzschildCouder.surface_height,

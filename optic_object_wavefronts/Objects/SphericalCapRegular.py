@@ -1,5 +1,5 @@
 from .. import Geometry
-from . import spherical_cap
+from . import SphericalCap
 
 
 def init(
@@ -28,7 +28,7 @@ def init(
     else:
         inner_polygon = None
 
-    return spherical_cap.init(
+    return SphericalCap.init(
         outer_polygon=outer_polygon,
         inner_polygon=inner_polygon,
         fn_hex_grid=fn_hex_grid,
