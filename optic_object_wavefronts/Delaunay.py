@@ -5,7 +5,19 @@ from scipy import spatial as scipy_spatial
 
 def make_faces_xy(vertices, ref):
     """
-    Create the faces based on the vertices x, and y components.
+    Create triangular faces based on the vertices x, and y components.
+
+    Parameters
+    ----------
+    vertices : dict
+            The vertices to make triangular faces for.
+    ref : str
+            The key for the faces keys.
+
+    Returns
+    -------
+    faces : dict
+            The faces for the vertices, referencing the vertices by key.
     """
     vertices_xy = []
     vkeys = []
