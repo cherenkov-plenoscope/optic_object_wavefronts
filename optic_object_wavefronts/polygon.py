@@ -208,4 +208,3 @@ def find_min_max_distant_to_point(polygon, point):
             min_vkey = str(vkey)
 
     return (min_vkey, max_vkey), (min_distance, max_distance)
-

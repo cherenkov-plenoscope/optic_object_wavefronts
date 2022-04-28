@@ -3,6 +3,7 @@ import optic_object_wavefronts as oow
 from optic_object_wavefronts import plot
 
 import matplotlib
+
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
