@@ -19,7 +19,7 @@ def init_facet_supports_on_principal_aperture_plane(
     fN = 2*int(np.ceil(outer_radius/grid_spacing))
 
     if grid_style == "hexagonal":
-        _grid = geometry.hexagonal_grid.make_vertices_xy(
+        _grid = geometry.grid.hexagonal.make_vertices_xy(
             outer_radius=1.0,
             ref="hex",
             fn=fN
