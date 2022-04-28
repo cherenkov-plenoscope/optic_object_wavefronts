@@ -4,7 +4,7 @@ from . import Scenery
 from . import Wavefront
 from . import Delaunay
 from . import Primitives
-from . import Assembly
+from . import Groups
 from . import Optics
 from . import Geometry
 from . import Polygon
