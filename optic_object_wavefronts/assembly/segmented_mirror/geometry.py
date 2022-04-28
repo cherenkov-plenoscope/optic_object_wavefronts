@@ -9,6 +9,7 @@ def init_facet_supports_on_principal_aperture_plane(
     grid_spacing,
     grid_style="hexagonal",
     center_of_grid=[0.0, 0.0],
+    ref="hex",
 ):
     _, min_max_distances = polygon.find_min_max_distant_to_point(
         polygon=aperture_outer_polygon, point=center_of_grid
@@ -18,8 +19,8 @@ def init_facet_supports_on_principal_aperture_plane(
     fN = 2 * int(np.ceil(outer_radius / grid_spacing))
 
     if grid_style == "hexagonal":
-        _grid = geometry.grid.hexagonal.make_vertices_xy(
-            outer_radius=1.0, ref="hex", fn=fN
+        _grid = geometry.grid.hexagonal.init_from_spacing(
+            spacing=grid_spacing, ref=ref, fn=fN
         )
     else:
         assert False, "Grid style {:s} is unknown.".format(grid_style)
