@@ -7,34 +7,34 @@ But when surface-normals matter, use this library to creatre meshes with accurat
 ![A spherical mirror with surface-normals](readme/mirror_render_blender.jpg)
 
 
-disc
+Disc
 ----
-![disc](readme/disc.jpg)
+![disc](readme/Disc.jpg)
 
-cylinder
+Cylinder
 --------
-![disc](readme/cylinder.jpg)
+![disc](readme/Cylinder.jpg)
 
-spherical_cap_regular
+SphericalCapRegular
+-------------------
+![disc](readme/SphericalCapRegular.jpg)
+
+SphericalCapHexagonal
 ---------------------
-![disc](readme/spherical_cap_regular.jpg)
+![disc](readme/SphericalCapHexagonal.jpg)
 
-spherical_cap_hexagonal
------------------------
-![disc](readme/spherical_cap_hexagonal.jpg)
+SphericalCapPixels
+------------------
+![disc](readme/SphericalCapPixels.jpg)
 
-spherical_cap_pixels
---------------------
-![disc](readme/spherical_cap_pixels.jpg)
+SphericalLens
+------------
+![disc](readme/SphericalLens.jpg)
 
-spherical_lens
---------------
-![disc](readme/spherical_lens.jpg)
+SphericalLensHexagonal
+----------------------
+![disc](readme/SphericalLensHexagonal.jpg)
 
-spherical_lens_hexagonal
-------------------------
-![disc](readme/spherical_lens_hexagonal.jpg)
-
-spherical_planar_lens_hexagonal
+SphericalPlanarLensHexagonal
 -------------------------------
-![disc](readme/spherical_planar_lens_hexagonal.jpg)
+![disc](readme/SphericalPlanarLensHexagonal.jpg)
