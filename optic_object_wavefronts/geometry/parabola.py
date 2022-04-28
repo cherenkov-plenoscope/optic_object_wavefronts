@@ -3,7 +3,7 @@ from . import ellipse
 
 def surface_height(x, y, focal_length):
     return ellipse.surface_height(
-        x=x, y=x, focal_length_x=focal_length, focal_length_y=focal_length
+        x=x, y=y, focal_length_x=focal_length, focal_length_y=focal_length
     )
 
 

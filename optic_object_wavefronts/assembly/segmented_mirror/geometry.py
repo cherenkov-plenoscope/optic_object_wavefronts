@@ -41,3 +41,18 @@ def init_facet_supports_on_principal_aperture_plane(
     mask = np.logical_and(mask_inside_outer, mask_outside_inner)
 
     return polygon.keep_vertices_in_mask(vertices=_grid, mask=mask)
+
+
+def elevate_facet_supports(
+    facet_supports,
+    curvature_height_function=geometry.parabola.surface_height,
+    curvature_config={"focal_length": 10.0},
+):
+    out = collections.OrderedDict(facet_supports)
+    for fkey in out:
+        out[fkey][2] = curvature_height_function(
+            x=out[fkey][0],
+            y=out[fkey][1],
+            **curvature_config,
+        )
+    return out
