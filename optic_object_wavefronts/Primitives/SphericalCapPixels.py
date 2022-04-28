@@ -1,5 +1,5 @@
 from .. import Object
-from .. import delaunay
+from .. import Delaunay
 from .. import Geometry
 from .. import polygon
 import numpy as np
@@ -27,7 +27,7 @@ def init(
             curvature_radius=curvature_radius,
         )
 
-    all_grid_faces = delaunay.make_faces_xy(vertices=obj["vertices"], ref=ref)
+    all_grid_faces = Delaunay.make_faces_xy(vertices=obj["vertices"], ref=ref)
 
     for fkey in all_grid_faces:
         vkey_a = all_grid_faces[fkey]["vertices"][0]

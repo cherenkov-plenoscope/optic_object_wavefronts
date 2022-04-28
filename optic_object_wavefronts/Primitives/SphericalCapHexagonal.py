@@ -1,5 +1,5 @@
 from .. import Object
-from .. import delaunay
+from .. import Delaunay
 from .. import Geometry
 from . import Disc
 import copy
@@ -32,7 +32,7 @@ def init(outer_radius, curvature_radius, fn=10, ref="SphericalCapHexagonal"):
             curvature_radius=curvature_radius,
         )
 
-    faces = delaunay.make_faces_xy(vertices=obj["vertices"], ref=ref)
+    faces = Delaunay.make_faces_xy(vertices=obj["vertices"], ref=ref)
 
     for fkey in faces:
         obj["faces"][fkey] = {
@@ -77,7 +77,7 @@ def weave_hexagon_edges(obj, outer_radius, margin_width_on_edge, ref):
                     [i_vertices[fkey][0], i_vertices[fkey][2], 0.0,]
                 )
 
-        i_faces = delaunay.make_faces_xy(
+        i_faces = Delaunay.make_faces_xy(
             vertices=i_combi_vertices, ref=ref + "_{:d}".format(irotz)
         )
 

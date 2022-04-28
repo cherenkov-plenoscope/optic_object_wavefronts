@@ -1,5 +1,5 @@
 from .. import Object
-from .. import delaunay
+from .. import Delaunay
 from .. import Geometry
 from .. import polygon
 import numpy as np
@@ -78,7 +78,7 @@ def init(
             **curvature_config,
         )
 
-    faces = delaunay.make_faces_xy(vertices=obj["vertices"], ref=ref)
+    faces = Delaunay.make_faces_xy(vertices=obj["vertices"], ref=ref)
 
     for fkey in faces:
         obj["faces"][fkey] = {

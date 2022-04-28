@@ -1,6 +1,6 @@
 from .. import Object
 from .. import Geometry
-from .. import delaunay
+from .. import Delaunay
 import numpy as np
 
 
@@ -64,7 +64,7 @@ def init(
     vnkey = (ref, 0)
     obj["vertex_normals"][vnkey] = np.array([0.0, 0.0, 1.0])
 
-    delfaces = delaunay.make_faces_xy(vertices=obj["vertices"], ref=ref)
+    delfaces = Delaunay.make_faces_xy(vertices=obj["vertices"], ref=ref)
 
     for fkey in delfaces:
         obj["faces"][fkey] = {
