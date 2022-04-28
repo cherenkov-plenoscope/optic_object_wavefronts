@@ -6,6 +6,6 @@ from . import delaunay
 from . import objects
 from . import Assembly
 from . import optics
-from . import geometry
+from . import Geometry
 from . import polygon
 from . import Off

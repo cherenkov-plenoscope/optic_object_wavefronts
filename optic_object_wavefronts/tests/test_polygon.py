@@ -2,7 +2,7 @@ import optic_object_wavefronts as oow
 
 
 def test_min_max_distance():
-    polygon = oow.geometry.regular_polygon.make_vertices_xy(
+    polygon = oow.Geometry.regular_polygon.make_vertices_xy(
         outer_radius=1.0, ref="ring", fn=4, rot=0.0,
     )
 

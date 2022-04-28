@@ -1,6 +1,6 @@
 from .. import Object
 from .. import delaunay
-from .. import geometry
+from .. import Geometry
 from .. import polygon
 import numpy as np
 
@@ -9,19 +9,19 @@ def init(
     outer_radius, curvature_radius, fn_hex_grid=10, ref="SphericalPixelCap",
 ):
     obj = Object.init()
-    obj["vertices"] = geometry.grid.hexagonal.init_from_outer_radius(
+    obj["vertices"] = Geometry.grid.hexagonal.init_from_outer_radius(
         outer_radius=2.0 * outer_radius, ref="hex", fn=fn_hex_grid
     )
 
     for k in obj["vertices"]:
-        obj["vertices"][k][2] = geometry.sphere.surface_height(
+        obj["vertices"][k][2] = Geometry.sphere.surface_height(
             x=obj["vertices"][k][0],
             y=obj["vertices"][k][1],
             curvature_radius=curvature_radius,
         )
 
     for k in obj["vertices"]:
-        obj["vertex_normals"][k] = geometry.sphere.surface_normal(
+        obj["vertex_normals"][k] = Geometry.sphere.surface_normal(
             x=obj["vertices"][k][0],
             y=obj["vertices"][k][1],
             curvature_radius=curvature_radius,
