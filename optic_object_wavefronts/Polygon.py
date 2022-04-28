@@ -8,20 +8,25 @@ import collections
 from shapely import geometry as shapely_geometry
 
 
-def to_numpy_array(polygon):
+def to_keys_and_numpy_array(polygon):
     """
-    Returns a numpy.array() of the vertices in the Polygon.
-    All addressing keys are lost.
-
     Parameters
     ----------
     polygon : dict
             The vertices of a polygon addressed by keys in a dict.
+
+    Returns
+    -------
+    (keys, vertices) : tuple(list, numpy.array)
+            A list of keys, and the plain coordinates of the vertices.
     """
-    arr = []
-    for k in polygon:
-        arr.append(polygon[k])
-    return np.array(arr)
+    vertices = []
+    keys = []
+    for key in polygon:
+        keys.append(key)
+        vertices.append(polygon[key])
+    vertices = np.array(vertices)
+    return keys, vertices
 
 
 def limits(polygon):
@@ -33,7 +38,7 @@ def limits(polygon):
     polygon : dict
             The vertices of a polygon addressed by keys in a dict.
     """
-    p = to_numpy_array(polygon)
+    _, p = to_keys_and_numpy_array(polygon=polygon)
     return (
         [np.min(p[:, 0]), np.max(p[:, 0])],
         [np.min(p[:, 1]), np.max(p[:, 1])],

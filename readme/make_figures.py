@@ -1,6 +1,6 @@
 import subprocess
 import optic_object_wavefronts as oow
-from optic_object_wavefronts import plot
+from optic_object_wavefronts import Plot
 
 import matplotlib
 
@@ -14,9 +14,9 @@ import matplotlib.pyplot as plt
 # 3D
 # --
 objs = {
-    "disc": {"outer_radius": 1.0, "fn": 109, "rot": 0.0},
-    "cylinder": {"outer_radius": 1.0, "length": 0.5, "fn": 13, "rot": 0.0},
-    "spherical_cap_regular": {
+    "Disc": {"outer_radius": 1.0, "fn": 109, "rot": 0.0},
+    "Cylinder": {"outer_radius": 1.0, "length": 0.5, "fn": 13, "rot": 0.0},
+    "SphericalCapRegular": {
         "outer_radius": 1.0,
         "inner_radius": 0.2,
         "curvature_radius": 4.0,
@@ -29,12 +29,12 @@ objs = {
         "curvature_radius": 4.0,
         "fn": 5,
     },
-    "spherical_cap_pixels": {
+    "SphericalCapPixels": {
         "outer_radius": 1.0,
         "curvature_radius": 4.0,
         "fn_hex_grid": 25,
     },
-    "spherical_lens": {
+    "SphericalLens": {
         "outer_radius": 1.0,
         "curvature_radius_top": 4.0,
         "curvature_radius_bot": -8.0,
@@ -45,13 +45,13 @@ objs = {
         "rot": 0.0,
         "ref": "lens",
     },
-    "spherical_lens_hexagonal": {
+    "SphericalLensHexagonal": {
         "outer_radius": 1.0,
         "curvature_radius": 1.5,
         "fn": 11,
         "ref": "lens",
     },
-    "spherical_planar_lens_hexagonal": {
+    "SphericalPlanarLensHexagonal": {
         "outer_radius": 1.0,
         "curvature_radius": 2.0,
         "fn": 11,
@@ -63,13 +63,13 @@ objs = {
 
 for obj_key in objs:
     kwargs = objs[obj_key]
-    obj = getattr(oow.objects, obj_key).init(**kwargs)
+    obj = getattr(oow.Primitives, obj_key).init(**kwargs)
 
-    fig, ax3d = oow.plot.fig_ax_3d(figsize=(4, 4), dpi=320)
-    oow.plot.ax_add_object_3d(
+    fig, ax3d = oow.Plot.fig_ax_3d(figsize=(4, 4), dpi=320)
+    oow.Plot.ax_add_object_3d(
         ax=ax3d, obj=obj, face_alpha=0.9, face_color="w", face_edge_width=0.3,
     )
-    oow.plot.ax_aspect_equal_3d(ax=ax3d)
+    oow.Plot.ax_aspect_equal_3d(ax=ax3d)
     ax3d.view_init(elev=30, azim=50)
     fig.savefig("{:s}.jpg".format(obj_key))
 

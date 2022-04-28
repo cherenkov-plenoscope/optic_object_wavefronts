@@ -9,6 +9,9 @@ def _key_contains_any_of_patterns(key, patterns):
 
 
 def init():
+    """
+    Returns an empty dict-structure for a Wavefront.
+    """
     return {
         "v": [],
         "vn": [],

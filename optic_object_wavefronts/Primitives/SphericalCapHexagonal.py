@@ -9,14 +9,14 @@ import numpy as np
 def init(outer_radius, curvature_radius, fn=10, ref="SphericalCapHexagonal"):
     obj = Object.init()
 
-    obj["vertices"] = Geometry.Grid.hexagonal.init_from_outer_radius(
+    obj["vertices"] = Geometry.Grid.Hexagonal.init_from_outer_radius(
         outer_radius=outer_radius, fn=fn, ref=ref + "/inner"
     )
 
     # elevate z-axis
     # --------------
     for vkey in obj["vertices"]:
-        obj["vertices"][vkey][2] = Geometry.sphere.surface_height(
+        obj["vertices"][vkey][2] = Geometry.Sphere.surface_height(
             x=obj["vertices"][vkey][0],
             y=obj["vertices"][vkey][1],
             curvature_radius=curvature_radius,
@@ -26,7 +26,7 @@ def init(outer_radius, curvature_radius, fn=10, ref="SphericalCapHexagonal"):
     # --------------
     for vkey in obj["vertices"]:
         vnkey = tuple(vkey)
-        obj["vertex_normals"][vnkey] = Geometry.sphere.surface_normal(
+        obj["vertex_normals"][vnkey] = Geometry.Sphere.surface_normal(
             x=obj["vertices"][vkey][0],
             y=obj["vertices"][vkey][1],
             curvature_radius=curvature_radius,

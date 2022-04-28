@@ -9,19 +9,19 @@ def init(
     outer_radius, curvature_radius, fn_hex_grid=10, ref="SphericalPixelCap",
 ):
     obj = Object.init()
-    obj["vertices"] = Geometry.Grid.hexagonal.init_from_outer_radius(
+    obj["vertices"] = Geometry.Grid.Hexagonal.init_from_outer_radius(
         outer_radius=2.0 * outer_radius, ref="hex", fn=fn_hex_grid
     )
 
     for k in obj["vertices"]:
-        obj["vertices"][k][2] = Geometry.sphere.surface_height(
+        obj["vertices"][k][2] = Geometry.Sphere.surface_height(
             x=obj["vertices"][k][0],
             y=obj["vertices"][k][1],
             curvature_radius=curvature_radius,
         )
 
     for k in obj["vertices"]:
-        obj["vertex_normals"][k] = Geometry.sphere.surface_normal(
+        obj["vertex_normals"][k] = Geometry.Sphere.surface_normal(
             x=obj["vertices"][k][0],
             y=obj["vertices"][k][1],
             curvature_radius=curvature_radius,
