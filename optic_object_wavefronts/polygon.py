@@ -79,6 +79,17 @@ def mask_vertices_inside(vertices, polygon):
     return mask
 
 
+def keep_vertices_in_mask(vertices, mask):
+    """
+    Returns a new dict containing only the vertices which are masked.
+    """
+    out = collections.OrderedDict()
+    for i, vkey in enumerate(vertices):
+        if mask[i]:
+            out[vkey] = vertices[vkey]
+    return out
+
+
 def get_vertices_inside(vertices, polygon):
     """
     Returns a new dict containing only the vertices inside the polygon.
@@ -94,12 +105,10 @@ def get_vertices_inside(vertices, polygon):
     -------
     mask_vertices_inside()
     """
-    out = collections.OrderedDict()
-    mask = mask_vertices_inside(vertices, polygon)
-    for i, vkey in enumerate(vertices):
-        if mask[i]:
-            out[vkey] = vertices[vkey]
-    return out
+    return keep_vertices_in_mask(
+        vertices=vertices,
+        mask=mask_vertices_inside(vertices, polygon),
+    )
 
 
 def get_vertices_outside(vertices, polygon):
@@ -118,12 +127,11 @@ def get_vertices_outside(vertices, polygon):
     mask_vertices_inside()
     get_vertices_inside()
     """
-    out = collections.OrderedDict()
-    mask = mask_vertices_inside(vertices, polygon)
-    for i, vkey in enumerate(vertices):
-        if not mask[i]:
-            out[vkey] = vertices[vkey]
-    return out
+    mask_inside = mask_vertices_inside(vertices, polygon)
+    return keep_vertices_in_mask(
+        vertices=vertices,
+        mask=np.logical_not(mask_inside),
+    )
 
 
 def mask_face_inside(vertices, faces, polygon):
