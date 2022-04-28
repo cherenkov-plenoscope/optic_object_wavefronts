@@ -82,6 +82,23 @@ def to_string(wavefront):
     return "\n".join(s) + "\n"
 
 
+def init_from_Off(off, mtl="material_name"):
+    """
+    Returns a wavefron-dictionary from an Object-File-Format-dictionary.
+
+    Parameters
+    ----------
+    off : dict
+        Contains the vertices 'v' and the faces 'f' present in the
+        Object-File-Format.
+    mtl : str
+        The key given to the material in the output wavefront.
+    """
+    return init_from_vertices_and_faces_only(
+        vertices=off["v"], faces=off["f"], mtl=mtl
+    )
+
+
 def init_from_vertices_and_faces_only(vertices, faces, mtl="material_name"):
     """
     Returns a wavefron-dictionary.
