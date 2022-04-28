@@ -3,7 +3,7 @@ import numpy as np
 
 
 def test_grid_vertices():
-    vs = oow.geometry.grid.hexagonal.make_vertices_xy(
+    vs = oow.geometry.grid.hexagonal.init_from_outer_radius(
         outer_radius=8.0, fn=10, ref="abc"
     )
     np.testing.assert_array_equal([vs[k][2] for k in vs], 0.0)
@@ -12,14 +12,14 @@ def test_grid_vertices():
 
 
 def test_grid_vertices_num():
-    vs = oow.geometry.grid.hexagonal.make_vertices_xy(
+    vs = oow.geometry.grid.hexagonal.init_from_outer_radius(
         outer_radius=1.0, fn=1, ref="abc"
     )
     assert len(vs) == 6 + 1
 
 
 def test_grid_vertices_ref():
-    vs = oow.geometry.grid.hexagonal.make_vertices_xy(
+    vs = oow.geometry.grid.hexagonal.init_from_outer_radius(
         outer_radius=1.0, fn=1, ref="abc"
     )
     for k in vs:

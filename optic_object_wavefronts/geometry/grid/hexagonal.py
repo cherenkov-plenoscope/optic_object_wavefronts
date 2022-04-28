@@ -7,7 +7,7 @@ HEXA = np.array([1.0, 0.0, 0.0])
 HEXB = np.array([0.5, np.sqrt(3.0) / 2.0, 0.0])
 
 
-def make_vertices_xy(outer_radius=1.0, ref="hex", fn=10):
+def init_from_outer_radius(outer_radius=1.0, ref="hex", fn=10):
     spacing = float(outer_radius / fn)
     N = int(fn)
     vertices = collections.OrderedDict()

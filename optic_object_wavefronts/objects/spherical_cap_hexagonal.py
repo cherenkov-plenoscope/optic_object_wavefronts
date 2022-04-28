@@ -9,7 +9,7 @@ import numpy as np
 def init(outer_radius, curvature_radius, fn=10, ref="SphericalCapHexagonal"):
     obj = Object.init()
 
-    obj["vertices"] = geometry.grid.hexagonal.make_vertices_xy(
+    obj["vertices"] = geometry.grid.hexagonal.init_from_outer_radius(
         outer_radius=outer_radius, fn=fn, ref=ref + "/inner"
     )
 

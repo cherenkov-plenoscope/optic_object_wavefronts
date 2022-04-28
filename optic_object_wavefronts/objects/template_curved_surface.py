@@ -41,7 +41,7 @@ def init(
         [np.max(np.abs(outer_limits[0])), np.max(np.abs(outer_limits[1]))]
     )
 
-    hex_vertices = geometry.grid.hexagonal.make_vertices_xy(
+    hex_vertices = geometry.grid.hexagonal.init_from_outer_radius(
         outer_radius=outer_radius_xy * 1.5, fn=fn_hex_grid, ref=ref + "/Grid"
     )
 
