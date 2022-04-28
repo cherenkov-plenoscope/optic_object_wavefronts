@@ -21,7 +21,7 @@ EXAMPLE_SURFACE_MIRROR = {
 def init():
     """
     Returns a Scenery.
-    A scenery is a tree of references to Objects.
+    A scenery is a tree of references to Primitives.
     A reference is a translation and rotation to describe the object's
     relations w.r.t. each other.
 

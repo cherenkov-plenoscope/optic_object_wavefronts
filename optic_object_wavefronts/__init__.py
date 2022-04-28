@@ -3,7 +3,7 @@ from . import Object
 from . import Scenery
 from . import Wavefront
 from . import delaunay
-from . import Objects
+from . import Primitives
 from . import Assembly
 from . import optics
 from . import Geometry
