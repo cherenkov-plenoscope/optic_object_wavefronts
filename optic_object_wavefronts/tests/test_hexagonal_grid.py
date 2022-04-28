@@ -24,3 +24,8 @@ def test_grid_vertices_ref():
     )
     for k in vs:
         assert k[0] == "abc"
+
+
+def test_num_vertices():
+    vs = oow.geometry.grid.hexagonal.init_from_spacing(spacing=1.0, fN=6)
+    assert len(vs) == (2*6 + 1)*(2*6 + 1)
