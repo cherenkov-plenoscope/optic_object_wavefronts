@@ -5,7 +5,7 @@ from . import Wavefront
 from . import delaunay
 from . import Primitives
 from . import Assembly
-from . import optics
+from . import Optics
 from . import Geometry
 from . import polygon
 from . import Off
