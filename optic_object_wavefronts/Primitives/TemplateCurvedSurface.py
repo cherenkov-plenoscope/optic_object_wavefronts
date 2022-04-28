@@ -1,7 +1,7 @@
 from .. import Object
 from .. import Delaunay
 from .. import Geometry
-from .. import polygon
+from .. import Polygon
 import numpy as np
 
 
@@ -36,7 +36,7 @@ def init(
     ref : string
             The name of the surface.
     """
-    outer_limits = polygon.limits(outer_polygon)
+    outer_limits = Polygon.limits(outer_polygon)
     outer_radius_xy = np.max(
         [np.max(np.abs(outer_limits[0])), np.max(np.abs(outer_limits[1]))]
     )
@@ -45,12 +45,12 @@ def init(
         outer_radius=outer_radius_xy * 1.5, fn=fn_hex_grid, ref=ref + "/Grid"
     )
 
-    hex_vertices_valid = polygon.get_vertices_inside(
+    hex_vertices_valid = Polygon.get_vertices_inside(
         vertices=hex_vertices, polygon=outer_polygon
     )
 
     if inner_polygon is not None:
-        hex_vertices_valid = polygon.get_vertices_outside(
+        hex_vertices_valid = Polygon.get_vertices_outside(
             vertices=hex_vertices_valid, polygon=inner_polygon
         )
 
@@ -87,7 +87,7 @@ def init(
         }
 
     if inner_polygon is not None:
-        mask_faces_in_inner = polygon.mask_face_inside(
+        mask_faces_in_inner = Polygon.mask_face_inside(
             vertices=obj["vertices"], faces=obj["faces"], polygon=inner_polygon
         )
         fkeys_to_be_removed = []

@@ -20,9 +20,9 @@ def init(
     length : float
             Length of Cylinder.
     fn : int
-            Number of vertices in outer regular polygon.
+            Number of vertices in outer regular Polygon.
     rot : float
-            Rotation in z of regular polygon.
+            Rotation in z of regular Polygon.
     ref : str
             Key for the material.
     """

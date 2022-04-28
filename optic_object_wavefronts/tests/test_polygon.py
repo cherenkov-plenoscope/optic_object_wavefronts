@@ -7,7 +7,7 @@ def test_min_max_distance():
     )
 
     point = (0.0, 0.0)
-    keys, dists = oow.polygon.find_min_max_distant_to_point(
+    keys, dists = oow.Polygon.find_min_max_distant_to_point(
         polygon=polygon, point=point,
     )
 
@@ -18,7 +18,7 @@ def test_min_max_distance():
     assert dists[1] == 1.0
 
     point = (0.1, 0.0)
-    keys, dists = oow.polygon.find_min_max_distant_to_point(
+    keys, dists = oow.Polygon.find_min_max_distant_to_point(
         polygon=polygon, point=point,
     )
 

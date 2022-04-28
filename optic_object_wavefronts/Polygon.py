@@ -10,7 +10,7 @@ from shapely import geometry as shapely_geometry
 
 def to_numpy_array(polygon):
     """
-    Returns a numpy.array() of the vertices in the polygon.
+    Returns a numpy.array() of the vertices in the Polygon.
     All addressing keys are lost.
 
     Parameters
@@ -26,7 +26,7 @@ def to_numpy_array(polygon):
 
 def limits(polygon):
     """
-    Returns the limits in x, y, and z of a polygon.
+    Returns the limits in x, y, and z of a Polygon.
 
     Parameters
     ----------
@@ -43,7 +43,7 @@ def limits(polygon):
 
 def to_shapely_polygon(polygon):
     """
-    Returns a shapely.geometry.Polygon() of the vertices in the polygon.
+    Returns a shapely.geometry.Polygon() of the vertices in the Polygon.
     All addressing keys are lost.
 
     Parameters
@@ -62,7 +62,7 @@ def to_shapely_polygon(polygon):
 def mask_vertices_inside(vertices, polygon):
     """
     Returns a list of bools, one bool for each vertex, to mark if it is
-    inside the polygon.
+    inside the Polygon.
 
     Parameters
     ----------
@@ -92,7 +92,7 @@ def keep_vertices_in_mask(vertices, mask):
 
 def get_vertices_inside(vertices, polygon):
     """
-    Returns a new dict containing only the vertices inside the polygon.
+    Returns a new dict containing only the vertices inside the Polygon.
 
     Parameters
     ----------
@@ -112,7 +112,7 @@ def get_vertices_inside(vertices, polygon):
 
 def get_vertices_outside(vertices, polygon):
     """
-    Returns a new dict containing only the vertices outside the polygon.
+    Returns a new dict containing only the vertices outside the Polygon.
 
     Parameters
     ----------
@@ -135,7 +135,7 @@ def get_vertices_outside(vertices, polygon):
 def mask_face_inside(vertices, faces, polygon):
     """
     Returns a list of bools, one pool for each face, to mask if it is
-    inside the polygon.
+    inside the Polygon.
 
     Parameters
     ----------
@@ -193,7 +193,7 @@ def find_min_max_distant_to_point(polygon, point):
     -------
     (keys, distances) : tuple
         Keys itself is a tuple of the closest and furthest key of a vertex in
-        the polygon.
+        the Polygon.
         Distances is also a tuple of the closest and furthest distances.
     """
     max_distance = 0.0

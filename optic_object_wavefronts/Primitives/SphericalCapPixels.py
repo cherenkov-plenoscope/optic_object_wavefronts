@@ -1,7 +1,7 @@
 from .. import Object
 from .. import Delaunay
 from .. import Geometry
-from .. import polygon
+from .. import Polygon
 import numpy as np
 
 
