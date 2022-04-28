@@ -1,5 +1,5 @@
 import numpy as np
-from . import template
+from . import Template
 
 
 UNITA = np.array([1.0, 0.0, 0.0])
@@ -17,6 +17,6 @@ def init_from_spacing(spacing=1.0, ref="rectangular", fN=10):
     ref : str
             Key in the references for the vertices.
     """
-    return template.init(
+    return Template.init(
         fN, vector_A=UNITA, vector_B=UNITB, ref=ref, spacing=spacing
     )

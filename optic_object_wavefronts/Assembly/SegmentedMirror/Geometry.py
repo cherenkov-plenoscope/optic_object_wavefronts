@@ -24,11 +24,11 @@ def init_facet_supports_on_principal_aperture_plane(
     fN = 2 * int(np.ceil(outer_radius / grid_spacing))
 
     if grid_style == "hexagonal":
-        _grid = Geometry.Grid.hexagonal.init_from_spacing(
+        _grid = Geometry.Grid.Hexagonal.init_from_spacing(
             spacing=grid_spacing, ref=ref, fN=fN
         )
     elif grid_style == "rectangular":
-        _grid = Geometry.grid.rectangular.init_from_spacing(
+        _grid = Geometry.Grid.Rectangular.init_from_spacing(
             spacing=grid_spacing, ref=ref, fN=fN
         )
     else:
