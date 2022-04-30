@@ -58,3 +58,29 @@ def elevate_facet_supports(
             x=out[fkey][0], y=out[fkey][1], **curvature_config,
         )
     return out
+
+
+def init_facet_rotation(
+    facet_support,
+    point_to_reflect_light_to,
+    direction_of_light_travel=[0.0, 0.0, -1.0],
+):
+    facet_support = np.array(facet_support)
+
+    direction_of_light_travel = np.array(direction_of_light_travel)
+    _direction_of_light_travel_norm = np.linalg.norm(direction_of_light_travel)
+    assert _direction_of_light_travel_norm > 0.0
+    direction_of_light_travel /= _direction_of_light_travel_norm
+    direction_of_light_coming_from = -1.0 * direction_of_light_travel
+
+    point_to_reflect_light_to = np.array(point_to_reflect_light_to)
+
+    direction_facet_to_target = -facet_support + point_to_reflect_light_to
+    direction_facet_to_target_norm = np.linalg.norm(direction_facet_to_target)
+    assert direction_facet_to_target_norm > 0.0
+    direction_facet_to_target /= direction_facet_to_target_norm
+
+    rotation_axis = np.cross(direction_facet_to_target, direction_of_light_coming_from)
+
+    return 1
+
