@@ -21,8 +21,8 @@ class QuadraticEquation:
 
 
 def _elliptic_radii(focal_length_x, focal_length_y):
-    radius_x = 0.5 * focal_length_x
-    radius_y = 0.5 * focal_length_y
+    radius_x = 2.0 * focal_length_x
+    radius_y = 2.0 * focal_length_y
     radius_z = 0.5 * (radius_x + radius_y)
     return radius_x, radius_y, radius_z
 
