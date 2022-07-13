@@ -219,3 +219,13 @@ def find_min_max_distant_to_point(polygon, point):
             min_vkey = str(vkey)
 
     return (min_vkey, max_vkey), (min_distance, max_distance)
+
+
+def rotate_z(polygon, theta):
+    out = collections.OrderedDict()
+    for key in polygon:
+        x, y, z = polygon[key]
+        nx = np.cos(theta) * x - np.sin(theta) * y
+        ny = np.sin(theta) * x + np.cos(theta) * y
+        out[key] = np.array([nx, ny, z])
+    return out
