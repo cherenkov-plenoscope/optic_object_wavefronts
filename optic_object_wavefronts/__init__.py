@@ -9,3 +9,4 @@ from . import Optics
 from . import Geometry
 from . import Polygon
 from . import Off
+from . import materials

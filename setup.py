@@ -19,6 +19,9 @@ setuptools.setup(
     url="https://github.com/cherenkov-plenoscope/optic_object_wavefronts",
     license="GPL v3",
     packages=["optic_object_wavefronts"],
+    package_data={
+        "optic_object_wavefronts": ["materials/media/*", "materials/surfaces/*"]
+    },
     python_requires=">=3",
     install_requires=["shapely",],
     classifiers=[
