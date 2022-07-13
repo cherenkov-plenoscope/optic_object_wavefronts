@@ -1,21 +1,8 @@
 import numpy as np
 import tarfile
 import io
-import json
+import json_numpy
 from . import Wavefront
-
-
-EXAMPLE_MEDIA_VACUUM = {
-    "refraction": [[200e-9, 1.0], [1.2e-6, 1.0]],
-    "absorbtion": [[200e-9, 1e99], [1.2e-6, 1e99]],
-}
-
-EXAMPLE_SURFACE_MIRROR = {
-    "material": "Phong",
-    "specular_reflection": [[200e-9, 1.0], [1.2e-6, 1.0]],
-    "diffuse_reflection": [[200e-9, 0.0], [1.2e-6, 0.0]],
-    "color": [200, 200, 200],
-}
 
 
 def init():
@@ -76,7 +63,7 @@ def write_to_merlict(scenery, path):
         # -----
         tar_append_dir(tarout, "materials/media")
         for mkey in scenery["materials"]["media"]:
-            medium_json_str = json.dumps(
+            medium_json_str = json_numpy.dumps(
                 scenery["materials"]["media"][mkey], indent=4,
             )
             tar_append_file(
@@ -89,7 +76,7 @@ def write_to_merlict(scenery, path):
         # --------
         tar_append_dir(tarout, "materials/surfaces")
         for skey in scenery["materials"]["surfaces"]:
-            surface_json_str = json.dumps(
+            surface_json_str = json_numpy.dumps(
                 scenery["materials"]["surfaces"][skey], indent=4,
             )
             tar_append_file(
@@ -100,7 +87,7 @@ def write_to_merlict(scenery, path):
 
         # boundary_layers
         # ---------------
-        boundary_layers_json_str = json.dumps(
+        boundary_layers_json_str = json_numpy.dumps(
             scenery["materials"]["boundary_layers"], indent=4,
         )
         tar_append_file(
@@ -120,7 +107,7 @@ def write_to_merlict(scenery, path):
 
         # tree of references to objects
         # -----------------------------
-        tree_json_str = json.dumps(scenery["tree"], indent=0)
+        tree_json_str = json_numpy.dumps(scenery["tree"], indent=0)
         tar_append_file(
             tarout=tarout,
             file_name="tree.json",
