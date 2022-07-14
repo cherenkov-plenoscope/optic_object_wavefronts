@@ -3,9 +3,10 @@ import tarfile
 import io
 import json_numpy
 from . import Wavefront
+from . import materials
 
 
-def init():
+def init(default_medium="vacuum"):
     """
     Returns a Scenery.
     A scenery is a tree of references to Primitives.
@@ -21,11 +22,14 @@ def init():
             "media": {},
             "surfaces": {},
             "boundary_layers": {},
-            "default_medium": "",
+            "default_medium": default_medium,
         },
         "objects": {},
         "tree": {"children": []},
     }
+    scenery["materials"]["media"][default_medium] = materials.medium(
+        key=default_medium
+    )
     return scenery
 
 
