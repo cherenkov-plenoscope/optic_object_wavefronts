@@ -1,5 +1,6 @@
 import copy
 import collections
+import numpy as np
 from . import Wavefront
 from . import version
 
@@ -30,6 +31,7 @@ def translate(obj, v):
     v : numpy.array
             Three dimensional vector for translation.
     """
+    v = np.array(v)
     out = copy.deepcopy(obj)
     for vkey in out["vertices"]:
         out["vertices"][vkey] += v
