@@ -1,4 +1,5 @@
 import numpy as np
+import io
 
 
 def _key_contains_any_of_patterns(key, patterns):
@@ -56,20 +57,20 @@ def init_from_Object(obj):
 
 def to_string(wavefront):
     # COUNTING STARTS AT ONE
-    s = []
-    s.append("# vertices")
+    s = io.StringIO()
+    s.write("# vertices\n")
     for v in wavefront["v"]:
-        s.append("v {:f} {:f} {:f}".format(v[0], v[1], v[2]))
-    s.append("# vertex-normals")
+        s.write("v {:f} {:f} {:f}\n".format(v[0], v[1], v[2]))
+    s.write("# vertex-normals\n")
     for vn in wavefront["vn"]:
-        s.append("vn {:f} {:f} {:f}".format(vn[0], vn[1], vn[2]))
-    s.append("# faces")
+        s.write("vn {:f} {:f} {:f}\n".format(vn[0], vn[1], vn[2]))
+    s.write("# faces\n")
 
     for mtl in wavefront["materials"]:
-        s.append("usemtl {:s}".format(mtl))
+        s.write("usemtl {:s}\n".format(mtl))
         for f in wavefront["materials"][mtl]:
-            s.append(
-                "f {:d}//{:d} {:d}//{:d} {:d}//{:d}".format(
+            s.write(
+                "f {:d}//{:d} {:d}//{:d} {:d}//{:d}\n".format(
                     1 + f["v"][0],
                     1 + f["vn"][0],
                     1 + f["v"][1],
@@ -78,7 +79,8 @@ def to_string(wavefront):
                     1 + f["vn"][2],
                 )
             )
-    return "\n".join(s) + "\n"
+    s.seek(0)
+    return s.read()
 
 
 def init_from_Off(off, mtl="material_name"):
