@@ -5,7 +5,7 @@ from .. import Polygon
 import numpy as np
 
 
-def init(
+def make_geometry(
     housing_outer_radius,
     housing_wall_width,
     housing_height,
@@ -14,7 +14,6 @@ def init(
     photo_sensor_num_on_diagonal,
     photo_sensor_gap,
     photo_sensor_plane_distance,
-    ref="LightFieldSensorCameraModule",
 ):
     """
     Parameters
@@ -49,77 +48,124 @@ def init(
     assert lens_curvature_radius > 0.0
     assert photo_sensor_gap >= 0.0
 
-    camera = Object.init()
+    c = {}
+    c["housing"] = {}
+    c["housing"]["outer_radius_outside"] = housing_outer_radius
+    c["housing"]["wall_width"] = housing_wall_width
+    c["housing"]["height"] = housing_height
+    c["housing"]["outer_radius_inside"] = (
+        c["housing"]["outer_radius_outside"] - c["housing"]["wall_width"]
+    )
+    c["housing"]["position"] = np.array([
+        0.0,
+        0.0,
+        photo_sensor_plane_distance - c["housing"]["height"],
+    ])
 
-    # grid for photo-sensors
-    # ----------------------
-    outer_radius_of_hexagon_to_fit_all_sensors_in = (
-        housing_outer_radius - housing_wall_width
+    c["lens"] = {}
+    c["lens"]["curvature_radius"] = lens_curvature_radius
+    c["lens"]["outer_radius"] = c["housing"]["outer_radius_outside"]
+    c["lens"]["fn"] = lens_fn
+    c["lens"]["position"] = np.array([0, 0, 0])
+
+    c["photo_sensor"] = {}
+    c["photo_sensor"]["grid"] = {}
+    c["photo_sensor"]["grid"]["gap"] = photo_sensor_gap
+    c["photo_sensor"]["grid"]["num_on_diagonal"] = photo_sensor_num_on_diagonal
+    c["photo_sensor"]["grid"]["distance_to_lens"] = photo_sensor_plane_distance
+
+    c["photo_sensor"]["grid"]["spacing"] = Geometry.Grid.Hexagonal.estimate_spacing_for_small_hexagons_in_big_hexagon(
+        big_hexagon_outer_radius=c["housing"]["outer_radius_inside"],
+        num_small_hexagons_on_diagonal_of_big_hexagon=c["photo_sensor"]["grid"]["num_on_diagonal"],
     )
 
-    photo_sensor_spacing = Geometry.Grid.Hexagonal.estimate_spacing_for_small_hexagons_in_big_hexagon(
-        big_hexagon_outer_radius=outer_radius_of_hexagon_to_fit_all_sensors_in,
-        num_small_hexagons_on_diagonal_of_big_hexagon=photo_sensor_num_on_diagonal,
+    grid_positions_xy = Geometry.Grid.Hexagonal.init_from_spacing(
+        spacing=c["photo_sensor"]["grid"]["spacing"],
+        ref="_",
+        fN=c["photo_sensor"]["grid"]["num_on_diagonal"],
     )
-
-    photo_sensor_bound_inner_radius = 1 / 2 * photo_sensor_spacing
-    photo_sensor_inner_radius = (
-        photo_sensor_bound_inner_radius - 0.5 * photo_sensor_gap
-    )
-    photo_sensor_outer_radius = 2 / np.sqrt(3) * photo_sensor_inner_radius
-
-    photo_sensors_centers_xy = Geometry.Grid.Hexagonal.init_from_spacing(
-        spacing=photo_sensor_spacing, ref="_", fN=photo_sensor_num_on_diagonal,
-    )
-    photo_sensors_centers_xy = Polygon.rotate_z(photo_sensors_centers_xy, 0)
-    photo_sensors_centers_xy = Polygon.get_vertices_inside(
-        vertices=photo_sensors_centers_xy,
+    grid_positions_xy = Polygon.rotate_z(grid_positions_xy, 0)
+    grid_positions_xy = Polygon.get_vertices_inside(
+        vertices=grid_positions_xy,
         polygon=Geometry.RegularPolygon.make_vertices_xy(
-            outer_radius=(housing_outer_radius - housing_wall_width),
+            outer_radius=c["housing"]["outer_radius_inside"],
             ref="_",
             fn=6,
             rot=0,
         ),
     )
+    for gkey in grid_positions_xy:
+        grid_positions_xy[gkey][2] = c["photo_sensor"]["grid"]["distance_to_lens"]
+    c["photo_sensor"]["grid"]["positions"] = grid_positions_xy
 
-    for ipsc, psckey in enumerate(photo_sensors_centers_xy):
+    c["photo_sensor"]["bound"] = {}
+    c["photo_sensor"]["bound"]["inner_radius"] = (
+        1 / 2 * c["photo_sensor"]["grid"]["spacing"]
+    )
+    c["photo_sensor"]["bound"]["outer_radius"] =  (
+        2 / np.sqrt(3) * c["photo_sensor"]["bound"]["inner_radius"]
+    )
+
+    c["photo_sensor"]["body"] = {}
+    c["photo_sensor"]["body"]["inner_radius"] = (
+        c["photo_sensor"]["bound"]["inner_radius"]
+        - 0.5 * c["photo_sensor"]["grid"]["gap"]
+    )
+    c["photo_sensor"]["body"]["outer_radius"] = (
+        2 / np.sqrt(3) * c["photo_sensor"]["body"]["inner_radius"]
+    )
+    return c
+
+
+def init(
+    camera_geometry,
+    ref="LightFieldSensorCameraModule",
+):
+    cg = camera_geometry
+    camera = Object.init()
+
+    # grid for photo-sensors
+    # ----------------------
+    for gi, gkey in enumerate(cg["photo_sensor"]["grid"]["positions"]):
         photo_sensor = Primitives.Disc.init(
-            outer_radius=photo_sensor_outer_radius,
+            outer_radius=cg["photo_sensor"]["body"]["outer_radius"],
             fn=6,
             rot=np.pi / 6,
-            ref=ref + "/photo_sensor_{:06d}".format(ipsc),
+            ref=ref + "/photo_sensor_{:06d}".format(gi),
             prevent_many_faces_share_same_vertex=False,
         )
-
-        shift_xy = photo_sensors_centers_xy[psckey]
-        shift_z = np.array([0.0, 0.0, photo_sensor_plane_distance])
-        shift_xyz = shift_xy + shift_z
-        photo_sensor = Object.translate(photo_sensor, shift_xyz)
+        photo_sensor = Object.translate(
+            photo_sensor,
+            cg["photo_sensor"]["grid"]["positions"][gkey],
+        )
         camera = Object.merge(camera, photo_sensor)
 
     # lens
     # ----
     lens = Primitives.SphericalLensHexagonal.init(
-        outer_radius=housing_outer_radius,
-        curvature_radius=lens_curvature_radius,
-        fn=lens_fn,
+        outer_radius=cg["lens"]["outer_radius"],
+        curvature_radius=cg["lens"]["curvature_radius"],
+        fn=cg["lens"]["fn"],
         ref=ref + "/lens",
     )
-    camera = Object.merge(camera, Object.translate(lens, [0.0, 0.0, 0.0]),)
+    camera = Object.merge(
+        camera,
+        Object.translate(lens, cg["lens"]["position"]),
+    )
 
     # housing
     # -------
     pipe = Primitives.PipeHexagonal.init(
-        outer_radius=housing_outer_radius,
-        inner_radius=housing_outer_radius - housing_wall_width,
-        height=housing_height,
+        outer_radius=cg["housing"]["outer_radius_outside"],
+        inner_radius=cg["housing"]["outer_radius_inside"],
+        height=cg["housing"]["height"],
         ref=ref + "/housing",
     )
 
     camera = Object.merge(
         camera,
         Object.translate(
-            pipe, [0.0, 0.0, photo_sensor_plane_distance - housing_height]
+            pipe, cg["housing"]["position"]
         ),
     )
 
