@@ -10,3 +10,5 @@ from . import SphericalLensHexagonal
 from . import SphericalPlanarLensHexagonal
 from . import SphericalCapPixels
 from . import SchwarzschildCouderCap
+from . import PipeHexagonal
+from . import Rectangle

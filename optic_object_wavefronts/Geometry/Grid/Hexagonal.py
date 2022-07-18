@@ -46,3 +46,26 @@ def init_from_spacing(spacing=1.0, ref="hex", fN=10):
     return Template.init(
         fN, vector_A=HEXA, vector_B=HEXB, ref=ref, spacing=spacing
     )
+
+
+def estimate_spacing_for_small_hexagons_in_big_hexagon(
+    big_hexagon_outer_radius, num_small_hexagons_on_diagonal_of_big_hexagon,
+):
+    assert big_hexagon_outer_radius > 0.0
+
+    n = num_small_hexagons_on_diagonal_of_big_hexagon
+    assert n > 0
+    assert np.mod(n, 2) == 1
+
+    big_hexagon_inner_radius = big_hexagon_outer_radius * np.sqrt(3) / 2
+
+    num_outer_diagonals = np.ceil(n / 2)
+    num_radii = np.floor(n / 2)
+
+    outer_diagonal_weight = 2.0 / np.sqrt(3)
+    radii_weight = 1.0 / np.sqrt(3)
+
+    spacing = (2 * big_hexagon_inner_radius) / (
+        num_outer_diagonals * outer_diagonal_weight + num_radii * radii_weight
+    )
+    return spacing

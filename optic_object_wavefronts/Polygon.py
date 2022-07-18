@@ -229,3 +229,12 @@ def rotate_z(polygon, theta):
         ny = np.sin(theta) * x + np.cos(theta) * y
         out[key] = np.array([nx, ny, z])
     return out
+
+
+def translate(polygon, translation):
+    translation = np.array(translation)
+    out = collections.OrderedDict()
+    for key in polygon:
+        pos = np.array(polygon[key])
+        out[key] = pos + translation
+    return out
