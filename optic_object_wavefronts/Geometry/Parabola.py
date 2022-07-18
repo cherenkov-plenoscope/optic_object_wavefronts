@@ -12,7 +12,7 @@ def surface_normal(x, y, focal_length):
 
     z(x,y) = (x**2 + y**2)/(4f)
     """
-    dzdx = (2.0*x)/(4.0*focal_length)
-    dzdy = (2.0*y)/(4.0*focal_length)
+    dzdx = (2.0 * x) / (4.0 * focal_length)
+    dzdy = (2.0 * y) / (4.0 * focal_length)
     normal = np.array([-dzdx, -dzdy, 1.0])
     return normal / np.linalg.norm(normal)

@@ -48,9 +48,7 @@ def init_from_Object(obj):
                 vs.append(v_dict[mtl_faces[fkey]["vertices"][dim]])
             vns = []
             for dim in range(3):
-                vns.append(
-                    vn_dict[mtl_faces[fkey]["vertex_normals"][dim]]
-                )
+                vns.append(vn_dict[mtl_faces[fkey]["vertex_normals"][dim]])
             wavefront["materials"][mkey].append({"v": vs, "vn": vns})
 
     return wavefront

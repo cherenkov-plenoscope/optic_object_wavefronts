@@ -22,10 +22,7 @@ def init(
     )
 
     back_obj = Disc.init(
-        outer_radius=outer_radius,
-        fn=6,
-        ref=join(ref, "back"),
-        rot=0.0,
+        outer_radius=outer_radius, fn=6, ref=join(ref, "back"), rot=0.0,
     )
 
     center_of_curvature = np.array([0.0, 0.0, curvature_radius])

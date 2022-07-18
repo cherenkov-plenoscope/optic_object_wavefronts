@@ -56,11 +56,9 @@ def make_geometry(
     c["housing"]["outer_radius_inside"] = (
         c["housing"]["outer_radius_outside"] - c["housing"]["wall_width"]
     )
-    c["housing"]["position"] = np.array([
-        0.0,
-        0.0,
-        photo_sensor_plane_distance - c["housing"]["height"],
-    ])
+    c["housing"]["position"] = np.array(
+        [0.0, 0.0, photo_sensor_plane_distance - c["housing"]["height"],]
+    )
 
     c["lens"] = {}
     c["lens"]["curvature_radius"] = lens_curvature_radius
@@ -74,9 +72,13 @@ def make_geometry(
     c["photo_sensor"]["grid"]["num_on_diagonal"] = photo_sensor_num_on_diagonal
     c["photo_sensor"]["grid"]["distance_to_lens"] = photo_sensor_plane_distance
 
-    c["photo_sensor"]["grid"]["spacing"] = Geometry.Grid.Hexagonal.estimate_spacing_for_small_hexagons_in_big_hexagon(
+    c["photo_sensor"]["grid"][
+        "spacing"
+    ] = Geometry.Grid.Hexagonal.estimate_spacing_for_small_hexagons_in_big_hexagon(
         big_hexagon_outer_radius=c["housing"]["outer_radius_inside"],
-        num_small_hexagons_on_diagonal_of_big_hexagon=c["photo_sensor"]["grid"]["num_on_diagonal"],
+        num_small_hexagons_on_diagonal_of_big_hexagon=c["photo_sensor"][
+            "grid"
+        ]["num_on_diagonal"],
     )
 
     grid_positions_xy = Geometry.Grid.Hexagonal.init_from_spacing(
@@ -95,14 +97,16 @@ def make_geometry(
         ),
     )
     for gkey in grid_positions_xy:
-        grid_positions_xy[gkey][2] = c["photo_sensor"]["grid"]["distance_to_lens"]
+        grid_positions_xy[gkey][2] = c["photo_sensor"]["grid"][
+            "distance_to_lens"
+        ]
     c["photo_sensor"]["grid"]["positions"] = grid_positions_xy
 
     c["photo_sensor"]["bound"] = {}
     c["photo_sensor"]["bound"]["inner_radius"] = (
         1 / 2 * c["photo_sensor"]["grid"]["spacing"]
     )
-    c["photo_sensor"]["bound"]["outer_radius"] =  (
+    c["photo_sensor"]["bound"]["outer_radius"] = (
         2 / np.sqrt(3) * c["photo_sensor"]["bound"]["inner_radius"]
     )
 
@@ -118,8 +122,7 @@ def make_geometry(
 
 
 def init(
-    camera_geometry,
-    ref="LightFieldSensorCameraModule",
+    camera_geometry, ref="LightFieldSensorCameraModule",
 ):
     cg = camera_geometry
     camera = Object.init()
@@ -135,8 +138,7 @@ def init(
             prevent_many_faces_share_same_vertex=False,
         )
         photo_sensor = Object.translate(
-            photo_sensor,
-            cg["photo_sensor"]["grid"]["positions"][gkey],
+            photo_sensor, cg["photo_sensor"]["grid"]["positions"][gkey],
         )
         camera = Object.merge(camera, photo_sensor)
 
@@ -149,8 +151,7 @@ def init(
         ref=ref + "/lens",
     )
     camera = Object.merge(
-        camera,
-        Object.translate(lens, cg["lens"]["position"]),
+        camera, Object.translate(lens, cg["lens"]["position"]),
     )
 
     # housing
@@ -163,10 +164,7 @@ def init(
     )
 
     camera = Object.merge(
-        camera,
-        Object.translate(
-            pipe, cg["housing"]["position"]
-        ),
+        camera, Object.translate(pipe, cg["housing"]["position"]),
     )
 
     return camera

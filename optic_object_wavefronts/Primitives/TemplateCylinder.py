@@ -58,16 +58,8 @@ def weave_cylinder_faces(obj, ref, vkey_lower, vkey_upper, norm_sign=1.0):
             )
 
         obj["materials"][side_mtl]["ttb_{:06d}".format(ni)] = {
-            "vertices": [
-                va_key,
-                vb_key,
-                vc_key,
-            ],
-            "vertex_normals": [
-                rst_vna_key,
-                rst_vnb_key,
-                rsb_vnc_key,
-            ],
+            "vertices": [va_key, vb_key, vc_key,],
+            "vertex_normals": [rst_vna_key, rst_vnb_key, rsb_vnc_key,],
         }
 
     for ni in range(n):
@@ -107,16 +99,8 @@ def weave_cylinder_faces(obj, ref, vkey_lower, vkey_upper, norm_sign=1.0):
             )
 
         obj["materials"][side_mtl]["bbt_{:06d}".format(ni)] = {
-            "vertices": [
-                va_key,
-                vb_key,
-                vc_key,
-            ],
-            "vertex_normals": [
-                rsb_vna_key,
-                rsb_vnb_key,
-                rst_vnc_key,
-            ],
+            "vertices": [va_key, vb_key, vc_key,],
+            "vertex_normals": [rsb_vna_key, rsb_vnb_key, rst_vnc_key,],
         }
 
     return obj

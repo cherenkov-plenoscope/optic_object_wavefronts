@@ -46,7 +46,9 @@ def init(
     top_mtl_key = os.path.join(ref, "top")
     obj["materials"][top_mtl_key] = collections.OrderedDict()
     for fkey in top["materials"][top_mtl_key]:
-        obj["materials"][top_mtl_key][fkey] = top["materials"][top_mtl_key][fkey]
+        obj["materials"][top_mtl_key][fkey] = top["materials"][top_mtl_key][
+            fkey
+        ]
 
     for vnkey in top["vertex_normals"]:
         obj["vertex_normals"][vnkey] = +1.0 * top["vertex_normals"][vnkey]
@@ -59,7 +61,9 @@ def init(
     bot_mtl_key = os.path.join(ref, "bot")
     obj["materials"][bot_mtl_key] = collections.OrderedDict()
     for fkey in bot["materials"][bot_mtl_key]:
-        obj["materials"][bot_mtl_key][fkey] = bot["materials"][bot_mtl_key][fkey]
+        obj["materials"][bot_mtl_key][fkey] = bot["materials"][bot_mtl_key][
+            fkey
+        ]
 
     for vnkey in bot["vertex_normals"]:
         obj["vertex_normals"][vnkey] = -1.0 * bot["vertex_normals"][vnkey]
