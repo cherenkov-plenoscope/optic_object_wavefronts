@@ -1,4 +1,5 @@
 import numpy as np
+import os
 import scipy
 from scipy import spatial as scipy_spatial
 from . import Polygon
@@ -28,7 +29,7 @@ def make_faces_xy(vertices, ref):
 
     faces = {}
     for fidx, del_face in enumerate(del_faces):
-        fkey = (ref, fidx)
+        fkey = os.path.join(ref, "{:06d}".format(fidx))
         faces[fkey] = {
             "vertices": [
                 vkeys[del_face[0]],

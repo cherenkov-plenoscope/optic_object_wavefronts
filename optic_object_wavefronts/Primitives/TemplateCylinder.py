@@ -1,4 +1,6 @@
 import numpy as np
+import os
+import collections
 from .. import Object
 
 
@@ -18,44 +20,53 @@ def weave_cylinder_faces(obj, ref, vkey_lower, vkey_upper, norm_sign=1.0):
     assert num_v_lower == num_v_upper
     n = num_v_upper
 
+    side_mtl = os.path.join(ref, "side")
+    obj["materials"][side_mtl] = collections.OrderedDict()
+
     for ni in range(n):
         n_a = int(ni)
         n_b = int(n_a + 1)
         if n_b == n:
             n_b = 0
         n_c = int(ni)
-        va = np.array(obj["vertices"][(vkey_upper, n_a)])
-        vb = np.array(obj["vertices"][(vkey_upper, n_b)])
-        vc = np.array(obj["vertices"][(vkey_lower, n_c)])
+        va_key = os.path.join(vkey_upper, "{:06d}".format(n_a))
+        va = np.array(obj["vertices"][va_key])
+        vb_key = os.path.join(vkey_upper, "{:06d}".format(n_b))
+        vb = np.array(obj["vertices"][vb_key])
+        vc_key = os.path.join(vkey_lower, "{:06d}".format(n_c))
+        vc = np.array(obj["vertices"][vc_key])
         va[2] = 0.0
         vb[2] = 0.0
         vc[2] = 0.0
-        if (ref + "/side/top", n_a) not in obj["vertex_normals"]:
-            obj["vertex_normals"][(ref + "/side/top", n_a)] = (
+
+        rst_vna_key = os.path.join(ref, "side", "top", "{:06d}".format(n_a))
+        if rst_vna_key not in obj["vertex_normals"]:
+            obj["vertex_normals"][rst_vna_key] = (
                 norm_sign * va / np.linalg.norm(va)
             )
 
-        if (ref + "/side/top", n_b) not in obj["vertex_normals"]:
-            obj["vertex_normals"][(ref + "/side/top", n_b)] = (
+        rst_vnb_key = os.path.join(ref, "side", "top", "{:06d}".format(n_b))
+        if rst_vnb_key not in obj["vertex_normals"]:
+            obj["vertex_normals"][rst_vnb_key] = (
                 norm_sign * vb / np.linalg.norm(vb)
             )
 
-        if (ref + "/side/bot", n_c) not in obj["vertex_normals"]:
-            obj["vertex_normals"][(ref + "/side/bot", n_c)] = (
+        rsb_vnc_key = os.path.join(ref, "side", "bot", "{:06d}".format(n_c))
+        if rsb_vnc_key not in obj["vertex_normals"]:
+            obj["vertex_normals"][rsb_vnc_key] = (
                 norm_sign * vc / np.linalg.norm(vc)
             )
 
-        side_fkey = (ref + "/side_ttb", ni)
-        obj["faces"][side_fkey] = {
+        obj["materials"][side_mtl]["ttb_{:06d}".format(ni)] = {
             "vertices": [
-                (vkey_upper, n_a),
-                (vkey_upper, n_b),
-                (vkey_lower, n_c),
+                va_key,
+                vb_key,
+                vc_key,
             ],
             "vertex_normals": [
-                (ref + "/side/top", n_a),
-                (ref + "/side/top", n_b),
-                (ref + "/side/bot", n_c),
+                rst_vna_key,
+                rst_vnb_key,
+                rsb_vnc_key,
             ],
         }
 
@@ -67,38 +78,44 @@ def weave_cylinder_faces(obj, ref, vkey_lower, vkey_upper, norm_sign=1.0):
         n_c = int(ni + 1)
         if n_c == n:
             n_c = 0
-        va = np.array(obj["vertices"][(vkey_lower, n_a)])
-        vb = np.array(obj["vertices"][(vkey_lower, n_b)])
-        vc = np.array(obj["vertices"][(vkey_upper, n_c)])
+        va_key = os.path.join(vkey_lower, "{:06d}".format(n_a))
+        va = np.array(obj["vertices"][va_key])
+        vb_key = os.path.join(vkey_lower, "{:06d}".format(n_b))
+        vb = np.array(obj["vertices"][vb_key])
+        vc_key = os.path.join(vkey_upper, "{:06d}".format(n_c))
+        vc = np.array(obj["vertices"][vc_key])
         va[2] = 0.0
         vb[2] = 0.0
         vc[2] = 0.0
-        if (ref + "/side/bot", n_a) not in obj["vertex_normals"]:
-            obj["vertex_normals"][(ref + "/side/bot", n_a)] = (
+
+        rsb_vna_key = os.path.join(ref, "side", "bot", "{:06d}".format(n_a))
+        if rsb_vna_key not in obj["vertex_normals"]:
+            obj["vertex_normals"][rsb_vna_key] = (
                 norm_sign * va / np.linalg.norm(va)
             )
 
-        if (ref + "/side/bot", n_b) not in obj["vertex_normals"]:
-            obj["vertex_normals"][(ref + "/side/bot", n_b)] = (
+        rsb_vnb_key = os.path.join(ref, "side", "bot", "{:06d}".format(n_b))
+        if rsb_vnb_key not in obj["vertex_normals"]:
+            obj["vertex_normals"][rsb_vnb_key] = (
                 norm_sign * vb / np.linalg.norm(vb)
             )
 
-        if (ref + "/side/top", n_c) not in obj["vertex_normals"]:
-            obj["vertex_normals"][(ref + "/side/top", n_c)] = (
+        rst_vnc_key = os.path.join(ref, "side", "top", "{:06d}".format(n_c))
+        if rst_vnc_key not in obj["vertex_normals"]:
+            obj["vertex_normals"][rst_vnc_key] = (
                 norm_sign * vc / np.linalg.norm(vc)
             )
 
-        side_fkey = (ref + "/side_bbt", ni)
-        obj["faces"][side_fkey] = {
+        obj["materials"][side_mtl]["bbt_{:06d}".format(ni)] = {
             "vertices": [
-                (vkey_lower, n_a),
-                (vkey_lower, n_b),
-                (vkey_upper, n_c),
+                va_key,
+                vb_key,
+                vc_key,
             ],
             "vertex_normals": [
-                (ref + "/side/bot", n_a),
-                (ref + "/side/bot", n_b),
-                (ref + "/side/top", n_c),
+                rsb_vna_key,
+                rsb_vnb_key,
+                rst_vnc_key,
             ],
         }
 
@@ -139,25 +156,19 @@ def init(
 
     obj = weave_cylinder_faces(
         obj=obj,
-        vkey_lower=ref + "/bot/outer_bound",
-        vkey_upper=ref + "/top/outer_bound",
-        ref=ref + "/outer",
+        vkey_lower=os.path.join(ref, "bot", "outer_bound"),
+        vkey_upper=os.path.join(ref, "top", "outer_bound"),
+        ref=os.path.join(ref, "outer"),
         norm_sign=+1.0,
     )
 
     if weave_inner_polygon:
         obj = weave_cylinder_faces(
             obj=obj,
-            vkey_lower=ref + "/bot/inner_bound",
-            vkey_upper=ref + "/top/inner_bound",
-            ref=ref + "/inner",
+            vkey_lower=os.path.join(ref, "bot", "inner_bound"),
+            vkey_upper=os.path.join(ref, "top", "inner_bound"),
+            ref=os.path.join(ref, "inner"),
             norm_sign=-1.0,
         )
-
-    obj["materials"][ref + "_top"] = [ref + "/top"]
-    obj["materials"][ref + "_bottom"] = [ref + "/bot"]
-    obj["materials"][ref + "_outer_side"] = [ref + "/outer"]
-    if weave_inner_polygon:
-        obj["materials"][ref + "_inner_side"] = [ref + "/inner"]
 
     return obj

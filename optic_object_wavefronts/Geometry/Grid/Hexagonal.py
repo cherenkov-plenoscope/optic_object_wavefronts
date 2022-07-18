@@ -1,4 +1,5 @@
 import numpy as np
+import os
 import collections
 from . import Template
 
@@ -16,7 +17,8 @@ def init_from_outer_radius(outer_radius=1.0, ref="hex", fn=10):
             bound_upper = -dA + N
             bound_lower = -dA - N
             if dB <= bound_upper and dB >= bound_lower:
-                vertices[(ref, (dA, dB))] = (dA * HEXA + dB * HEXB) * spacing
+                vkey = os.path.join(ref, "{:d}_{:d}".format(dA, dB))
+                vertices[vkey] = (dA * HEXA + dB * HEXB) * spacing
     return vertices
 
 

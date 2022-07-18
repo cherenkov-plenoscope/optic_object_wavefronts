@@ -1,5 +1,7 @@
 from .. import Geometry
 from . import SphericalCap
+import os
+import collections
 
 
 def init(
@@ -14,7 +16,7 @@ def init(
     outer_polygon = Geometry.RegularPolygon.make_vertices_xy(
         outer_radius=outer_radius,
         fn=fn_polygon,
-        ref=ref + "/outer_bound",
+        ref=os.path.join(ref, "outer_bound"),
         rot=rot,
     )
 
@@ -22,7 +24,7 @@ def init(
         inner_polygon = Geometry.RegularPolygon.make_vertices_xy(
             outer_radius=inner_radius,
             fn=fn_polygon,
-            ref=ref + "/inner_bound",
+            ref=os.path.join(ref, "inner_bound"),
             rot=rot,
         )
     else:

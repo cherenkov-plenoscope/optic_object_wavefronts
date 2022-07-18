@@ -2,6 +2,8 @@ from .. import Object
 from . import Disc
 from . import TemplateCylinder
 import numpy as np
+import collections
+import os
 
 
 def init(
@@ -27,11 +29,14 @@ def init(
             Key for the material.
     """
     top = Disc.init(
-        outer_radius=outer_radius, ref=ref + "/top", fn=fn, rot=rot,
+        outer_radius=outer_radius,
+        ref=os.path.join(ref, "top"),
+        fn=fn,
+        rot=rot,
     )
     bot = Disc.init(
         outer_radius=outer_radius,
-        ref=ref + "/bot",
+        ref=os.path.join(ref, "bot"),
         fn=fn,
         rot=(2 * np.pi) / (2 * fn) + rot,
     )
@@ -42,27 +47,29 @@ def init(
         tmp_v = np.array(top["vertices"][vkey])
         tmp_v[2] = float(length)
         obj["vertices"][vkey] = tmp_v
-    for fkey in top["faces"]:
-        obj["faces"][fkey] = top["faces"][fkey]
     for vnkey in top["vertex_normals"]:
-        obj["vertex_normals"][vnkey] = [0, 0, 1]
+        obj["vertex_normals"][vnkey] = np.array([0, 0, 1])
+
+    mtl_top = os.path.join(ref, "top")
+    obj["materials"][mtl_top] = collections.OrderedDict()
+    for fkey in top["materials"][mtl_top]:
+        obj["materials"][mtl_top][fkey] = top["materials"][mtl_top][fkey]
 
     for vkey in bot["vertices"]:
         obj["vertices"][vkey] = bot["vertices"][vkey]
-    for fkey in bot["faces"]:
-        obj["faces"][fkey] = bot["faces"][fkey]
     for vnkey in bot["vertex_normals"]:
-        obj["vertex_normals"][vnkey] = [0, 0, -1]
+        obj["vertex_normals"][vnkey] = np.array([0, 0, -1])
+
+    mtl_bot = os.path.join(ref, "bot")
+    obj["materials"][mtl_bot] = collections.OrderedDict()
+    for fkey in bot["materials"][mtl_bot]:
+        obj["materials"][mtl_bot][fkey] = bot["materials"][mtl_bot][fkey]
 
     obj = TemplateCylinder.weave_cylinder_faces(
         obj=obj,
-        vkey_lower=ref + "/bot/outer_bound",
-        vkey_upper=ref + "/top/outer_bound",
-        ref=ref + "/outer",
+        vkey_lower=os.path.join(ref, "bot", "outer_bound"),
+        vkey_upper=os.path.join(ref, "top", "outer_bound"),
+        ref=os.path.join(ref, "outer"),
     )
-
-    obj["materials"][ref + "_top"] = ["top"]
-    obj["materials"][ref + "_bottom"] = ["bot"]
-    obj["materials"][ref + "_outer_side"] = ["outer"]
 
     return obj

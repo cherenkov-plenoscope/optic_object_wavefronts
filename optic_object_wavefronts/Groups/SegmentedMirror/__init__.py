@@ -82,9 +82,9 @@ def add_segmented_mirror_to_frame_in_scenery(
             ref="facet",
         )
         facet_mtl_to_boundary_layers_map = {
-            "facet_front": ref + "f",
-            "facet_back": ref + "b",
-            "facet_side": ref + "b",
+            "facet/front": ref + "f",
+            "facet/back": ref + "b",
+            "facet/side": ref + "b",
         }
         scenery["materials"]["boundary_layers"][ref + "b"] = {
             "inner": {"medium": inner_medium, "surface": facet_surface_body},

@@ -1,4 +1,6 @@
 import numpy as np
+import os
+import collections
 from .. import Object
 from . import Cylinder
 from . import SphericalCapHexagonal
@@ -19,13 +21,13 @@ def init(
     top = SphericalCapHexagonal.init(
         outer_radius=outer_radius,
         curvature_radius=-1.0 * curvature_radius,
-        ref=ref + "/top",
+        ref=os.path.join(ref, "top"),
         fn=fn,
     )
     bot = SphericalCapHexagonal.init(
         outer_radius=outer_radius,
         curvature_radius=1.0 * curvature_radius,
-        ref=ref + "/bot",
+        ref=os.path.join(ref, "bot"),
         fn=fn,
     )
 
@@ -37,8 +39,10 @@ def init(
         tmp_v = np.array(top["vertices"][vkey])
         tmp_v[2] = tmp_v[2] + float(cap_height)
         obj["vertices"][vkey] = tmp_v
-    for fkey in top["faces"]:
-        obj["faces"][fkey] = top["faces"][fkey]
+    top_mtl_key = os.path.join(ref, "top")
+    obj["materials"][top_mtl_key] = collections.OrderedDict()
+    for fkey in top["materials"][top_mtl_key]:
+        obj["materials"][top_mtl_key][fkey] = top["materials"][top_mtl_key][fkey]
     for vnkey in top["vertex_normals"]:
         obj["vertex_normals"][vnkey] = +1.0 * top["vertex_normals"][vnkey]
 
@@ -46,8 +50,10 @@ def init(
         tmp_v = np.array(bot["vertices"][vkey])
         tmp_v[2] = tmp_v[2] - float(cap_height)
         obj["vertices"][vkey] = tmp_v
-    for fkey in bot["faces"]:
-        obj["faces"][fkey] = bot["faces"][fkey]
+    bot_mtl_key = os.path.join(ref, "bot")
+    obj["materials"][bot_mtl_key] = collections.OrderedDict()
+    for fkey in bot["materials"][bot_mtl_key]:
+        obj["materials"][bot_mtl_key][fkey] = bot["materials"][bot_mtl_key][fkey]
     for vnkey in bot["vertex_normals"]:
         obj["vertex_normals"][vnkey] = -1.0 * bot["vertex_normals"][vnkey]
 
@@ -57,11 +63,7 @@ def init(
         obj=obj,
         outer_radius=outer_radius,
         margin_width_on_edge=0.1 * hexagonal_grid_spacing,
-        ref=ref + "/side",
+        ref=os.path.join(ref, "side"),
     )
-
-    obj["materials"][ref + "_top"] = [ref + "/top"]
-    obj["materials"][ref + "_bottom"] = [ref + "/bot"]
-    obj["materials"][ref + "_side"] = [ref + "/side"]
 
     return obj

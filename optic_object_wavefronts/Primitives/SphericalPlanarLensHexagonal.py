@@ -2,6 +2,8 @@ from . import SphericalCapHexagonal
 from . import Disc
 from .. import Object
 import numpy as np
+import os
+import collections
 
 
 def init(
@@ -11,15 +13,19 @@ def init(
     fn=10,
     ref="SphericalPlaneHexagonalBody",
 ):
+    join = os.path.join
     front_obj = SphericalCapHexagonal.init(
         outer_radius=outer_radius,
         curvature_radius=curvature_radius,
         fn=fn,
-        ref=ref + "/front",
+        ref=join(ref, "front"),
     )
 
     back_obj = Disc.init(
-        outer_radius=outer_radius, fn=6, ref=ref + "/back", rot=0.0,
+        outer_radius=outer_radius,
+        fn=6,
+        ref=join(ref, "back"),
+        rot=0.0,
     )
 
     center_of_curvature = np.array([0.0, 0.0, curvature_radius])
@@ -36,19 +42,16 @@ def init(
         obj=obj,
         outer_radius=outer_radius,
         margin_width_on_edge=0.1 * hexagonal_grid_spacing,
-        ref=ref + "/side",
+        ref=join(ref, "side"),
     )
 
-    # remove /side faces inside of curvature-sphere
-    side_fkeys = []
-    for fkey in obj["faces"]:
-        if str.find(fkey[0], ref + "/side") >= 0:
-            side_fkeys.append(fkey)
-
-    for fkey in side_fkeys:
-        va_key = obj["faces"][fkey]["vertices"][0]
-        vb_key = obj["faces"][fkey]["vertices"][1]
-        vc_key = obj["faces"][fkey]["vertices"][2]
+    mtl_side_key = os.path.join(ref, "side")
+    mtl_side = obj["materials"][mtl_side_key]
+    new_mtl_side = collections.OrderedDict()
+    for fkey in mtl_side:
+        va_key = mtl_side[fkey]["vertices"][0]
+        vb_key = mtl_side[fkey]["vertices"][1]
+        vc_key = mtl_side[fkey]["vertices"][2]
 
         va = obj["vertices"][va_key]
         vb = obj["vertices"][vb_key]
@@ -67,11 +70,10 @@ def init(
         mid_ca_inside = r_mid_ca <= curvature_radius
 
         if np.sum([mid_ab_inside, mid_bc_inside, mid_ca_inside]) > 1:
-            obj["faces"].pop(fkey)
+            pass
+        else:
+            new_mtl_side[fkey] = mtl_side[fkey]
 
-    obj["materials"] = {}
-    obj["materials"][ref + "_front"] = [ref + "/front"]
-    obj["materials"][ref + "_back"] = [ref + "/back"]
-    obj["materials"][ref + "_side"] = [ref + "/side"]
+    obj["materials"][mtl_side_key] = new_mtl_side
 
     return obj

@@ -3,6 +3,8 @@ from .. import Delaunay
 from .. import Geometry
 from .. import Polygon
 import numpy as np
+import os
+import collections
 
 
 def init(
@@ -42,7 +44,9 @@ def init(
     )
 
     hex_vertices = Geometry.Grid.Hexagonal.init_from_outer_radius(
-        outer_radius=outer_radius_xy * 1.5, fn=fn_hex_grid, ref=ref + "/Grid"
+        outer_radius=outer_radius_xy * 1.5,
+        fn=fn_hex_grid,
+        ref=os.path.join(ref, "grid"),
     )
 
     hex_vertices_valid = Polygon.get_vertices_inside(
@@ -80,23 +84,26 @@ def init(
 
     faces = Delaunay.make_faces_xy(vertices=obj["vertices"], ref=ref)
 
+    obj["materials"][ref] = collections.OrderedDict()
+
+    mtl_key = ref
     for fkey in faces:
-        obj["faces"][fkey] = {
+        obj["materials"][mtl_key][fkey] = {
             "vertices": faces[fkey]["vertices"],
             "vertex_normals": faces[fkey]["vertices"],
         }
 
     if inner_polygon is not None:
         mask_faces_in_inner = Polygon.mask_face_inside(
-            vertices=obj["vertices"], faces=obj["faces"], polygon=inner_polygon
+            vertices=obj["vertices"],
+            faces=obj["materials"][mtl_key],
+            polygon=inner_polygon,
         )
         fkeys_to_be_removed = []
-        for idx, fkey in enumerate(obj["faces"]):
+        for idx, fkey in enumerate(obj["materials"][mtl_key]):
             if mask_faces_in_inner[idx]:
                 fkeys_to_be_removed.append(fkey)
         for fkey in fkeys_to_be_removed:
-            obj["faces"].pop(fkey)
-
-    obj["materials"][ref] = [ref]
+            obj["materials"][mtl_key].pop(fkey)
 
     return obj

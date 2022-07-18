@@ -39,21 +39,19 @@ def init_from_Object(obj):
         wavefront["vn"].append(obj["vertex_normals"][vnkey])
 
     for mkey in obj["materials"]:
+        mtl_faces = obj["materials"][mkey]
         wavefront["materials"][mkey] = []
 
-        for fkey in obj["faces"]:
-            if _key_contains_any_of_patterns(
-                key=fkey[0], patterns=obj["materials"][mkey]
-            ):
-                vs = []
-                for dim in range(3):
-                    vs.append(v_dict[obj["faces"][fkey]["vertices"][dim]])
-                vns = []
-                for dim in range(3):
-                    vns.append(
-                        vn_dict[obj["faces"][fkey]["vertex_normals"][dim]]
-                    )
-                wavefront["materials"][mkey].append({"v": vs, "vn": vns})
+        for fkey in mtl_faces:
+            vs = []
+            for dim in range(3):
+                vs.append(v_dict[mtl_faces[fkey]["vertices"][dim]])
+            vns = []
+            for dim in range(3):
+                vns.append(
+                    vn_dict[mtl_faces[fkey]["vertex_normals"][dim]]
+                )
+            wavefront["materials"][mkey].append({"v": vs, "vn": vns})
 
     return wavefront
 

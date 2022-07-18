@@ -4,13 +4,15 @@ from .. import Geometry
 from . import Disc
 import copy
 import numpy as np
+import os
+import collections
 
 
 def init(outer_radius, curvature_radius, fn=10, ref="SphericalCapHexagonal"):
     obj = Object.init()
 
     obj["vertices"] = Geometry.Grid.Hexagonal.init_from_outer_radius(
-        outer_radius=outer_radius, fn=fn, ref=ref + "/inner"
+        outer_radius=outer_radius, fn=fn, ref=os.path.join(ref, "inner")
     )
 
     # elevate z-axis
@@ -25,22 +27,23 @@ def init(outer_radius, curvature_radius, fn=10, ref="SphericalCapHexagonal"):
     # vertex-normals
     # --------------
     for vkey in obj["vertices"]:
-        vnkey = tuple(vkey)
+        vnkey = str(vkey)
         obj["vertex_normals"][vnkey] = Geometry.Sphere.surface_normal(
             x=obj["vertices"][vkey][0],
             y=obj["vertices"][vkey][1],
             curvature_radius=curvature_radius,
         )
 
-    faces = Delaunay.make_faces_xy(vertices=obj["vertices"], ref=ref)
+    faces = Delaunay.make_faces_xy(vertices=obj["vertices"], ref="")
 
+    mtl_key = ref
+    obj["materials"][mtl_key] = collections.OrderedDict()
     for fkey in faces:
-        obj["faces"][fkey] = {
+        obj["materials"][mtl_key][fkey] = {
             "vertices": faces[fkey]["vertices"],
             "vertex_normals": faces[fkey]["vertices"],
         }
 
-    obj["materials"][ref] = [ref]
     return obj
 
 
@@ -67,6 +70,9 @@ def weave_hexagon_edges(obj, outer_radius, margin_width_on_edge, ref):
     inner_radius_threshold = inner_radius_hexagon - margin_width_on_edge
     rot_perp = np.pi / 2.0
 
+    mtl_key = ref
+    obj["materials"][mtl_key] = collections.OrderedDict()
+
     for irotz, phi in enumerate(np.linspace(0, 2 * np.pi, 6, endpoint=False)):
         i_vertices = rotate_vertices_xy(vertices=obj["vertices"], phi=phi)
 
@@ -78,18 +84,18 @@ def weave_hexagon_edges(obj, outer_radius, margin_width_on_edge, ref):
                 )
 
         i_faces = Delaunay.make_faces_xy(
-            vertices=i_combi_vertices, ref=ref + "_{:d}".format(irotz)
+            vertices=i_combi_vertices, ref=ref + "{:d}".format(irotz)
         )
 
         i_normal = np.array(
             [np.cos(-phi + rot_perp), np.sin(-phi + rot_perp), 0.0]
         )
-        i_vnkey = (ref, irotz)
+        i_vnkey = os.path.join(ref, "{:06d}".format(irotz))
 
         obj["vertex_normals"][i_vnkey] = i_normal
 
         for fkey in i_faces:
-            obj["faces"][fkey] = {
+            obj["materials"][mtl_key][fkey] = {
                 "vertices": i_faces[fkey]["vertices"],
                 "vertex_normals": [i_vnkey, i_vnkey, i_vnkey],
             }

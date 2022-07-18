@@ -2,6 +2,8 @@ from .. import Object
 from .. import Geometry
 from .. import Delaunay
 import numpy as np
+import os
+import collections
 
 
 def init(
@@ -36,7 +38,7 @@ def init(
     obj = Object.init()
     obj["vertices"] = Geometry.RegularPolygon.make_vertices_xy(
         outer_radius=outer_radius,
-        ref=ref + "/" + "outer_bound",
+        ref=os.path.join(ref, "outer_bound"),
         fn=fn,
         rot=rot,
     )
@@ -48,30 +50,30 @@ def init(
         while next_fn >= 6:
             inner_vertices = Geometry.RegularPolygon.make_vertices_xy(
                 outer_radius=next_radius,
-                ref=ref + "/" + "aux",
+                ref=os.path.join(ref, "aux"),
                 fn=next_fn,
                 rot=rot,
             )
 
             for inner_vkey in inner_vertices:
-                _vkey = (ref + "/aux", v_inner_idx)
+                _vkey = os.path.join(ref, "aux", "{:06d}".format(v_inner_idx))
                 obj["vertices"][_vkey] = inner_vertices[inner_vkey]
                 v_inner_idx += 1
 
             next_radius = 0.9 * next_radius
             next_fn = int(np.round(next_fn / 3))
 
-    vnkey = (ref, 0)
+    vnkey = os.path.join(ref, "0")
     obj["vertex_normals"][vnkey] = np.array([0.0, 0.0, 1.0])
 
-    delfaces = Delaunay.make_faces_xy(vertices=obj["vertices"], ref=ref)
+    delfaces = Delaunay.make_faces_xy(vertices=obj["vertices"], ref="")
+
+    obj["materials"][ref] = collections.OrderedDict()
 
     for fkey in delfaces:
-        obj["faces"][fkey] = {
+        obj["materials"][ref][fkey] = {
             "vertices": delfaces[fkey]["vertices"],
             "vertex_normals": [vnkey, vnkey, vnkey],
         }
-
-    obj["materials"][ref] = [ref]
 
     return obj
