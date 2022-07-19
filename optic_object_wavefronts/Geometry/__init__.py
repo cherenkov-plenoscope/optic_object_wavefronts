@@ -1,7 +1,7 @@
 """
 Collect equations of geometric primitives
 """
-from . import Plane
+from . import plane
 from . import sphere
 from . import Ellipse
 from . import Parabola
