@@ -49,7 +49,9 @@ def init(
         if ra <= outer_radius and rb <= outer_radius and rc <= outer_radius:
             obj["materials"][mtl_key][fkey] = all_grid_faces[fkey]
             obj["materials"][mtl_key][fkey]["vertex_normals"] = [
-                vkey_a, vkey_b, vkey_c
+                vkey_a,
+                vkey_b,
+                vkey_c,
             ]
 
     return Object.remove_unused_vertices_and_vertex_normals(obj=obj)
