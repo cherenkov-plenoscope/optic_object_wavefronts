@@ -89,7 +89,7 @@ def make_geometry(
     grid_positions_xy = polygon.rotate_z(grid_positions_xy, 0)
     grid_positions_xy = polygon.get_vertices_inside(
         vertices=grid_positions_xy,
-        polygon=Geometry.RegularPolygon.make_vertices_xy(
+        polygon=Geometry.regular_polygon.make_vertices_xy(
             outer_radius=c["housing"]["outer_radius_inside"],
             ref="_",
             fn=6,

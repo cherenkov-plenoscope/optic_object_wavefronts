@@ -143,17 +143,17 @@ def add_segmented_mirror_to_frame_in_scenery(
     )
 
     if config["outer_aperture_shape_hex"] == 1:
-        aperture_outer_polygon = Geometry.RegularPolygon.make_vertices_xy(
+        aperture_outer_polygon = Geometry.regular_polygon.make_vertices_xy(
             outer_radius=outer_radius_facet_supports, fn=6, rot=np.pi / 6,
         )
     else:
-        aperture_outer_polygon = Geometry.RegularPolygon.make_vertices_xy(
+        aperture_outer_polygon = Geometry.regular_polygon.make_vertices_xy(
             outer_radius=outer_radius_facet_supports, fn=fn_circle, rot=0.0,
         )
 
     facet_centers = init_facet_centers_xy(
         aperture_outer_polygon=aperture_outer_polygon,
-        aperture_inner_polygon=Geometry.RegularPolygon.make_vertices_xy(
+        aperture_inner_polygon=Geometry.regular_polygon.make_vertices_xy(
             outer_radius=inner_radius_facet_supports, fn=fn_circle,
         ),
         grid_spacing=grid_spacing,
@@ -194,10 +194,10 @@ def add_segmented_mirror_to_frame_in_scenery(
 
 
 def init_facet_centers_xy(
-    aperture_outer_polygon=Geometry.RegularPolygon.make_vertices_xy(
+    aperture_outer_polygon=Geometry.regular_polygon.make_vertices_xy(
         outer_radius=1.0
     ),
-    aperture_inner_polygon=Geometry.RegularPolygon.make_vertices_xy(
+    aperture_inner_polygon=Geometry.regular_polygon.make_vertices_xy(
         outer_radius=0.5
     ),
     grid_spacing=0.1,

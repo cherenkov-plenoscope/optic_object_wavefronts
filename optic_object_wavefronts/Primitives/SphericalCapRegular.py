@@ -13,7 +13,7 @@ def init(
     ref="SphericalCap",
     rot=0.0,
 ):
-    outer_polygon = Geometry.RegularPolygon.make_vertices_xy(
+    outer_polygon = Geometry.regular_polygon.make_vertices_xy(
         outer_radius=outer_radius,
         fn=fn_polygon,
         ref=os.path.join(ref, "outer_bound"),
@@ -21,7 +21,7 @@ def init(
     )
 
     if inner_radius is not None:
-        inner_polygon = Geometry.RegularPolygon.make_vertices_xy(
+        inner_polygon = Geometry.regular_polygon.make_vertices_xy(
             outer_radius=inner_radius,
             fn=fn_polygon,
             ref=os.path.join(ref, "inner_bound"),
