@@ -1,5 +1,5 @@
 from .. import Object
-from .. import Delaunay
+from .. import delaunay
 from .. import Geometry
 from .. import Polygon
 import numpy as np
@@ -82,7 +82,7 @@ def init(
             **curvature_config,
         )
 
-    faces = Delaunay.make_faces_xy(vertices=obj["vertices"], ref=ref)
+    faces = delaunay.make_faces_xy(vertices=obj["vertices"], ref=ref)
 
     obj["materials"][ref] = collections.OrderedDict()
 

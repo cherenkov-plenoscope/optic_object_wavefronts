@@ -1,6 +1,5 @@
 from .. import Object
 from .. import Geometry
-from .. import Delaunay
 import numpy as np
 import os
 import collections

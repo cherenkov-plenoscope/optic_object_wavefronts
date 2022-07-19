@@ -2,7 +2,7 @@ from .version import __version__
 from . import Object
 from . import Scenery
 from . import Wavefront
-from . import Delaunay
+from . import delaunay
 from . import Primitives
 from . import Groups
 from . import Optics

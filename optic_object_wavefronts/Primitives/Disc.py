@@ -1,6 +1,6 @@
 from .. import Object
 from .. import Geometry
-from .. import Delaunay
+from .. import delaunay
 import numpy as np
 import os
 import collections
@@ -66,7 +66,7 @@ def init(
     vnkey = os.path.join(ref, "0")
     obj["vertex_normals"][vnkey] = np.array([0.0, 0.0, 1.0])
 
-    delfaces = Delaunay.make_faces_xy(vertices=obj["vertices"], ref="")
+    delfaces = delaunay.make_faces_xy(vertices=obj["vertices"], ref="")
 
     obj["materials"][ref] = collections.OrderedDict()
 
