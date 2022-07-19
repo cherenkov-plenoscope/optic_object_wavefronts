@@ -111,9 +111,8 @@ def write_to_obj(mesh, path, header=True):
     header : bool
             Add a header with version-number.
     """
-    wavefront = io.obj.init_from_mesh(mesh=mesh)
-    wavefront_str = io.obj.to_string(wavefront)
+    obj = io.obj.init_from_mesh(mesh=mesh)
     with open(path, "wt") as fout:
         if header:
             fout.write("# {:s} v{:s}\n".format(__name__, version.__version__))
-        fout.write(wavefront_str)
+        fout.write(io.obj.dumps(obj=obj))

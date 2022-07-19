@@ -48,7 +48,7 @@ def init_from_mesh(mesh):
     return obj
 
 
-def to_string(obj):
+def dumps(obj):
     # COUNTING STARTS AT ONE
     s = io.StringIO()
     s.write("# vertices\n")
