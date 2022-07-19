@@ -250,7 +250,7 @@ def set_facet_centers_z(
             y=facet_centers[fkey][1],
             curvature_radius=focal_length,
         )
-        prabola_z = Geometry.Parabola.surface_height(
+        prabola_z = Geometry.parabola.surface_height(
             x=facet_centers[fkey][0],
             y=facet_centers[fkey][1],
             focal_length=focal_length,
