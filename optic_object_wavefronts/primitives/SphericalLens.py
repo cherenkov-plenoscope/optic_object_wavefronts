@@ -2,7 +2,7 @@ import numpy as np
 import os
 import collections
 from .. import mesh
-from . import TemplateCylinder
+from . import template_cylinder
 from . import SphericalCapRegular
 
 
@@ -68,7 +68,7 @@ def init(
     for vnkey in bot["vertex_normals"]:
         lens["vertex_normals"][vnkey] = -1.0 * bot["vertex_normals"][vnkey]
 
-    lens = TemplateCylinder.weave_cylinder_faces(
+    lens = template_cylinder.weave_cylinder_faces(
         mesh=lens,
         vkey_lower=os.path.join(ref, "bot", "outer_bound"),
         vkey_upper=os.path.join(ref, "top", "outer_bound"),
@@ -77,7 +77,7 @@ def init(
     )
 
     if inner_radius is not None:
-        lens = TemplateCylinder.weave_cylinder_faces(
+        lens = template_cylinder.weave_cylinder_faces(
             mesh=lens,
             vkey_lower=os.path.join(ref, "bot", "inner_bound"),
             vkey_upper=os.path.join(ref, "top", "inner_bound"),

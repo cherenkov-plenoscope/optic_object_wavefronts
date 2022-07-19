@@ -14,8 +14,8 @@ import matplotlib.pyplot as plt
 # 3D
 # --
 objs = {
-    "Disc": {"outer_radius": 1.0, "fn": 109, "rot": 0.0},
-    "Cylinder": {"outer_radius": 1.0, "length": 0.5, "fn": 13, "rot": 0.0},
+    "disc": {"outer_radius": 1.0, "fn": 109, "rot": 0.0},
+    "cylinder": {"outer_radius": 1.0, "length": 0.5, "fn": 13, "rot": 0.0},
     "SphericalCapRegular": {
         "outer_radius": 1.0,
         "inner_radius": 0.2,

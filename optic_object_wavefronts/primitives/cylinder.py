@@ -1,6 +1,6 @@
 from .. import mesh
-from . import Disc
-from . import TemplateCylinder
+from . import disc
+from . import template_cylinder
 import numpy as np
 import collections
 import os
@@ -28,48 +28,48 @@ def init(
     ref : str
             Key for the material.
     """
-    top = Disc.init(
+    top = disc.init(
         outer_radius=outer_radius,
         ref=os.path.join(ref, "top"),
         fn=fn,
         rot=rot,
     )
-    bot = Disc.init(
+    bot = disc.init(
         outer_radius=outer_radius,
         ref=os.path.join(ref, "bot"),
         fn=fn,
         rot=(2 * np.pi) / (2 * fn) + rot,
     )
 
-    cylinder = mesh.init()
+    cyl = mesh.init()
 
     for vkey in top["vertices"]:
         tmp_v = np.array(top["vertices"][vkey])
         tmp_v[2] = float(length)
-        cylinder["vertices"][vkey] = tmp_v
+        cyl["vertices"][vkey] = tmp_v
     for vnkey in top["vertex_normals"]:
-        cylinder["vertex_normals"][vnkey] = np.array([0, 0, 1])
+        cyl["vertex_normals"][vnkey] = np.array([0, 0, 1])
 
     mtl_top = os.path.join(ref, "top")
-    cylinder["materials"][mtl_top] = collections.OrderedDict()
+    cyl["materials"][mtl_top] = collections.OrderedDict()
     for fkey in top["materials"][mtl_top]:
-        cylinder["materials"][mtl_top][fkey] = top["materials"][mtl_top][fkey]
+        cyl["materials"][mtl_top][fkey] = top["materials"][mtl_top][fkey]
 
     for vkey in bot["vertices"]:
-        cylinder["vertices"][vkey] = bot["vertices"][vkey]
+        cyl["vertices"][vkey] = bot["vertices"][vkey]
     for vnkey in bot["vertex_normals"]:
-        cylinder["vertex_normals"][vnkey] = np.array([0, 0, -1])
+        cyl["vertex_normals"][vnkey] = np.array([0, 0, -1])
 
     mtl_bot = os.path.join(ref, "bot")
-    cylinder["materials"][mtl_bot] = collections.OrderedDict()
+    cyl["materials"][mtl_bot] = collections.OrderedDict()
     for fkey in bot["materials"][mtl_bot]:
-        cylinder["materials"][mtl_bot][fkey] = bot["materials"][mtl_bot][fkey]
+        cyl["materials"][mtl_bot][fkey] = bot["materials"][mtl_bot][fkey]
 
-    cylinder = TemplateCylinder.weave_cylinder_faces(
-        mesh=cylinder,
+    cyl = template_cylinder.weave_cylinder_faces(
+        mesh=cyl,
         vkey_lower=os.path.join(ref, "bot", "outer_bound"),
         vkey_upper=os.path.join(ref, "top", "outer_bound"),
         ref=os.path.join(ref, "outer"),
     )
 
-    return cylinder
+    return cyl

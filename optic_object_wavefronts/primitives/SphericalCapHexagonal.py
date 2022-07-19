@@ -1,7 +1,6 @@
 from .. import mesh
 from .. import delaunay
 from .. import geometry
-from . import Disc
 import copy
 import numpy as np
 import os

@@ -130,7 +130,7 @@ def init(
     # grid for photo-sensors
     # ----------------------
     for gi, gkey in enumerate(cg["photo_sensor"]["grid"]["positions"]):
-        photo_sensor = primitives.Disc.init(
+        photo_sensor = primitives.disc.init(
             outer_radius=cg["photo_sensor"]["body"]["outer_radius"],
             fn=6,
             rot=np.pi / 6,

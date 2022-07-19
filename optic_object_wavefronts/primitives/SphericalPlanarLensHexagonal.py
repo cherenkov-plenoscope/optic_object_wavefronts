@@ -1,5 +1,5 @@
 from . import SphericalCapHexagonal
-from . import Disc
+from . import disc
 from .. import mesh
 import numpy as np
 import os
@@ -21,7 +21,7 @@ def init(
         ref=join(ref, "front"),
     )
 
-    back = Disc.init(
+    back = disc.init(
         outer_radius=outer_radius, fn=6, ref=join(ref, "back"), rot=0.0,
     )
 

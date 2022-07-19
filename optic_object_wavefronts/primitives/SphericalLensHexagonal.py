@@ -2,7 +2,7 @@ import numpy as np
 import os
 import collections
 from .. import mesh
-from . import Cylinder
+from . import cylinder
 from . import SphericalCapHexagonal
 
 
