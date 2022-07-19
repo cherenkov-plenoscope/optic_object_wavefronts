@@ -1,4 +1,4 @@
 """
 Collect formulas related to optics.
 """
-from . import LensMaker
+from . import lens_maker
