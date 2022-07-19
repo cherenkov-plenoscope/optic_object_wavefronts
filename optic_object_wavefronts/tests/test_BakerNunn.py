@@ -43,7 +43,7 @@ def test_baker_nunn():
     )
     z_focus_surfcae = z_mirror + focus_surface_curvature_radius
 
-    mirror = oow.primitives.SphericalLens.init(
+    mirror = oow.primitives.spherical_lens.init(
         outer_radius=mirror_radius,
         inner_radius=0.0254,
         curvature_radius_top=-mirror_curvature_radius,
@@ -55,7 +55,7 @@ def test_baker_nunn():
         ref="mirror",
     )
 
-    cor1 = oow.primitives.SphericalLens.init(
+    cor1 = oow.primitives.spherical_lens.init(
         outer_radius=corrector_radius,
         curvature_radius_top=-13.754,
         curvature_radius_bot=-2.589,
@@ -66,7 +66,7 @@ def test_baker_nunn():
         ref="corrector1",
     )
 
-    cor2 = oow.primitives.SphericalLens.init(
+    cor2 = oow.primitives.spherical_lens.init(
         outer_radius=corrector_radius,
         curvature_radius_top=-2.988818,
         curvature_radius_bot=2.988818,
@@ -77,7 +77,7 @@ def test_baker_nunn():
         ref="corrector2",
     )
 
-    cor3 = oow.primitives.SphericalLens.init(
+    cor3 = oow.primitives.spherical_lens.init(
         outer_radius=corrector_radius,
         curvature_radius_top=2.589,
         curvature_radius_bot=13.754,
@@ -133,13 +133,13 @@ def test_baker_nunn():
         0.0,
     ]
 
-    f_shield = oow.primitives.SphericalCap.init(
+    f_shield = oow.primitives.spherical_cap.init(
         outer_polygon=focus_shield_bound,
         curvature_radius=focus_shield_curvature_radius,
         fn_hex_grid=fn_hex_grid,
         ref="focus_shield",
     )
-    f_surface = oow.primitives.SphericalCap.init(
+    f_surface = oow.primitives.spherical_cap.init(
         outer_polygon=focus_surface_bound,
         curvature_radius=focus_surface_curvature_radius,
         fn_hex_grid=3 * fn_hex_grid,

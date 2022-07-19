@@ -74,7 +74,7 @@ def add_segmented_mirror_to_frame_in_scenery(
     }
 
     if facet_body_width > 0.0:
-        facet = primitives.SphericalPlanarLensHexagonal.init(
+        facet = primitives.spherical_planar_lens_hexagonal.init(
             outer_radius=facet_outer_radius,
             curvature_radius=facet_curvature_radius,
             width=facet_body_width,
@@ -91,7 +91,7 @@ def add_segmented_mirror_to_frame_in_scenery(
             "outer": {"medium": outer_medium, "surface": facet_surface_body},
         }
     else:
-        facet = primitives.SphericalCapHexagonal.init(
+        facet = primitives.spherical_cap_hexagonal.init(
             outer_radius=facet_outer_radius,
             curvature_radius=facet_curvature_radius,
             fn=facet_fn,

@@ -122,7 +122,7 @@ def make_geometry(
 
 
 def init(
-    camera_geometry, ref="LightFieldSensorCameraModule",
+    camera_geometry, ref="light_field_sensor_camera_module",
 ):
     cg = camera_geometry
     camera = mesh.init()
@@ -144,7 +144,7 @@ def init(
 
     # lens
     # ----
-    lens = primitives.SphericalLensHexagonal.init(
+    lens = primitives.spherical_lens_hexagonal.init(
         outer_radius=cg["lens"]["outer_radius"],
         curvature_radius=cg["lens"]["curvature_radius"],
         fn=cg["lens"]["fn"],
@@ -156,7 +156,7 @@ def init(
 
     # housing
     # -------
-    pipe = primitives.PipeHexagonal.init(
+    pipe = primitives.pipe_hexagonal.init(
         outer_radius=cg["housing"]["outer_radius_outside"],
         inner_radius=cg["housing"]["outer_radius_inside"],
         height=cg["housing"]["height"],
