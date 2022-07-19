@@ -9,7 +9,7 @@ def init(
     outer_radius, curvature_radius, fn_hex_grid=10, ref="SphericalPixelCap",
 ):
     cap = mesh.init()
-    cap["vertices"] = Geometry.Grid.Hexagonal.init_from_outer_radius(
+    cap["vertices"] = Geometry.grid.Hexagonal.init_from_outer_radius(
         outer_radius=2.0 * outer_radius, ref="hex", fn=fn_hex_grid
     )
 

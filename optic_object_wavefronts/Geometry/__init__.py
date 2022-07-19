@@ -6,5 +6,5 @@ from . import sphere
 from . import ellipse
 from . import parabola
 from . import regular_polygon
-from . import Grid
+from . import grid
 from . import schwarzschild_couder

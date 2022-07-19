@@ -74,14 +74,14 @@ def make_geometry(
 
     c["photo_sensor"]["grid"][
         "spacing"
-    ] = Geometry.Grid.Hexagonal.estimate_spacing_for_small_hexagons_in_big_hexagon(
+    ] = Geometry.grid.Hexagonal.estimate_spacing_for_small_hexagons_in_big_hexagon(
         big_hexagon_outer_radius=c["housing"]["outer_radius_inside"],
         num_small_hexagons_on_diagonal_of_big_hexagon=c["photo_sensor"][
             "grid"
         ]["num_on_diagonal"],
     )
 
-    grid_positions_xy = Geometry.Grid.Hexagonal.init_from_spacing(
+    grid_positions_xy = Geometry.grid.Hexagonal.init_from_spacing(
         spacing=c["photo_sensor"]["grid"]["spacing"],
         ref="_",
         fN=c["photo_sensor"]["grid"]["num_on_diagonal"],

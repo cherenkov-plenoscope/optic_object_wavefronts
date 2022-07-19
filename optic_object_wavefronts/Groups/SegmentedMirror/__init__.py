@@ -213,15 +213,15 @@ def init_facet_centers_xy(
     fN = 2 * int(np.ceil(outer_radius / grid_spacing))
 
     if grid_style == "hexagonal":
-        _grid = Geometry.Grid.Hexagonal.init_from_spacing(
+        _grid = Geometry.grid.Hexagonal.init_from_spacing(
             spacing=grid_spacing, ref=ref, fN=fN
         )
     elif grid_style == "rectangular":
-        _grid = Geometry.Grid.Rectangular.init_from_spacing(
+        _grid = Geometry.grid.Rectangular.init_from_spacing(
             spacing=grid_spacing, ref=ref, fN=fN
         )
     else:
-        assert False, "Grid style {:s} is unknown.".format(grid_style)
+        assert False, "grid style {:s} is unknown.".format(grid_style)
 
     _grid = polygon.rotate_z(_grid, grid_rotation)
     mask_inside_outer = polygon.mask_vertices_inside(
