@@ -1,6 +1,6 @@
 from .. import mesh
 from .. import geometry
-from .. import Primitives
+from .. import primitives
 from .. import polygon
 import numpy as np
 
@@ -130,7 +130,7 @@ def init(
     # grid for photo-sensors
     # ----------------------
     for gi, gkey in enumerate(cg["photo_sensor"]["grid"]["positions"]):
-        photo_sensor = Primitives.Disc.init(
+        photo_sensor = primitives.Disc.init(
             outer_radius=cg["photo_sensor"]["body"]["outer_radius"],
             fn=6,
             rot=np.pi / 6,
@@ -144,7 +144,7 @@ def init(
 
     # lens
     # ----
-    lens = Primitives.SphericalLensHexagonal.init(
+    lens = primitives.SphericalLensHexagonal.init(
         outer_radius=cg["lens"]["outer_radius"],
         curvature_radius=cg["lens"]["curvature_radius"],
         fn=cg["lens"]["fn"],
@@ -156,7 +156,7 @@ def init(
 
     # housing
     # -------
-    pipe = Primitives.PipeHexagonal.init(
+    pipe = primitives.PipeHexagonal.init(
         outer_radius=cg["housing"]["outer_radius_outside"],
         inner_radius=cg["housing"]["outer_radius_inside"],
         height=cg["housing"]["height"],

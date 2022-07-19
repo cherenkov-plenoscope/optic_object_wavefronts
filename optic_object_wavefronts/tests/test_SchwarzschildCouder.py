@@ -44,7 +44,7 @@ FN_HEX_GRID = 17
 
 
 def test_init():
-    m1 = oow.Primitives.SchwarzschildCouderCap.init(
+    m1 = oow.primitives.SchwarzschildCouderCap.init(
         outer_polygon=oow.geometry.regular_polygon.make_vertices_xy(
             outer_radius=c["M1"]["outer_radius"],
             fn=FN_POLYGON,
@@ -60,7 +60,7 @@ def test_init():
         ref="M1",
     )
 
-    m2 = oow.Primitives.SchwarzschildCouderCap.init(
+    m2 = oow.primitives.SchwarzschildCouderCap.init(
         outer_polygon=oow.geometry.regular_polygon.make_vertices_xy(
             outer_radius=c["M2"]["outer_radius"],
             fn=FN_POLYGON,
@@ -72,7 +72,7 @@ def test_init():
         ref="M2",
     )
 
-    det = oow.Primitives.SphericalCap.init(
+    det = oow.primitives.SphericalCap.init(
         outer_polygon=oow.geometry.regular_polygon.make_vertices_xy(
             outer_radius=c["DET"]["outer_radius"],
             fn=FN_POLYGON,

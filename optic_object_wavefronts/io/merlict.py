@@ -9,7 +9,7 @@ from .. import materials
 def init(default_medium="vacuum"):
     """
     Returns a Scenery.
-    A scenery is a tree of references to Primitives.
+    A scenery is a tree of references to primitives.
     A reference is a translation and rotation to describe the object's
     relations w.r.t. each other.
 

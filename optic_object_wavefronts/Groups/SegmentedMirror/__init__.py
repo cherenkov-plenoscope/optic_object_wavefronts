@@ -6,7 +6,7 @@ import collections
 import copy
 from ... import geometry
 from ... import polygon
-from ... import Primitives
+from ... import primitives
 from ... import materials
 
 
@@ -74,7 +74,7 @@ def add_segmented_mirror_to_frame_in_scenery(
     }
 
     if facet_body_width > 0.0:
-        facet = Primitives.SphericalPlanarLensHexagonal.init(
+        facet = primitives.SphericalPlanarLensHexagonal.init(
             outer_radius=facet_outer_radius,
             curvature_radius=facet_curvature_radius,
             width=facet_body_width,
@@ -91,7 +91,7 @@ def add_segmented_mirror_to_frame_in_scenery(
             "outer": {"medium": outer_medium, "surface": facet_surface_body},
         }
     else:
-        facet = Primitives.SphericalCapHexagonal.init(
+        facet = primitives.SphericalCapHexagonal.init(
             outer_radius=facet_outer_radius,
             curvature_radius=facet_curvature_radius,
             fn=facet_fn,
