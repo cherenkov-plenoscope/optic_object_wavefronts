@@ -1,7 +1,7 @@
 from .. import Object
 from .. import delaunay
 from .. import Geometry
-from .. import Polygon
+from .. import polygon
 import numpy as np
 import os
 import collections
@@ -38,7 +38,7 @@ def init(
     ref : string
             The name of the surface.
     """
-    outer_limits = Polygon.limits(outer_polygon)
+    outer_limits = polygon.limits(outer_polygon)
     outer_radius_xy = np.max(
         [np.max(np.abs(outer_limits[0])), np.max(np.abs(outer_limits[1]))]
     )
@@ -49,12 +49,12 @@ def init(
         ref=os.path.join(ref, "grid"),
     )
 
-    hex_vertices_valid = Polygon.get_vertices_inside(
+    hex_vertices_valid = polygon.get_vertices_inside(
         vertices=hex_vertices, polygon=outer_polygon
     )
 
     if inner_polygon is not None:
-        hex_vertices_valid = Polygon.get_vertices_outside(
+        hex_vertices_valid = polygon.get_vertices_outside(
             vertices=hex_vertices_valid, polygon=inner_polygon
         )
 
@@ -94,7 +94,7 @@ def init(
         }
 
     if inner_polygon is not None:
-        mask_faces_in_inner = Polygon.mask_face_inside(
+        mask_faces_in_inner = polygon.mask_face_inside(
             vertices=obj["vertices"],
             faces=obj["materials"][mtl_key],
             polygon=inner_polygon,

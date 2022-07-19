@@ -1,7 +1,7 @@
 from .. import Object
 from .. import Geometry
 from .. import Primitives
-from .. import Polygon
+from .. import polygon
 import numpy as np
 
 
@@ -86,8 +86,8 @@ def make_geometry(
         ref="_",
         fN=c["photo_sensor"]["grid"]["num_on_diagonal"],
     )
-    grid_positions_xy = Polygon.rotate_z(grid_positions_xy, 0)
-    grid_positions_xy = Polygon.get_vertices_inside(
+    grid_positions_xy = polygon.rotate_z(grid_positions_xy, 0)
+    grid_positions_xy = polygon.get_vertices_inside(
         vertices=grid_positions_xy,
         polygon=Geometry.RegularPolygon.make_vertices_xy(
             outer_radius=c["housing"]["outer_radius_inside"],

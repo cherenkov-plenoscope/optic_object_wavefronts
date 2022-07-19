@@ -1,7 +1,6 @@
 from .. import Object
 from .. import delaunay
 from .. import Geometry
-from .. import Polygon
 import numpy as np
 import collections
 

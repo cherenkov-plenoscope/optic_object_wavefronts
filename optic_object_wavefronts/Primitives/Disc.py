@@ -24,9 +24,9 @@ def init(
     outer_radius : float
             Outer radius of the regular polygon defining the Disc.
     fn : int
-            Number of vertices in outer regular Polygon.
+            Number of vertices in outer regular polygon.
     rot : float
-            Rotation in z of regular Polygon.
+            Rotation in z of regular polygon.
     ref : str
             Key for the material.
     prevent_many_faces_share_same_vertex : bool

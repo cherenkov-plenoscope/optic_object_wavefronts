@@ -2,7 +2,7 @@ import numpy as np
 import os
 import scipy
 from scipy import spatial as scipy_spatial
-from . import Polygon
+from . import polygon
 
 
 def make_faces_xy(vertices, ref):
@@ -21,7 +21,7 @@ def make_faces_xy(vertices, ref):
     faces : dict
             The faces for the vertices, referencing the vertices by key.
     """
-    vkeys, vertices = Polygon.to_keys_and_numpy_array(polygon=vertices)
+    vkeys, vertices = polygon.to_keys_and_numpy_array(polygon=vertices)
     vertices_xy = vertices[:, 0:2]
 
     del_tri = scipy.spatial.Delaunay(points=vertices_xy)

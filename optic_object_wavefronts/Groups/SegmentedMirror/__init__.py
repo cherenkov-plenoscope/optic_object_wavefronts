@@ -5,7 +5,7 @@ import numpy as np
 import collections
 import copy
 from ... import Geometry
-from ... import Polygon
+from ... import polygon
 from ... import Primitives
 from ... import materials
 
@@ -206,7 +206,7 @@ def init_facet_centers_xy(
     center_of_grid=[0.0, 0.0],
     ref="grid",
 ):
-    _, min_max_distances = Polygon.find_min_max_distant_to_point(
+    _, min_max_distances = polygon.find_min_max_distant_to_point(
         polygon=aperture_outer_polygon, point=center_of_grid
     )
     outer_radius = min_max_distances[1]
@@ -223,16 +223,16 @@ def init_facet_centers_xy(
     else:
         assert False, "Grid style {:s} is unknown.".format(grid_style)
 
-    _grid = Polygon.rotate_z(_grid, grid_rotation)
-    mask_inside_outer = Polygon.mask_vertices_inside(
+    _grid = polygon.rotate_z(_grid, grid_rotation)
+    mask_inside_outer = polygon.mask_vertices_inside(
         vertices=_grid, polygon=aperture_outer_polygon
     )
-    mask_inside_inner = Polygon.mask_vertices_inside(
+    mask_inside_inner = polygon.mask_vertices_inside(
         vertices=_grid, polygon=aperture_inner_polygon
     )
     mask_outside_inner = np.logical_not(mask_inside_inner)
     mask = np.logical_and(mask_inside_outer, mask_outside_inner)
-    return Polygon.keep_vertices_in_mask(vertices=_grid, mask=mask)
+    return polygon.keep_vertices_in_mask(vertices=_grid, mask=mask)
 
 
 def set_facet_centers_z(
