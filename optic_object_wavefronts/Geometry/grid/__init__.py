@@ -1,3 +1,3 @@
-from . import Hexagonal
-from . import Rectangular
-from . import Template
+from . import hexagonal
+from . import rectangular
+from . import template

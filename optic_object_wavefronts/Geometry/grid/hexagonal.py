@@ -1,7 +1,7 @@
 import numpy as np
 import os
 import collections
-from . import Template
+from . import template
 
 
 HEXA = np.array([1.0, 0.0, 0.0])
@@ -45,7 +45,7 @@ def init_from_spacing(spacing=1.0, ref="hex", fN=10):
     \___/   \___/
         \___/
     """
-    return Template.init(
+    return template.init(
         fN, vector_A=HEXA, vector_B=HEXB, ref=ref, spacing=spacing
     )
 

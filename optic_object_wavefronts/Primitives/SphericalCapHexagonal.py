@@ -11,7 +11,7 @@ import collections
 def init(outer_radius, curvature_radius, fn=10, ref="SphericalCapHexagonal"):
     cap = mesh.init()
 
-    cap["vertices"] = Geometry.grid.Hexagonal.init_from_outer_radius(
+    cap["vertices"] = Geometry.grid.hexagonal.init_from_outer_radius(
         outer_radius=outer_radius, fn=fn, ref=os.path.join(ref, "inner")
     )
 
