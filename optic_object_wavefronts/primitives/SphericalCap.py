@@ -1,5 +1,5 @@
 from .. import geometry
-from . import TemplateCurvedSurface
+from . import template_curved_surface
 import numpy as np
 
 
@@ -10,7 +10,7 @@ def init(
     fn_hex_grid=10,
     ref="SphericalCap",
 ):
-    return TemplateCurvedSurface.init(
+    return template_curved_surface.init(
         outer_polygon=outer_polygon,
         curvature_config={"curvature_radius": curvature_radius},
         curvature_height_function=geometry.sphere.surface_height,

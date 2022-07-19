@@ -1,4 +1,4 @@
-from . import TemplateCurvedSurface
+from . import template_curved_surface
 from . import template_cylinder
 from . import disc
 from . import cylinder
@@ -11,4 +11,4 @@ from . import SphericalPlanarLensHexagonal
 from . import SphericalCapPixels
 from . import SchwarzschildCouderCap
 from . import PipeHexagonal
-from . import Rectangle
+from . import rectangle
