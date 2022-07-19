@@ -7,4 +7,4 @@ from . import ellipse
 from . import parabola
 from . import regular_polygon
 from . import Grid
-from . import SchwarzschildCouder
+from . import schwarzschild_couder
