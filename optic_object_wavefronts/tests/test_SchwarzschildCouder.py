@@ -1,5 +1,5 @@
 import optic_object_wavefronts as oow
-from optic_object_wavefronts import Plot
+from optic_object_wavefronts import plot
 import numpy as np
 
 c = {
@@ -102,14 +102,14 @@ def test_init():
 
     oow.Object.write_to_wavefront(obj=telescope, path="tiny_telescope.obj")
 
-    fig, ax3d = oow.Plot.fig_ax_3d(figsize=(10, 10), dpi=320)
-    oow.Plot.ax_add_object_3d(
+    fig, ax3d = oow.plot.fig_ax_3d(figsize=(10, 10), dpi=320)
+    oow.plot.ax_add_object_3d(
         ax=ax3d,
         obj=telescope,
         face_alpha=0.9,
         face_color="w",
         face_edge_width=0.3,
     )
-    oow.Plot.ax_aspect_equal_3d(ax=ax3d)
+    oow.plot.ax_aspect_equal_3d(ax=ax3d)
     ax3d.view_init(elev=30, azim=50)
     fig.savefig("tiny_telescope.jpg")
