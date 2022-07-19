@@ -2,13 +2,6 @@ import numpy as np
 import io
 
 
-def _key_contains_any_of_patterns(key, patterns):
-    for pattern in patterns:
-        if str.find(key, pattern) >= 0:
-            return True
-    return False
-
-
 def init():
     """
     Returns an empty dict-structure for a Wavefront.
