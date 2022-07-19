@@ -103,7 +103,7 @@ def test_init():
     oow.mesh.write_to_obj(mesh=telescope, path="tiny_telescope.obj")
 
     fig, ax3d = oow.plot.fig_ax_3d(figsize=(10, 10), dpi=320)
-    oow.plot.ax_add_object_3d(
+    oow.plot.ax_add_mesh_3d(
         ax=ax3d,
         mesh=telescope,
         face_alpha=0.9,

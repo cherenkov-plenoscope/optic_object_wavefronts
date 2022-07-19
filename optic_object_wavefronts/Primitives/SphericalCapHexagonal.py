@@ -18,7 +18,7 @@ def init(outer_radius, curvature_radius, fn=10, ref="SphericalCapHexagonal"):
     # elevate z-axis
     # --------------
     for vkey in cap["vertices"]:
-        cap["vertices"][vkey][2] = Geometry.Sphere.surface_height(
+        cap["vertices"][vkey][2] = Geometry.sphere.surface_height(
             x=cap["vertices"][vkey][0],
             y=cap["vertices"][vkey][1],
             curvature_radius=curvature_radius,
@@ -28,7 +28,7 @@ def init(outer_radius, curvature_radius, fn=10, ref="SphericalCapHexagonal"):
     # --------------
     for vkey in cap["vertices"]:
         vnkey = str(vkey)
-        cap["vertex_normals"][vnkey] = Geometry.Sphere.surface_normal(
+        cap["vertex_normals"][vnkey] = Geometry.sphere.surface_normal(
             x=cap["vertices"][vkey][0],
             y=cap["vertices"][vkey][1],
             curvature_radius=curvature_radius,

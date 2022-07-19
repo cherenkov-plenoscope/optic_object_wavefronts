@@ -14,14 +14,14 @@ def init(
     )
 
     for k in cap["vertices"]:
-        cap["vertices"][k][2] = Geometry.Sphere.surface_height(
+        cap["vertices"][k][2] = Geometry.sphere.surface_height(
             x=cap["vertices"][k][0],
             y=cap["vertices"][k][1],
             curvature_radius=curvature_radius,
         )
 
     for k in cap["vertices"]:
-        cap["vertex_normals"][k] = Geometry.Sphere.surface_normal(
+        cap["vertex_normals"][k] = Geometry.sphere.surface_normal(
             x=cap["vertices"][k][0],
             y=cap["vertices"][k][1],
             curvature_radius=curvature_radius,

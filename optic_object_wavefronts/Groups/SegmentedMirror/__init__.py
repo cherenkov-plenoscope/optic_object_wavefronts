@@ -245,7 +245,7 @@ def set_facet_centers_z(
     assert focal_length > 0.0
     assert 0 <= DaviesCotton_over_parabolic_mixing_factor <= 1.0
     for fkey in facet_centers:
-        davies_cotton_z = Geometry.Sphere.surface_height(
+        davies_cotton_z = Geometry.sphere.surface_height(
             x=facet_centers[fkey][0],
             y=facet_centers[fkey][1],
             curvature_radius=focal_length,
