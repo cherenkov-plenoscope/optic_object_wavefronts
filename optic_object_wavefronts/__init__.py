@@ -1,6 +1,5 @@
 from .version import __version__
 from . import Object
-from . import Scenery
 from . import delaunay
 from . import Primitives
 from . import Groups
