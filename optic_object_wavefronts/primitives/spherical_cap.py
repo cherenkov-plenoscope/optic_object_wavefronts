@@ -8,7 +8,7 @@ def init(
     curvature_radius,
     inner_polygon=None,
     fn_hex_grid=10,
-    ref="SphericalCap",
+    ref="spherical_cap",
 ):
     return template_curved_surface.init(
         outer_polygon=outer_polygon,

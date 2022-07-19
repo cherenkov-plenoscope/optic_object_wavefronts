@@ -1,5 +1,5 @@
 from .. import geometry
-from . import SphericalCap
+from . import spherical_cap
 import os
 import collections
 
@@ -10,7 +10,7 @@ def init(
     inner_radius=None,
     fn_polygon=17,
     fn_hex_grid=10,
-    ref="SphericalCap",
+    ref="spherical_cap_regular",
     rot=0.0,
 ):
     outer_polygon = geometry.regular_polygon.make_vertices_xy(
@@ -30,7 +30,7 @@ def init(
     else:
         inner_polygon = None
 
-    return SphericalCap.init(
+    return spherical_cap.init(
         outer_polygon=outer_polygon,
         inner_polygon=inner_polygon,
         fn_hex_grid=fn_hex_grid,

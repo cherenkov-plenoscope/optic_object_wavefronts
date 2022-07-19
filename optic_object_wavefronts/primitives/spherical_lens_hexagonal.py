@@ -3,7 +3,7 @@ import os
 import collections
 from .. import mesh
 from . import cylinder
-from . import SphericalCapHexagonal
+from . import spherical_cap_hexagonal
 
 
 def estimate_height_of_cap(curvature_radius, outer_radius):
@@ -13,18 +13,18 @@ def estimate_height_of_cap(curvature_radius, outer_radius):
 
 
 def init(
-    outer_radius, curvature_radius, fn, ref,
+    outer_radius, curvature_radius, fn, ref="spherical_lens_hexagonal",
 ):
     assert curvature_radius > 0.0
     assert outer_radius > 0.0
 
-    top = SphericalCapHexagonal.init(
+    top = spherical_cap_hexagonal.init(
         outer_radius=outer_radius,
         curvature_radius=-1.0 * curvature_radius,
         ref=os.path.join(ref, "top"),
         fn=fn,
     )
-    bot = SphericalCapHexagonal.init(
+    bot = spherical_cap_hexagonal.init(
         outer_radius=outer_radius,
         curvature_radius=1.0 * curvature_radius,
         ref=os.path.join(ref, "bot"),
@@ -63,7 +63,7 @@ def init(
 
     hexagonal_grid_spacing = outer_radius / fn
 
-    lens = SphericalCapHexagonal.weave_hexagon_edges(
+    lens = spherical_cap_hexagonal.weave_hexagon_edges(
         mesh=lens,
         outer_radius=outer_radius,
         margin_width_on_edge=0.1 * hexagonal_grid_spacing,

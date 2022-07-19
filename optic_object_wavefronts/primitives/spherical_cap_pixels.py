@@ -6,7 +6,7 @@ import collections
 
 
 def init(
-    outer_radius, curvature_radius, fn_hex_grid=10, ref="SphericalPixelCap",
+    outer_radius, curvature_radius, fn_hex_grid=10, ref="spherical_pixel_cap",
 ):
     cap = mesh.init()
     cap["vertices"] = geometry.grid.hexagonal.init_from_outer_radius(

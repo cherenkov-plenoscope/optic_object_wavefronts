@@ -14,7 +14,7 @@ def init(
     curvature_surface_normal_function,
     inner_polygon=None,
     fn_hex_grid=10,
-    ref="CurvedSurface",
+    ref="curved_surface",
 ):
     """
     Returns an object that describes a curved 2d surface. The user provides

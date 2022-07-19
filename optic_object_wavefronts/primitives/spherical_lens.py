@@ -3,7 +3,7 @@ import os
 import collections
 from .. import mesh
 from . import template_cylinder
-from . import SphericalCapRegular
+from . import spherical_cap_regular
 
 
 def init(
@@ -14,10 +14,10 @@ def init(
     fn_polygon,
     fn_hex_grid,
     rot,
-    ref,
+    ref="spherical_lens",
     inner_radius=None,
 ):
-    top = SphericalCapRegular.init(
+    top = spherical_cap_regular.init(
         outer_radius=outer_radius,
         inner_radius=inner_radius,
         curvature_radius=-1.0 * curvature_radius_top,
@@ -26,7 +26,7 @@ def init(
         fn_hex_grid=fn_hex_grid,
         rot=rot,
     )
-    bot = SphericalCapRegular.init(
+    bot = spherical_cap_regular.init(
         outer_radius=outer_radius,
         inner_radius=inner_radius,
         curvature_radius=-1.0 * curvature_radius_bot,

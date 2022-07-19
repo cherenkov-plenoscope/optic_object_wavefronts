@@ -1,4 +1,4 @@
-from . import SphericalCapHexagonal
+from . import spherical_cap_hexagonal
 from . import disc
 from .. import mesh
 import numpy as np
@@ -11,10 +11,10 @@ def init(
     curvature_radius,
     width,
     fn=10,
-    ref="SphericalPlaneHexagonalBody",
+    ref="spherical_planar_lens_hexagonal",
 ):
     join = os.path.join
-    front = SphericalCapHexagonal.init(
+    front = spherical_cap_hexagonal.init(
         outer_radius=outer_radius,
         curvature_radius=curvature_radius,
         fn=fn,
@@ -35,7 +35,7 @@ def init(
 
     hexagonal_grid_spacing = outer_radius / fn
 
-    facet = SphericalCapHexagonal.weave_hexagon_edges(
+    facet = spherical_cap_hexagonal.weave_hexagon_edges(
         mesh=facet,
         outer_radius=outer_radius,
         margin_width_on_edge=0.1 * hexagonal_grid_spacing,
