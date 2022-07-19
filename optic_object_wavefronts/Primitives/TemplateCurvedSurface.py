@@ -1,4 +1,4 @@
-from .. import Object
+from .. import mesh
 from .. import delaunay
 from .. import Geometry
 from .. import polygon
@@ -58,52 +58,52 @@ def init(
             vertices=hex_vertices_valid, polygon=inner_polygon
         )
 
-    obj = Object.init()
+    mes = mesh.init()
 
     for k in hex_vertices_valid:
-        obj["vertices"][k] = hex_vertices_valid[k]
+        mes["vertices"][k] = hex_vertices_valid[k]
     for k in outer_polygon:
-        obj["vertices"][k] = outer_polygon[k]
+        mes["vertices"][k] = outer_polygon[k]
     if inner_polygon is not None:
         for k in inner_polygon:
-            obj["vertices"][k] = inner_polygon[k]
+            mes["vertices"][k] = inner_polygon[k]
 
-    for k in obj["vertices"]:
-        obj["vertices"][k][2] = curvature_height_function(
-            x=obj["vertices"][k][0],
-            y=obj["vertices"][k][1],
+    for k in mes["vertices"]:
+        mes["vertices"][k][2] = curvature_height_function(
+            x=mes["vertices"][k][0],
+            y=mes["vertices"][k][1],
             **curvature_config,
         )
 
-    for k in obj["vertices"]:
-        obj["vertex_normals"][k] = curvature_surface_normal_function(
-            x=obj["vertices"][k][0],
-            y=obj["vertices"][k][1],
+    for k in mes["vertices"]:
+        mes["vertex_normals"][k] = curvature_surface_normal_function(
+            x=mes["vertices"][k][0],
+            y=mes["vertices"][k][1],
             **curvature_config,
         )
 
-    faces = delaunay.make_faces_xy(vertices=obj["vertices"], ref=ref)
+    faces = delaunay.make_faces_xy(vertices=mes["vertices"], ref=ref)
 
-    obj["materials"][ref] = collections.OrderedDict()
+    mes["materials"][ref] = collections.OrderedDict()
 
     mtl_key = ref
     for fkey in faces:
-        obj["materials"][mtl_key][fkey] = {
+        mes["materials"][mtl_key][fkey] = {
             "vertices": faces[fkey]["vertices"],
             "vertex_normals": faces[fkey]["vertices"],
         }
 
     if inner_polygon is not None:
         mask_faces_in_inner = polygon.mask_face_inside(
-            vertices=obj["vertices"],
-            faces=obj["materials"][mtl_key],
+            vertices=mes["vertices"],
+            faces=mes["materials"][mtl_key],
             polygon=inner_polygon,
         )
         fkeys_to_be_removed = []
-        for idx, fkey in enumerate(obj["materials"][mtl_key]):
+        for idx, fkey in enumerate(mes["materials"][mtl_key]):
             if mask_faces_in_inner[idx]:
                 fkeys_to_be_removed.append(fkey)
         for fkey in fkeys_to_be_removed:
-            obj["materials"][mtl_key].pop(fkey)
+            mes["materials"][mtl_key].pop(fkey)
 
-    return obj
+    return mes

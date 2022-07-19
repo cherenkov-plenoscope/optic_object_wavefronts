@@ -1,4 +1,4 @@
-from .. import Object
+from .. import mesh
 from .. import Geometry
 from .. import Primitives
 from .. import polygon
@@ -125,7 +125,7 @@ def init(
     camera_geometry, ref="LightFieldSensorCameraModule",
 ):
     cg = camera_geometry
-    camera = Object.init()
+    camera = mesh.init()
 
     # grid for photo-sensors
     # ----------------------
@@ -137,10 +137,10 @@ def init(
             ref=ref + "/photo_sensor_{:06d}".format(gi),
             prevent_many_faces_share_same_vertex=False,
         )
-        photo_sensor = Object.translate(
+        photo_sensor = mesh.translate(
             photo_sensor, cg["photo_sensor"]["grid"]["positions"][gkey],
         )
-        camera = Object.merge(camera, photo_sensor)
+        camera = mesh.merge(camera, photo_sensor)
 
     # lens
     # ----
@@ -150,8 +150,8 @@ def init(
         fn=cg["lens"]["fn"],
         ref=ref + "/lens",
     )
-    camera = Object.merge(
-        camera, Object.translate(lens, cg["lens"]["position"]),
+    camera = mesh.merge(
+        camera, mesh.translate(lens, cg["lens"]["position"]),
     )
 
     # housing
@@ -163,8 +163,8 @@ def init(
         ref=ref + "/housing",
     )
 
-    camera = Object.merge(
-        camera, Object.translate(pipe, cg["housing"]["position"]),
+    camera = mesh.merge(
+        camera, mesh.translate(pipe, cg["housing"]["position"]),
     )
 
     return camera

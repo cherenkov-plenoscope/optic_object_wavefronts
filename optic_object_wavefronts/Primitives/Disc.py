@@ -1,4 +1,4 @@
-from .. import Object
+from .. import mesh
 from .. import Geometry
 from .. import delaunay
 import numpy as np
@@ -35,8 +35,8 @@ def init(
     """
     inner_radius = outer_radius * Geometry.regular_polygon.inner_radius(fn=fn)
 
-    obj = Object.init()
-    obj["vertices"] = Geometry.regular_polygon.make_vertices_xy(
+    disc = mesh.init()
+    disc["vertices"] = Geometry.regular_polygon.make_vertices_xy(
         outer_radius=outer_radius,
         ref=os.path.join(ref, "outer_bound"),
         fn=fn,
@@ -57,23 +57,23 @@ def init(
 
             for inner_vkey in inner_vertices:
                 _vkey = os.path.join(ref, "aux", "{:06d}".format(v_inner_idx))
-                obj["vertices"][_vkey] = inner_vertices[inner_vkey]
+                disc["vertices"][_vkey] = inner_vertices[inner_vkey]
                 v_inner_idx += 1
 
             next_radius = 0.9 * next_radius
             next_fn = int(np.round(next_fn / 3))
 
     vnkey = os.path.join(ref, "0")
-    obj["vertex_normals"][vnkey] = np.array([0.0, 0.0, 1.0])
+    disc["vertex_normals"][vnkey] = np.array([0.0, 0.0, 1.0])
 
-    delfaces = delaunay.make_faces_xy(vertices=obj["vertices"], ref="")
+    delfaces = delaunay.make_faces_xy(vertices=disc["vertices"], ref="")
 
-    obj["materials"][ref] = collections.OrderedDict()
+    disc["materials"][ref] = collections.OrderedDict()
 
     for fkey in delfaces:
-        obj["materials"][ref][fkey] = {
+        disc["materials"][ref][fkey] = {
             "vertices": delfaces[fkey]["vertices"],
             "vertex_normals": [vnkey, vnkey, vnkey],
         }
 
-    return obj
+    return disc

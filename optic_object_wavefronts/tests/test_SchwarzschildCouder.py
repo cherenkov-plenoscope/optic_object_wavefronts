@@ -83,29 +83,29 @@ def test_init():
         fn_hex_grid=FN_HEX_GRID // 3,
     )
 
-    telescope = oow.Object.init()
+    telescope = oow.mesh.init()
 
-    telescope = oow.Object.merge(
+    telescope = oow.mesh.merge(
         telescope,
-        oow.Object.translate(m1, np.array([0.0, 0.0, c["M1"]["z"]])),
+        oow.mesh.translate(m1, np.array([0.0, 0.0, c["M1"]["z"]])),
     )
 
-    telescope = oow.Object.merge(
+    telescope = oow.mesh.merge(
         telescope,
-        oow.Object.translate(m2, np.array([0.0, 0.0, c["M2"]["z"]])),
+        oow.mesh.translate(m2, np.array([0.0, 0.0, c["M2"]["z"]])),
     )
 
-    telescope = oow.Object.merge(
+    telescope = oow.mesh.merge(
         telescope,
-        oow.Object.translate(det, np.array([0.0, 0.0, c["DET"]["z"]])),
+        oow.mesh.translate(det, np.array([0.0, 0.0, c["DET"]["z"]])),
     )
 
-    oow.Object.write_to_wavefront(obj=telescope, path="tiny_telescope.obj")
+    oow.mesh.write_to_obj(mesh=telescope, path="tiny_telescope.obj")
 
     fig, ax3d = oow.plot.fig_ax_3d(figsize=(10, 10), dpi=320)
     oow.plot.ax_add_object_3d(
         ax=ax3d,
-        obj=telescope,
+        mesh=telescope,
         face_alpha=0.9,
         face_color="w",
         face_edge_width=0.3,

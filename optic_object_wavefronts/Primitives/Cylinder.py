@@ -1,4 +1,4 @@
-from .. import Object
+from .. import mesh
 from . import Disc
 from . import TemplateCylinder
 import numpy as np
@@ -41,35 +41,35 @@ def init(
         rot=(2 * np.pi) / (2 * fn) + rot,
     )
 
-    obj = Object.init()
+    cylinder = mesh.init()
 
     for vkey in top["vertices"]:
         tmp_v = np.array(top["vertices"][vkey])
         tmp_v[2] = float(length)
-        obj["vertices"][vkey] = tmp_v
+        cylinder["vertices"][vkey] = tmp_v
     for vnkey in top["vertex_normals"]:
-        obj["vertex_normals"][vnkey] = np.array([0, 0, 1])
+        cylinder["vertex_normals"][vnkey] = np.array([0, 0, 1])
 
     mtl_top = os.path.join(ref, "top")
-    obj["materials"][mtl_top] = collections.OrderedDict()
+    cylinder["materials"][mtl_top] = collections.OrderedDict()
     for fkey in top["materials"][mtl_top]:
-        obj["materials"][mtl_top][fkey] = top["materials"][mtl_top][fkey]
+        cylinder["materials"][mtl_top][fkey] = top["materials"][mtl_top][fkey]
 
     for vkey in bot["vertices"]:
-        obj["vertices"][vkey] = bot["vertices"][vkey]
+        cylinder["vertices"][vkey] = bot["vertices"][vkey]
     for vnkey in bot["vertex_normals"]:
-        obj["vertex_normals"][vnkey] = np.array([0, 0, -1])
+        cylinder["vertex_normals"][vnkey] = np.array([0, 0, -1])
 
     mtl_bot = os.path.join(ref, "bot")
-    obj["materials"][mtl_bot] = collections.OrderedDict()
+    cylinder["materials"][mtl_bot] = collections.OrderedDict()
     for fkey in bot["materials"][mtl_bot]:
-        obj["materials"][mtl_bot][fkey] = bot["materials"][mtl_bot][fkey]
+        cylinder["materials"][mtl_bot][fkey] = bot["materials"][mtl_bot][fkey]
 
-    obj = TemplateCylinder.weave_cylinder_faces(
-        obj=obj,
+    cylinder = TemplateCylinder.weave_cylinder_faces(
+        mesh=cylinder,
         vkey_lower=os.path.join(ref, "bot", "outer_bound"),
         vkey_upper=os.path.join(ref, "top", "outer_bound"),
         ref=os.path.join(ref, "outer"),
     )
 
-    return obj
+    return cylinder

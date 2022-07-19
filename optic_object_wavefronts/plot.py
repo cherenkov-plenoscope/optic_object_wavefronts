@@ -28,9 +28,9 @@ def ax_add_face(
     ax.add_patch(p)
 
 
-def ax_add_object_xy(
+def ax_add_mesh_xy(
     ax,
-    obj,
+    mesh,
     vertex_color="k",
     vertex_marker="x",
     vertex_marker_size=0.1,
@@ -39,22 +39,22 @@ def ax_add_object_xy(
     face_edge_color="black",
     face_edge_width=0.2,
 ):
-    for vkey in obj["vertices"]:
+    for vkey in mesh["vertices"]:
         ax.plot(
-            obj["vertices"][vkey][0],
-            obj["vertices"][vkey][1],
+            mesh["vertices"][vkey][0],
+            mesh["vertices"][vkey][1],
             marker=vertex_marker,
             color=vertex_color,
             markersize=vertex_marker_size,
         )
 
-    for mkey in obj["materials"]:
-        faces = obj["materials"][mkey]
+    for mkey in mesh["materials"]:
+        faces = mesh["materials"][mkey]
         for fkey in faces:
             vs = []
             for ii in range(3):
                 vkey = faces[fkey]["vertices"][ii]
-                vs.append(obj["vertices"][vkey][0:2])
+                vs.append(mesh["vertices"][vkey][0:2])
             vs = np.array(vs)
             ax_add_face(
                 ax=ax,
@@ -66,11 +66,11 @@ def ax_add_object_xy(
             )
 
 
-def plot_Object(obj):
+def plot_mesh(mesh):
     fig = plt.figure()
     ax = fig.add_axes([0.1, 0.1, 0.8, 0.8])
     ax.set_aspect("equal")
-    ax_add_object_xy(ax=ax, obj=obj)
+    ax_add_mesh_xy(ax=ax, mesh=mesh)
     plt.show()
 
 
@@ -99,9 +99,9 @@ def ax_aspect_equal_3d(ax):
         getattr(ax, "set_{}lim".format(dim))(ctr - r, ctr + r)
 
 
-def ax_add_object_3d(
+def ax_add_mesh_3d(
     ax,
-    obj,
+    mesh,
     face_edge_width=1.0,
     face_edge_color="black",
     face_color="white",
@@ -113,9 +113,9 @@ def ax_add_object_3d(
     vertex_normal_alpha=1.0,
     zorder=1,
 ):
-    wavefront = oow.io.obj.init_from_Object(obj=obj)
+    obj = oow.io.obj.init_from_mesh(mesh=mesh)
 
-    vertices = [(v[0], v[1], v[2]) for v in wavefront["v"]]
+    vertices = [(v[0], v[1], v[2]) for v in obj["v"]]
 
     # faces
     # -----
@@ -123,8 +123,8 @@ def ax_add_object_3d(
     facecolors = []
     edgecolors = []
     linewidths = []
-    for material in wavefront["materials"]:
-        for face in wavefront["materials"][material]:
+    for material in obj["materials"]:
+        for face in obj["materials"][material]:
             polygons.append(
                 [
                     vertices[face["v"][0]],
@@ -143,13 +143,13 @@ def ax_add_object_3d(
 
     # normals
     # -------
-    for material in wavefront["materials"]:
-        for face in wavefront["materials"][material]:
+    for material in obj["materials"]:
+        for face in obj["materials"][material]:
             for n in range(3):
                 normal = vertex_normal_length * np.array(
-                    wavefront["vn"][face["vn"][n]]
+                    obj["vn"][face["vn"][n]]
                 )
-                start = wavefront["v"][face["v"][n]]
+                start = obj["v"][face["v"][n]]
                 stop = start + normal
 
                 polygons.append(

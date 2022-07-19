@@ -49,10 +49,8 @@ def write_to_merlict(scenery, path):
         # -------
         tar_append_dir(tarout, "objects")
         for okey in scenery["objects"]:
-            wavefront = obj.init_from_Object(
-                obj=scenery["objects"][okey]
-            )
-            wavefront_str = obj.to_string(wavefront=wavefront)
+            wfr = obj.init_from_mesh(mesh=scenery["objects"][okey])
+            wavefront_str = obj.to_string(obj=wfr)
             tar_append_file(
                 tarout=tarout,
                 file_name="objects/{:s}.obj".format(okey),

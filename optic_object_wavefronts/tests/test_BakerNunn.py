@@ -146,35 +146,35 @@ def test_baker_nunn():
         ref="focus_surface",
     )
 
-    baker_nunn = oow.Object.init()
+    baker_nunn = oow.mesh.init()
 
-    baker_nunn = oow.Object.merge(
+    baker_nunn = oow.mesh.merge(
         baker_nunn,
-        oow.Object.translate(mirror, np.array([0.0, 0.0, z_mirror])),
+        oow.mesh.translate(mirror, np.array([0.0, 0.0, z_mirror])),
     )
 
-    baker_nunn = oow.Object.merge(
-        baker_nunn, oow.Object.translate(cor3, np.array([0.0, 0.0, z_corr3]))
+    baker_nunn = oow.mesh.merge(
+        baker_nunn, oow.mesh.translate(cor3, np.array([0.0, 0.0, z_corr3]))
     )
 
-    baker_nunn = oow.Object.merge(
-        baker_nunn, oow.Object.translate(cor2, np.array([0.0, 0.0, z_corr2]))
+    baker_nunn = oow.mesh.merge(
+        baker_nunn, oow.mesh.translate(cor2, np.array([0.0, 0.0, z_corr2]))
     )
 
-    baker_nunn = oow.Object.merge(
-        baker_nunn, oow.Object.translate(cor1, np.array([0.0, 0.0, z_corr1]))
+    baker_nunn = oow.mesh.merge(
+        baker_nunn, oow.mesh.translate(cor1, np.array([0.0, 0.0, z_corr1]))
     )
 
-    baker_nunn = oow.Object.merge(
+    baker_nunn = oow.mesh.merge(
         baker_nunn,
-        oow.Object.translate(
+        oow.mesh.translate(
             f_shield, np.array([0.0, 0.0, z_focus_shield + 0.02])
         ),
     )
 
-    baker_nunn = oow.Object.merge(
+    baker_nunn = oow.mesh.merge(
         baker_nunn,
-        oow.Object.translate(f_surface, np.array([0.0, 0.0, z_focus_surfcae])),
+        oow.mesh.translate(f_surface, np.array([0.0, 0.0, z_focus_surfcae])),
     )
 
-    oow.Object.write_to_wavefront(obj=baker_nunn, path="baker_nunn.obj")
+    oow.mesh.write_to_obj(mesh=baker_nunn, path="baker_nunn.obj")

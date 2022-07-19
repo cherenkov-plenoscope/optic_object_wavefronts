@@ -13,28 +13,28 @@ def init():
     }
 
 
-def init_from_Object(obj):
+def init_from_mesh(mesh):
     """
-    The obj has hashable keys to address vertices and normals.
+    The mesh has hashable keys to address vertices and normals.
     The object-wavefront replaces those with numeric indices.
     """
     v_dict = {}
-    for vi, vkey in enumerate(obj["vertices"]):
+    for vi, vkey in enumerate(mesh["vertices"]):
         v_dict[vkey] = vi
     vn_dict = {}
-    for vni, vnkey in enumerate(obj["vertex_normals"]):
+    for vni, vnkey in enumerate(mesh["vertex_normals"]):
         vn_dict[vnkey] = vni
 
-    wavefront = init()
+    obj = init()
 
-    for vkey in obj["vertices"]:
-        wavefront["v"].append(obj["vertices"][vkey])
-    for vnkey in obj["vertex_normals"]:
-        wavefront["vn"].append(obj["vertex_normals"][vnkey])
+    for vkey in mesh["vertices"]:
+        obj["v"].append(mesh["vertices"][vkey])
+    for vnkey in mesh["vertex_normals"]:
+        obj["vn"].append(mesh["vertex_normals"][vnkey])
 
-    for mkey in obj["materials"]:
-        mtl_faces = obj["materials"][mkey]
-        wavefront["materials"][mkey] = []
+    for mkey in mesh["materials"]:
+        mtl_faces = mesh["materials"][mkey]
+        obj["materials"][mkey] = []
 
         for fkey in mtl_faces:
             vs = []
@@ -43,25 +43,25 @@ def init_from_Object(obj):
             vns = []
             for dim in range(3):
                 vns.append(vn_dict[mtl_faces[fkey]["vertex_normals"][dim]])
-            wavefront["materials"][mkey].append({"v": vs, "vn": vns})
+            obj["materials"][mkey].append({"v": vs, "vn": vns})
 
-    return wavefront
+    return obj
 
 
-def to_string(wavefront):
+def to_string(obj):
     # COUNTING STARTS AT ONE
     s = io.StringIO()
     s.write("# vertices\n")
-    for v in wavefront["v"]:
+    for v in obj["v"]:
         s.write("v {:f} {:f} {:f}\n".format(v[0], v[1], v[2]))
     s.write("# vertex-normals\n")
-    for vn in wavefront["vn"]:
+    for vn in obj["vn"]:
         s.write("vn {:f} {:f} {:f}\n".format(vn[0], vn[1], vn[2]))
     s.write("# faces\n")
 
-    for mtl in wavefront["materials"]:
+    for mtl in obj["materials"]:
         s.write("usemtl {:s}\n".format(mtl))
-        for f in wavefront["materials"][mtl]:
+        for f in obj["materials"][mtl]:
             s.write(
                 "f {:d}//{:d} {:d}//{:d} {:d}//{:d}\n".format(
                     1 + f["v"][0],
@@ -76,7 +76,7 @@ def to_string(wavefront):
     return s.read()
 
 
-def init_from_Off(off, mtl="material_name"):
+def init_from_off(off, mtl="material_name"):
     """
     Returns a wavefron-dictionary from an Object-File-Format-dictionary.
 

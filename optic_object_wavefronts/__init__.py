@@ -1,5 +1,5 @@
 from .version import __version__
-from . import Object
+from . import mesh
 from . import delaunay
 from . import Primitives
 from . import Groups

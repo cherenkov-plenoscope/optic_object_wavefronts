@@ -1,6 +1,6 @@
 from . import SphericalCapHexagonal
 from . import Disc
-from .. import Object
+from .. import mesh
 import numpy as np
 import os
 import collections
@@ -14,45 +14,45 @@ def init(
     ref="SphericalPlaneHexagonalBody",
 ):
     join = os.path.join
-    front_obj = SphericalCapHexagonal.init(
+    front = SphericalCapHexagonal.init(
         outer_radius=outer_radius,
         curvature_radius=curvature_radius,
         fn=fn,
         ref=join(ref, "front"),
     )
 
-    back_obj = Disc.init(
+    back = Disc.init(
         outer_radius=outer_radius, fn=6, ref=join(ref, "back"), rot=0.0,
     )
 
     center_of_curvature = np.array([0.0, 0.0, curvature_radius])
 
-    back_obj = Object.translate(back_obj, [0.0, 0.0, -width])
-    for vnkey in back_obj["vertex_normals"]:
-        back_obj["vertex_normals"][vnkey] = np.array([0.0, 0.0, -1.0])
+    back = mesh.translate(back, [0.0, 0.0, -width])
+    for vnkey in back["vertex_normals"]:
+        back["vertex_normals"][vnkey] = np.array([0.0, 0.0, -1.0])
 
-    obj = Object.merge(front_obj, back_obj)
+    facet = mesh.merge(front, back)
 
     hexagonal_grid_spacing = outer_radius / fn
 
-    obj = SphericalCapHexagonal.weave_hexagon_edges(
-        obj=obj,
+    facet = SphericalCapHexagonal.weave_hexagon_edges(
+        mesh=facet,
         outer_radius=outer_radius,
         margin_width_on_edge=0.1 * hexagonal_grid_spacing,
         ref=join(ref, "side"),
     )
 
     mtl_side_key = os.path.join(ref, "side")
-    mtl_side = obj["materials"][mtl_side_key]
+    mtl_side = facet["materials"][mtl_side_key]
     new_mtl_side = collections.OrderedDict()
     for fkey in mtl_side:
         va_key = mtl_side[fkey]["vertices"][0]
         vb_key = mtl_side[fkey]["vertices"][1]
         vc_key = mtl_side[fkey]["vertices"][2]
 
-        va = obj["vertices"][va_key]
-        vb = obj["vertices"][vb_key]
-        vc = obj["vertices"][vc_key]
+        va = facet["vertices"][va_key]
+        vb = facet["vertices"][vb_key]
+        vc = facet["vertices"][vc_key]
 
         mid_ab = 0.5 * (va + vb)
         mid_bc = 0.5 * (vb + vc)
@@ -71,6 +71,6 @@ def init(
         else:
             new_mtl_side[fkey] = mtl_side[fkey]
 
-    obj["materials"][mtl_side_key] = new_mtl_side
+    facet["materials"][mtl_side_key] = new_mtl_side
 
-    return obj
+    return facet

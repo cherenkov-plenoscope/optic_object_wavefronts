@@ -1,4 +1,4 @@
-from .. import Object
+from .. import mesh
 from .. import delaunay
 from .. import Geometry
 from . import Disc
@@ -9,42 +9,42 @@ import collections
 
 
 def init(outer_radius, curvature_radius, fn=10, ref="SphericalCapHexagonal"):
-    obj = Object.init()
+    cap = mesh.init()
 
-    obj["vertices"] = Geometry.Grid.Hexagonal.init_from_outer_radius(
+    cap["vertices"] = Geometry.Grid.Hexagonal.init_from_outer_radius(
         outer_radius=outer_radius, fn=fn, ref=os.path.join(ref, "inner")
     )
 
     # elevate z-axis
     # --------------
-    for vkey in obj["vertices"]:
-        obj["vertices"][vkey][2] = Geometry.Sphere.surface_height(
-            x=obj["vertices"][vkey][0],
-            y=obj["vertices"][vkey][1],
+    for vkey in cap["vertices"]:
+        cap["vertices"][vkey][2] = Geometry.Sphere.surface_height(
+            x=cap["vertices"][vkey][0],
+            y=cap["vertices"][vkey][1],
             curvature_radius=curvature_radius,
         )
 
     # vertex-normals
     # --------------
-    for vkey in obj["vertices"]:
+    for vkey in cap["vertices"]:
         vnkey = str(vkey)
-        obj["vertex_normals"][vnkey] = Geometry.Sphere.surface_normal(
-            x=obj["vertices"][vkey][0],
-            y=obj["vertices"][vkey][1],
+        cap["vertex_normals"][vnkey] = Geometry.Sphere.surface_normal(
+            x=cap["vertices"][vkey][0],
+            y=cap["vertices"][vkey][1],
             curvature_radius=curvature_radius,
         )
 
-    faces = delaunay.make_faces_xy(vertices=obj["vertices"], ref="")
+    faces = delaunay.make_faces_xy(vertices=cap["vertices"], ref="")
 
     mtl_key = ref
-    obj["materials"][mtl_key] = collections.OrderedDict()
+    cap["materials"][mtl_key] = collections.OrderedDict()
     for fkey in faces:
-        obj["materials"][mtl_key][fkey] = {
+        cap["materials"][mtl_key][fkey] = {
             "vertices": faces[fkey]["vertices"],
             "vertex_normals": faces[fkey]["vertices"],
         }
 
-    return obj
+    return cap
 
 
 def rotate_vertices_xy(vertices, phi):
@@ -61,7 +61,7 @@ def rotate_vertices_xy(vertices, phi):
     return vertices_out
 
 
-def weave_hexagon_edges(obj, outer_radius, margin_width_on_edge, ref):
+def weave_hexagon_edges(mesh, outer_radius, margin_width_on_edge, ref):
     assert outer_radius >= 0
     assert margin_width_on_edge >= 0
     inner_radius_hexagon = outer_radius * Geometry.regular_polygon.inner_radius(
@@ -71,10 +71,10 @@ def weave_hexagon_edges(obj, outer_radius, margin_width_on_edge, ref):
     rot_perp = np.pi / 2.0
 
     mtl_key = ref
-    obj["materials"][mtl_key] = collections.OrderedDict()
+    mesh["materials"][mtl_key] = collections.OrderedDict()
 
     for irotz, phi in enumerate(np.linspace(0, 2 * np.pi, 6, endpoint=False)):
-        i_vertices = rotate_vertices_xy(vertices=obj["vertices"], phi=phi)
+        i_vertices = rotate_vertices_xy(vertices=mesh["vertices"], phi=phi)
 
         i_combi_vertices = {}
         for fkey in i_vertices:
@@ -92,12 +92,12 @@ def weave_hexagon_edges(obj, outer_radius, margin_width_on_edge, ref):
         )
         i_vnkey = os.path.join(ref, "{:06d}".format(irotz))
 
-        obj["vertex_normals"][i_vnkey] = i_normal
+        mesh["vertex_normals"][i_vnkey] = i_normal
 
         for fkey in i_faces:
-            obj["materials"][mtl_key][fkey] = {
+            mesh["materials"][mtl_key][fkey] = {
                 "vertices": i_faces[fkey]["vertices"],
                 "vertex_normals": [i_vnkey, i_vnkey, i_vnkey],
             }
 
-    return obj
+    return mesh

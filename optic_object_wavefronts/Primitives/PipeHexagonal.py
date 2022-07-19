@@ -1,4 +1,4 @@
-from .. import Object
+from .. import mesh
 import numpy as np
 import os
 import collections
@@ -30,7 +30,7 @@ def init(
     ri = inner_radius
     rrr = {"i": ri, "o": ro}
     hhh = {"l": 0.0, "h": height}
-    obj = Object.init()
+    pipe = mesh.init()
 
     # vertices
     # --------
@@ -44,30 +44,30 @@ def init(
                 rsin = rrr[j] * sin
                 vn.append(np.array([cos, sin, 0.0]))
                 vkey = join(ref, "w{:s}{:s}{:d}".format(h, j, i))
-                obj["vertices"][vkey] = [rcos, rsin, hhh[h]]
+                pipe["vertices"][vkey] = [rcos, rsin, hhh[h]]
 
     # vertex normals
     # --------------
     for i in range(6):
-        obj["vertex_normals"][join(ref, "vni{:d}".format(i))] = vn[i]
-        obj["vertex_normals"][join(ref, "vno{:d}".format(i))] = -1.0 * vn[i]
-    obj["vertex_normals"][join(ref, "vnbot")] = [0, 0, -1]
-    obj["vertex_normals"][join(ref, "vntop")] = [0, 0, 1]
+        pipe["vertex_normals"][join(ref, "vni{:d}".format(i))] = vn[i]
+        pipe["vertex_normals"][join(ref, "vno{:d}".format(i))] = -1.0 * vn[i]
+    pipe["vertex_normals"][join(ref, "vnbot")] = [0, 0, -1]
+    pipe["vertex_normals"][join(ref, "vntop")] = [0, 0, 1]
 
     vnbot = join(ref, "vnbot")
     vntop = join(ref, "vntop")
 
     mtl_inner_key = join(ref, "inner")
-    obj["materials"][mtl_inner_key] = collections.OrderedDict()
+    pipe["materials"][mtl_inner_key] = collections.OrderedDict()
 
     mtl_outer_key = join(ref, "outer")
-    obj["materials"][mtl_outer_key] = collections.OrderedDict()
+    pipe["materials"][mtl_outer_key] = collections.OrderedDict()
 
     mtl_bottom_key = join(ref, "bottom")
-    obj["materials"][mtl_bottom_key] = collections.OrderedDict()
+    pipe["materials"][mtl_bottom_key] = collections.OrderedDict()
 
     mtl_top_key = join(ref, "top")
-    obj["materials"][mtl_top_key] = collections.OrderedDict()
+    pipe["materials"][mtl_top_key] = collections.OrderedDict()
 
     # faces
     # -----
@@ -79,7 +79,7 @@ def init(
 
         # inner walls
         # -----------
-        obj["materials"][mtl_inner_key]["{:d}_{:d}".format(i, 0)] = {
+        pipe["materials"][mtl_inner_key]["{:d}_{:d}".format(i, 0)] = {
             "vertices": [
                 join(ref, "wli{:d}".format(li)),
                 join(ref, "wli{:d}".format(li1)),
@@ -87,7 +87,7 @@ def init(
             ],
             "vertex_normals": [vnikey, vnikey, vnikey],
         }
-        obj["materials"][mtl_inner_key]["{:d}_{:d}".format(i, 1)] = {
+        pipe["materials"][mtl_inner_key]["{:d}_{:d}".format(i, 1)] = {
             "vertices": [
                 join(ref, "whi{:d}".format(li1)),
                 join(ref, "whi{:d}".format(li)),
@@ -98,7 +98,7 @@ def init(
 
         # outer walls
         # -----------
-        obj["materials"][mtl_outer_key]["{:d}_{:d}".format(i, 0)] = {
+        pipe["materials"][mtl_outer_key]["{:d}_{:d}".format(i, 0)] = {
             "vertices": [
                 join(ref, "wlo{:d}".format(li)),
                 join(ref, "wlo{:d}".format(li1)),
@@ -106,7 +106,7 @@ def init(
             ],
             "vertex_normals": [vnokey, vnokey, vnokey],
         }
-        obj["materials"][mtl_outer_key]["{:d}_{:d}".format(i, 1)] = {
+        pipe["materials"][mtl_outer_key]["{:d}_{:d}".format(i, 1)] = {
             "vertices": [
                 join(ref, "who{:d}".format(li1)),
                 join(ref, "who{:d}".format(li)),
@@ -117,7 +117,7 @@ def init(
 
         # bottom faces
         # ------------
-        obj["materials"][mtl_bottom_key]["{:d}_{:d}".format(i, 0)] = {
+        pipe["materials"][mtl_bottom_key]["{:d}_{:d}".format(i, 0)] = {
             "vertices": [
                 join(ref, "wli{:d}".format(li)),
                 join(ref, "wli{:d}".format(li1)),
@@ -125,7 +125,7 @@ def init(
             ],
             "vertex_normals": [vnbot, vnbot, vnbot],
         }
-        obj["materials"][mtl_bottom_key]["{:d}_{:d}".format(i, 1)] = {
+        pipe["materials"][mtl_bottom_key]["{:d}_{:d}".format(i, 1)] = {
             "vertices": [
                 join(ref, "wli{:d}".format(li1)),
                 join(ref, "wlo{:d}".format(li1)),
@@ -136,7 +136,7 @@ def init(
 
         # top faces
         # ---------
-        obj["materials"][mtl_top_key]["{:d}_{:d}".format(i, 0)] = {
+        pipe["materials"][mtl_top_key]["{:d}_{:d}".format(i, 0)] = {
             "vertices": [
                 join(ref, "whi{:d}".format(li)),
                 join(ref, "whi{:d}".format(li1)),
@@ -144,7 +144,7 @@ def init(
             ],
             "vertex_normals": [vntop, vntop, vntop],
         }
-        obj["materials"][mtl_top_key]["{:d}_{:d}".format(i, 1)] = {
+        pipe["materials"][mtl_top_key]["{:d}_{:d}".format(i, 1)] = {
             "vertices": [
                 join(ref, "whi{:d}".format(li1)),
                 join(ref, "who{:d}".format(li1)),
@@ -153,4 +153,4 @@ def init(
             "vertex_normals": [vntop, vntop, vntop],
         }
 
-    return obj
+    return pipe

@@ -7,8 +7,8 @@ from . import version
 
 def init():
     """
-    Returns an Object which describes meshes of triangular faces.
-    An Object can have multiple materials.
+    Returns a mesh which describes meshes of triangular faces.
+    A mesh can have multiple materials.
     This is the basic building.
     Finally it can be exported to an object-wavefront (.obj).
     """
@@ -19,19 +19,19 @@ def init():
     }
 
 
-def translate(obj, v):
+def translate(mesh, v):
     """
-    Returns a translated copy of the Object.
+    Returns a translated copy of the mesh.
 
     Parameters
     ----------
-    obj : dict
-            The Object.
+    mesh : dict
+            The mesh.
     v : numpy.array
             Three dimensional vector for translation.
     """
     v = np.array(v)
-    out = copy.deepcopy(obj)
+    out = copy.deepcopy(mesh)
     for vkey in out["vertices"]:
         out["vertices"][vkey] += v
     return out
@@ -39,14 +39,14 @@ def translate(obj, v):
 
 def merge(a, b):
     """
-    Returns a new Object merged out of the objects a, and b.
+    Returns a new mesh merged out of the objects a, and b.
 
     Parameters
     ----------
     a : dict
-            The Object a.
+            The mesh a.
     b : dict
-            The Object b.
+            The mesh b.
     """
     out = copy.deepcopy(a)
     for vkey in b["vertices"]:
@@ -63,17 +63,17 @@ def merge(a, b):
     return out
 
 
-def remove_unused_vertices_and_vertex_normals(obj):
+def remove_unused_vertices_and_vertex_normals(mesh):
     """
-    Returns a new Object with all unused vertices and vertex-normals removed.
+    Returns a new mesh with all unused vertices and vertex-normals removed.
 
     Parameters
     ----------
-    obj : dict
-            The Object.
+    mesh : dict
+            The mesh.
     """
     out = init()
-    out["materials"] = copy.deepcopy(obj["materials"])
+    out["materials"] = copy.deepcopy(mesh["materials"])
 
     valid_vkeys = set()
     for mkey in out["materials"]:
@@ -81,9 +81,9 @@ def remove_unused_vertices_and_vertex_normals(obj):
             for vkey in out["materials"][mkey][fkey]["vertices"]:
                 valid_vkeys.add(vkey)
 
-    for vkey in obj["vertices"]:
+    for vkey in mesh["vertices"]:
         if vkey in valid_vkeys:
-            out["vertices"][vkey] = obj["vertices"][vkey]
+            out["vertices"][vkey] = mesh["vertices"][vkey]
 
     valid_vnkeys = set()
     for mkey in out["materials"]:
@@ -91,27 +91,27 @@ def remove_unused_vertices_and_vertex_normals(obj):
             for vnkey in out["materials"][mkey][fkey]["vertex_normals"]:
                 valid_vnkeys.add(vnkey)
 
-    for vnkey in obj["vertex_normals"]:
+    for vnkey in mesh["vertex_normals"]:
         if vnkey in valid_vnkeys:
-            out["vertex_normals"][vnkey] = obj["vertex_normals"][vnkey]
+            out["vertex_normals"][vnkey] = mesh["vertex_normals"][vnkey]
 
     return out
 
 
-def write_to_wavefront(obj, path, header=True):
+def write_to_obj(mesh, path, header=True):
     """
-    Writes the Object to a wavefront-file at path.
+    Writes the mesh to a wavefront-file at path.
 
     Parameters
     ----------
-    obj : dict
-            The Object.
+    mesh : dict
+            The mesh.
     path : str
             The output path.
     header : bool
             Add a header with version-number.
     """
-    wavefront = io.obj.init_from_Object(obj)
+    wavefront = io.obj.init_from_mesh(mesh=mesh)
     wavefront_str = io.obj.to_string(wavefront)
     with open(path, "wt") as fout:
         if header:
