@@ -2,8 +2,8 @@ import numpy as np
 import tarfile
 import io
 import json_numpy
-from . import Wavefront
-from . import materials
+from . import obj
+from .. import materials
 
 
 def init(default_medium="vacuum"):
@@ -49,10 +49,10 @@ def write_to_merlict(scenery, path):
         # -------
         tar_append_dir(tarout, "objects")
         for okey in scenery["objects"]:
-            wavefront = Wavefront.init_from_Object(
+            wavefront = obj.init_from_Object(
                 obj=scenery["objects"][okey]
             )
-            wavefront_str = Wavefront.to_string(wavefront=wavefront)
+            wavefront_str = obj.to_string(wavefront=wavefront)
             tar_append_file(
                 tarout=tarout,
                 file_name="objects/{:s}.obj".format(okey),

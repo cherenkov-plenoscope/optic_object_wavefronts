@@ -1,7 +1,7 @@
 import copy
 import collections
 import numpy as np
-from . import Wavefront
+from . import io
 from . import version
 
 
@@ -111,8 +111,8 @@ def write_to_wavefront(obj, path, header=True):
     header : bool
             Add a header with version-number.
     """
-    wavefront = Wavefront.init_from_Object(obj)
-    wavefront_str = Wavefront.to_string(wavefront)
+    wavefront = io.obj.init_from_Object(obj)
+    wavefront_str = io.obj.to_string(wavefront)
     with open(path, "wt") as fout:
         if header:
             fout.write("# {:s} v{:s}\n".format(__name__, version.__version__))

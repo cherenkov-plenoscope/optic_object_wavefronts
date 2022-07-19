@@ -113,7 +113,7 @@ def ax_add_object_3d(
     vertex_normal_alpha=1.0,
     zorder=1,
 ):
-    wavefront = oow.Wavefront.init_from_Object(obj=obj)
+    wavefront = oow.io.obj.init_from_Object(obj=obj)
 
     vertices = [(v[0], v[1], v[2]) for v in wavefront["v"]]
 
