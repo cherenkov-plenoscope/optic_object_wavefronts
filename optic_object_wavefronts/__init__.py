@@ -3,7 +3,7 @@ from . import mesh
 from . import delaunay
 from . import Primitives
 from . import Groups
-from . import Optics
+from . import optics
 from . import Geometry
 from . import polygon
 from . import materials
