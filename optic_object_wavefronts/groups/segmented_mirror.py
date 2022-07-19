@@ -4,10 +4,10 @@ Create segmented mirrors from parameters.
 import numpy as np
 import collections
 import copy
-from ... import geometry
-from ... import polygon
-from ... import primitives
-from ... import materials
+from .. import geometry
+from .. import polygon
+from .. import primitives
+from .. import materials
 
 
 CONFIG_EXAMPLE = {
