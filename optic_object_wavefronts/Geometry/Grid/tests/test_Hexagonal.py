@@ -1,5 +1,6 @@
 import optic_object_wavefronts as oow
 import numpy as np
+import os
 
 
 def test_grid_vertices():
@@ -23,7 +24,7 @@ def test_grid_vertices_ref():
         outer_radius=1.0, fn=1, ref="abc"
     )
     for k in vs:
-        assert k[0] == "abc"
+        assert os.path.dirname(k) == "abc"
 
 
 def test_num_vertices():

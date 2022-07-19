@@ -3,6 +3,7 @@ from .. import Delaunay
 from .. import Geometry
 from .. import Polygon
 import numpy as np
+import collections
 
 
 def init(
@@ -27,6 +28,9 @@ def init(
             curvature_radius=curvature_radius,
         )
 
+    mtl_key = ref
+    obj["materials"][mtl_key] = collections.OrderedDict()
+
     all_grid_faces = Delaunay.make_faces_xy(vertices=obj["vertices"], ref=ref)
 
     for fkey in all_grid_faces:
@@ -43,10 +47,9 @@ def init(
         rc = np.hypot(vc[0], vc[1])
 
         if ra <= outer_radius and rb <= outer_radius and rc <= outer_radius:
-            obj["faces"][fkey] = all_grid_faces[fkey]
-
-            obj["faces"][fkey]["vertex_normals"] = [vkey_a, vkey_b, vkey_c]
-
-    obj["materials"][ref] = [ref]
+            obj["materials"][mtl_key][fkey] = all_grid_faces[fkey]
+            obj["materials"][mtl_key][fkey]["vertex_normals"] = [
+                vkey_a, vkey_b, vkey_c
+            ]
 
     return Object.remove_unused_vertices_and_vertex_normals(obj=obj)

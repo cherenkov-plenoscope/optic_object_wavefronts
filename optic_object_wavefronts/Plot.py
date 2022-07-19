@@ -48,20 +48,22 @@ def ax_add_object_xy(
             markersize=vertex_marker_size,
         )
 
-    for fkey in obj["faces"]:
-        vs = []
-        for ii in range(3):
-            vkey = obj["faces"][fkey]["vertices"][ii]
-            vs.append(obj["vertices"][vkey][0:2])
-        vs = np.array(vs)
-        ax_add_face(
-            ax=ax,
-            vertices=vs,
-            face_alpha=face_alpha,
-            face_color=face_color,
-            face_edge_color=face_edge_color,
-            face_edge_width=face_edge_width,
-        )
+    for mkey in obj["materials"]:
+        faces = obj["materials"][mkey]
+        for fkey in faces:
+            vs = []
+            for ii in range(3):
+                vkey = faces[fkey]["vertices"][ii]
+                vs.append(obj["vertices"][vkey][0:2])
+            vs = np.array(vs)
+            ax_add_face(
+                ax=ax,
+                vertices=vs,
+                face_alpha=face_alpha,
+                face_color=face_color,
+                face_edge_color=face_edge_color,
+                face_edge_width=face_edge_width,
+            )
 
 
 def plot_Object(obj):

@@ -11,10 +11,10 @@ def test_min_max_distance():
         polygon=polygon, point=point,
     )
 
-    assert keys[0] == "('ring', 0)"
+    assert keys[0] == "ring/000000"
     assert dists[0] == 1.0
 
-    assert keys[1] == "('ring', 3)"
+    assert keys[1] == "ring/000003"
     assert dists[1] == 1.0
 
     point = (0.1, 0.0)
@@ -22,8 +22,8 @@ def test_min_max_distance():
         polygon=polygon, point=point,
     )
 
-    assert keys[0] == "('ring', 0)"
+    assert keys[0] == "ring/000000"
     assert dists[0] == 0.9
 
-    assert keys[1] == "('ring', 2)"
+    assert keys[1] == "ring/000002"
     assert dists[1] == 1.1
