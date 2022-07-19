@@ -1,5 +1,5 @@
 from .. import mesh
-from .. import Geometry
+from .. import geometry
 from .. import delaunay
 import numpy as np
 import os
@@ -33,10 +33,10 @@ def init(
             Adds faces to reduce the number of faces sharing a single vertex.
             If False, only the vertices of the regular polygon will be used.
     """
-    inner_radius = outer_radius * Geometry.regular_polygon.inner_radius(fn=fn)
+    inner_radius = outer_radius * geometry.regular_polygon.inner_radius(fn=fn)
 
     disc = mesh.init()
-    disc["vertices"] = Geometry.regular_polygon.make_vertices_xy(
+    disc["vertices"] = geometry.regular_polygon.make_vertices_xy(
         outer_radius=outer_radius,
         ref=os.path.join(ref, "outer_bound"),
         fn=fn,
@@ -48,7 +48,7 @@ def init(
         next_radius = 0.9 * inner_radius
         v_inner_idx = 0
         while next_fn >= 6:
-            inner_vertices = Geometry.regular_polygon.make_vertices_xy(
+            inner_vertices = geometry.regular_polygon.make_vertices_xy(
                 outer_radius=next_radius,
                 ref=os.path.join(ref, "aux"),
                 fn=next_fn,

@@ -45,12 +45,12 @@ FN_HEX_GRID = 17
 
 def test_init():
     m1 = oow.Primitives.SchwarzschildCouderCap.init(
-        outer_polygon=oow.Geometry.regular_polygon.make_vertices_xy(
+        outer_polygon=oow.geometry.regular_polygon.make_vertices_xy(
             outer_radius=c["M1"]["outer_radius"],
             fn=FN_POLYGON,
             ref="M1_outer",
         ),
-        inner_polygon=oow.Geometry.regular_polygon.make_vertices_xy(
+        inner_polygon=oow.geometry.regular_polygon.make_vertices_xy(
             outer_radius=c["M1"]["inner_radius"],
             fn=FN_POLYGON,
             ref="M1_inner",
@@ -61,7 +61,7 @@ def test_init():
     )
 
     m2 = oow.Primitives.SchwarzschildCouderCap.init(
-        outer_polygon=oow.Geometry.regular_polygon.make_vertices_xy(
+        outer_polygon=oow.geometry.regular_polygon.make_vertices_xy(
             outer_radius=c["M2"]["outer_radius"],
             fn=FN_POLYGON,
             ref="M2_inner",
@@ -73,7 +73,7 @@ def test_init():
     )
 
     det = oow.Primitives.SphericalCap.init(
-        outer_polygon=oow.Geometry.regular_polygon.make_vertices_xy(
+        outer_polygon=oow.geometry.regular_polygon.make_vertices_xy(
             outer_radius=c["DET"]["outer_radius"],
             fn=FN_POLYGON,
             ref="DET_outer",

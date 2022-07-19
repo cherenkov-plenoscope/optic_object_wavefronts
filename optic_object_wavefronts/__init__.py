@@ -4,7 +4,7 @@ from . import delaunay
 from . import Primitives
 from . import Groups
 from . import optics
-from . import Geometry
+from . import geometry
 from . import polygon
 from . import materials
 from . import io

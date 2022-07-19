@@ -1,6 +1,6 @@
 from .. import mesh
 from .. import delaunay
-from .. import Geometry
+from .. import geometry
 from . import Disc
 import copy
 import numpy as np
@@ -11,14 +11,14 @@ import collections
 def init(outer_radius, curvature_radius, fn=10, ref="SphericalCapHexagonal"):
     cap = mesh.init()
 
-    cap["vertices"] = Geometry.grid.hexagonal.init_from_outer_radius(
+    cap["vertices"] = geometry.grid.hexagonal.init_from_outer_radius(
         outer_radius=outer_radius, fn=fn, ref=os.path.join(ref, "inner")
     )
 
     # elevate z-axis
     # --------------
     for vkey in cap["vertices"]:
-        cap["vertices"][vkey][2] = Geometry.sphere.surface_height(
+        cap["vertices"][vkey][2] = geometry.sphere.surface_height(
             x=cap["vertices"][vkey][0],
             y=cap["vertices"][vkey][1],
             curvature_radius=curvature_radius,
@@ -28,7 +28,7 @@ def init(outer_radius, curvature_radius, fn=10, ref="SphericalCapHexagonal"):
     # --------------
     for vkey in cap["vertices"]:
         vnkey = str(vkey)
-        cap["vertex_normals"][vnkey] = Geometry.sphere.surface_normal(
+        cap["vertex_normals"][vnkey] = geometry.sphere.surface_normal(
             x=cap["vertices"][vkey][0],
             y=cap["vertices"][vkey][1],
             curvature_radius=curvature_radius,
@@ -64,7 +64,7 @@ def rotate_vertices_xy(vertices, phi):
 def weave_hexagon_edges(mesh, outer_radius, margin_width_on_edge, ref):
     assert outer_radius >= 0
     assert margin_width_on_edge >= 0
-    inner_radius_hexagon = outer_radius * Geometry.regular_polygon.inner_radius(
+    inner_radius_hexagon = outer_radius * geometry.regular_polygon.inner_radius(
         fn=6
     )
     inner_radius_threshold = inner_radius_hexagon - margin_width_on_edge

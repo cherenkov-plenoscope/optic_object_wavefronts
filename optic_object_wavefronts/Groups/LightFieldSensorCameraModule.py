@@ -1,5 +1,5 @@
 from .. import mesh
-from .. import Geometry
+from .. import geometry
 from .. import Primitives
 from .. import polygon
 import numpy as np
@@ -74,14 +74,14 @@ def make_geometry(
 
     c["photo_sensor"]["grid"][
         "spacing"
-    ] = Geometry.grid.hexagonal.estimate_spacing_for_small_hexagons_in_big_hexagon(
+    ] = geometry.grid.hexagonal.estimate_spacing_for_small_hexagons_in_big_hexagon(
         big_hexagon_outer_radius=c["housing"]["outer_radius_inside"],
         num_small_hexagons_on_diagonal_of_big_hexagon=c["photo_sensor"][
             "grid"
         ]["num_on_diagonal"],
     )
 
-    grid_positions_xy = Geometry.grid.hexagonal.init_from_spacing(
+    grid_positions_xy = geometry.grid.hexagonal.init_from_spacing(
         spacing=c["photo_sensor"]["grid"]["spacing"],
         ref="_",
         fN=c["photo_sensor"]["grid"]["num_on_diagonal"],
@@ -89,7 +89,7 @@ def make_geometry(
     grid_positions_xy = polygon.rotate_z(grid_positions_xy, 0)
     grid_positions_xy = polygon.get_vertices_inside(
         vertices=grid_positions_xy,
-        polygon=Geometry.regular_polygon.make_vertices_xy(
+        polygon=geometry.regular_polygon.make_vertices_xy(
             outer_radius=c["housing"]["outer_radius_inside"],
             ref="_",
             fn=6,

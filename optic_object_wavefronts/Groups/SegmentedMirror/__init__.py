@@ -4,7 +4,7 @@ Create segmented mirrors from parameters.
 import numpy as np
 import collections
 import copy
-from ... import Geometry
+from ... import geometry
 from ... import polygon
 from ... import Primitives
 from ... import materials
@@ -143,17 +143,17 @@ def add_segmented_mirror_to_frame_in_scenery(
     )
 
     if config["outer_aperture_shape_hex"] == 1:
-        aperture_outer_polygon = Geometry.regular_polygon.make_vertices_xy(
+        aperture_outer_polygon = geometry.regular_polygon.make_vertices_xy(
             outer_radius=outer_radius_facet_supports, fn=6, rot=np.pi / 6,
         )
     else:
-        aperture_outer_polygon = Geometry.regular_polygon.make_vertices_xy(
+        aperture_outer_polygon = geometry.regular_polygon.make_vertices_xy(
             outer_radius=outer_radius_facet_supports, fn=fn_circle, rot=0.0,
         )
 
     facet_centers = init_facet_centers_xy(
         aperture_outer_polygon=aperture_outer_polygon,
-        aperture_inner_polygon=Geometry.regular_polygon.make_vertices_xy(
+        aperture_inner_polygon=geometry.regular_polygon.make_vertices_xy(
             outer_radius=inner_radius_facet_supports, fn=fn_circle,
         ),
         grid_spacing=grid_spacing,
@@ -194,10 +194,10 @@ def add_segmented_mirror_to_frame_in_scenery(
 
 
 def init_facet_centers_xy(
-    aperture_outer_polygon=Geometry.regular_polygon.make_vertices_xy(
+    aperture_outer_polygon=geometry.regular_polygon.make_vertices_xy(
         outer_radius=1.0
     ),
-    aperture_inner_polygon=Geometry.regular_polygon.make_vertices_xy(
+    aperture_inner_polygon=geometry.regular_polygon.make_vertices_xy(
         outer_radius=0.5
     ),
     grid_spacing=0.1,
@@ -213,11 +213,11 @@ def init_facet_centers_xy(
     fN = 2 * int(np.ceil(outer_radius / grid_spacing))
 
     if grid_style == "hexagonal":
-        _grid = Geometry.grid.hexagonal.init_from_spacing(
+        _grid = geometry.grid.hexagonal.init_from_spacing(
             spacing=grid_spacing, ref=ref, fN=fN
         )
     elif grid_style == "rectangular":
-        _grid = Geometry.grid.rectangular.init_from_spacing(
+        _grid = geometry.grid.rectangular.init_from_spacing(
             spacing=grid_spacing, ref=ref, fN=fN
         )
     else:
@@ -245,12 +245,12 @@ def set_facet_centers_z(
     assert focal_length > 0.0
     assert 0 <= DaviesCotton_over_parabolic_mixing_factor <= 1.0
     for fkey in facet_centers:
-        davies_cotton_z = Geometry.sphere.surface_height(
+        davies_cotton_z = geometry.sphere.surface_height(
             x=facet_centers[fkey][0],
             y=facet_centers[fkey][1],
             curvature_radius=focal_length,
         )
-        prabola_z = Geometry.parabola.surface_height(
+        prabola_z = geometry.parabola.surface_height(
             x=facet_centers[fkey][0],
             y=facet_centers[fkey][1],
             focal_length=focal_length,

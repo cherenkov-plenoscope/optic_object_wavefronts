@@ -1,5 +1,5 @@
 from .. import mesh
-from .. import Geometry
+from .. import geometry
 import numpy as np
 import os
 import collections
