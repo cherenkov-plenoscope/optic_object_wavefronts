@@ -86,13 +86,11 @@ def test_init():
     telescope = oow.mesh.init()
 
     telescope = oow.mesh.merge(
-        telescope,
-        oow.mesh.translate(m1, np.array([0.0, 0.0, c["M1"]["z"]])),
+        telescope, oow.mesh.translate(m1, np.array([0.0, 0.0, c["M1"]["z"]])),
     )
 
     telescope = oow.mesh.merge(
-        telescope,
-        oow.mesh.translate(m2, np.array([0.0, 0.0, c["M2"]["z"]])),
+        telescope, oow.mesh.translate(m2, np.array([0.0, 0.0, c["M2"]["z"]])),
     )
 
     telescope = oow.mesh.merge(

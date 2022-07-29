@@ -149,8 +149,7 @@ def test_baker_nunn():
     baker_nunn = oow.mesh.init()
 
     baker_nunn = oow.mesh.merge(
-        baker_nunn,
-        oow.mesh.translate(mirror, np.array([0.0, 0.0, z_mirror])),
+        baker_nunn, oow.mesh.translate(mirror, np.array([0.0, 0.0, z_mirror])),
     )
 
     baker_nunn = oow.mesh.merge(

@@ -152,9 +152,7 @@ def init(
         fn=cg["lens"]["fn"],
         ref=join(ref, "lens"),
     )
-    camera = mesh.merge(
-        camera, mesh.translate(lens, cg["lens"]["position"]),
-    )
+    camera = mesh.merge(camera, mesh.translate(lens, cg["lens"]["position"]),)
 
     # housing
     # -------

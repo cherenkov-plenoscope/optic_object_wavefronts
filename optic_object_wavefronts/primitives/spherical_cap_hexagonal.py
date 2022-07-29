@@ -63,8 +63,8 @@ def rotate_vertices_xy(vertices, phi):
 def weave_hexagon_edges(mesh, outer_radius, margin_width_on_edge, ref):
     assert outer_radius >= 0
     assert margin_width_on_edge >= 0
-    inner_radius_hexagon = outer_radius * geometry.regular_polygon.inner_radius(
-        fn=6
+    inner_radius_hexagon = (
+        outer_radius * geometry.regular_polygon.inner_radius(fn=6)
     )
     inner_radius_threshold = inner_radius_hexagon - margin_width_on_edge
     rot_perp = np.pi / 2.0

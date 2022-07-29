@@ -40,7 +40,6 @@ def add_segmented_mirror_to_frame_in_scenery_heritage(
     )
     fn_circle = int(np.ceil(2.0 * np.pi * approx_num_facets_on_outer_radius))
 
-
     outer_radius_facet_supports = (
         config["max_outer_aperture_radius"] - config["facet_inner_hex_radius"]
     )
@@ -150,9 +149,7 @@ def add_segmented_mirror_to_frame_in_scenery(
 
     # facet
     # -----
-    facet_outer_radius = facet_inner_hex_radius * (
-        2.0 / np.sqrt(3.0)
-    )
+    facet_outer_radius = facet_inner_hex_radius * (2.0 / np.sqrt(3.0))
     facet_curvature_radius = 2.0 * focal_length
     facet_object_key = ref + "facet"
 
@@ -341,7 +338,7 @@ def set_facet_centers_z(
         sphere_z = geometry.sphere.surface_height(
             x=facet_centers[fkey][0],
             y=facet_centers[fkey][1],
-            curvature_radius=2.0*focal_length,
+            curvature_radius=2.0 * focal_length,
         )
         facet_centers[fkey][2] = (
             davies_cotton_z * davies_cotton_weight
@@ -353,10 +350,7 @@ def set_facet_centers_z(
 
 
 def shift_facet_centers_z_so_mean_distance_of_facet_centers_to_focal_point_is_focal_length(
-    facet_centers,
-    focal_length,
-    max_delta,
-    max_iterations=1000,
+    facet_centers, focal_length, max_delta, max_iterations=1000,
 ):
     focal_point = [0.0, 0.0, focal_length]
     i = 0
@@ -429,9 +423,7 @@ def init_facet_rotation_with_focal_point(
 
 
 def facet_rotation_axis_and_angle(
-    facet_center,
-    target_point,
-    direction_incoming_light=[0.0, 0.0, -1.0],
+    facet_center, target_point, direction_incoming_light=[0.0, 0.0, -1.0],
 ):
     facet_center = np.array(facet_center)
     target_point = np.array(target_point)
