@@ -21,10 +21,81 @@ CONFIG_EXAMPLE = {
 }
 
 
+def add_segmented_mirror_to_frame_in_scenery_heritage(
+    frame,
+    scenery,
+    config,
+    outer_medium="vacuum",
+    inner_medium="vacuum",
+    facet_surface_mirror="perfect_mirror",
+    facet_surface_body="perfect_absorber",
+    facet_fn=7,
+    facet_body_width=0.0,
+    ref="a",
+):
+    a = config["DaviesCotton_over_parabolic_mixing_factor"]
+
+    approx_num_facets_on_outer_radius = (
+        config["max_outer_aperture_radius"] / config["facet_inner_hex_radius"]
+    )
+    fn_circle = int(np.ceil(2.0 * np.pi * approx_num_facets_on_outer_radius))
+
+
+    outer_radius_facet_supports = (
+        config["max_outer_aperture_radius"] - config["facet_inner_hex_radius"]
+    )
+    if config["outer_aperture_shape_hex"] == 1:
+        aperture_outer_polygon = geometry.regular_polygon.make_vertices_xy(
+            outer_radius=outer_radius_facet_supports, fn=6, rot=np.pi / 6,
+        )
+    else:
+        aperture_outer_polygon = geometry.regular_polygon.make_vertices_xy(
+            outer_radius=outer_radius_facet_supports, fn=fn_circle, rot=0.0,
+        )
+
+    inner_radius_facet_supports = (
+        config["min_inner_aperture_radius"] + config["facet_inner_hex_radius"]
+    )
+    aperture_inner_polygon = geometry.regular_polygon.make_vertices_xy(
+        outer_radius=inner_radius_facet_supports, fn=fn_circle,
+    )
+
+    return add_segmented_mirror_to_frame_in_scenery(
+        frame=frame,
+        scenery=scenery,
+        focal_length=config["focal_length"],
+        aperture_outer_polygon=aperture_outer_polygon,
+        aperture_inner_polygon=aperture_inner_polygon,
+        facet_inner_hex_radius=config["facet_inner_hex_radius"],
+        gap_between_facets=config["gap_between_facets"],
+        davies_cotton_weight=a,
+        parabola_weight=(1.0 - a),
+        sphere_weight=0.0,
+        mean_distance_of_facet_centers_to_focal_point_is_focal_length=True,
+        facet_rotation="individual",
+        outer_medium=outer_medium,
+        inner_medium=outer_medium,
+        facet_surface_mirror=facet_surface_mirror,
+        facet_surface_body=facet_surface_body,
+        facet_fn=facet_fn,
+        facet_body_width=facet_body_width,
+        ref=ref,
+    )
+
+
 def add_segmented_mirror_to_frame_in_scenery(
     frame,
     scenery,
-    config=CONFIG_EXAMPLE,
+    focal_length,
+    aperture_outer_polygon,
+    aperture_inner_polygon,
+    facet_inner_hex_radius,
+    gap_between_facets,
+    davies_cotton_weight,
+    parabola_weight,
+    sphere_weight,
+    mean_distance_of_facet_centers_to_focal_point_is_focal_length,
+    facet_rotation,
     outer_medium="vacuum",
     inner_medium="vacuum",
     facet_surface_mirror="perfect_mirror",
@@ -40,9 +111,26 @@ def add_segmented_mirror_to_frame_in_scenery(
         A frame in the scenery.
     scenery : dict
         The scenery.
-    config : dict
-        The geometry of the working-surface in Sebastian's format used since
-        his Master-thesis.
+    focal_length : float
+        Distance from aperture's principal plane where image forms.
+    aperture_outer_polygon : dict
+        Polygon marking the outer bound for facet-centers.
+    aperture_inner_polygon : dict
+        Polygon marking the inner bound for facet-centers.
+    facet_inner_hex_radius : float
+        Inner radius of hexagonal facet.
+    gap_between_facets : float
+        Distance of gap between neighboring facets.
+    mean_distance_of_facet_centers_to_focal_point_is_focal_length : bool
+        Whether to shift the facet-centers in z or not.
+    davies_cotton_weight : float
+        Weight 0-1,
+    parabola_weight : float
+        Weight 0-1,
+    sphere_weight : float
+        Weight 0-1,
+    facet_rotation : str
+        How to rotate the facets.
     outer_medium : str
         Key of the outer medium sourroundung the mirror.
     inner_medium : str
@@ -62,10 +150,10 @@ def add_segmented_mirror_to_frame_in_scenery(
 
     # facet
     # -----
-    facet_outer_radius = config["facet_inner_hex_radius"] * (
+    facet_outer_radius = facet_inner_hex_radius * (
         2.0 / np.sqrt(3.0)
     )
-    facet_curvature_radius = 2.0 * config["focal_length"]
+    facet_curvature_radius = 2.0 * focal_length
     facet_object_key = ref + "facet"
 
     scenery["materials"]["boundary_layers"][ref + "f"] = {
@@ -122,40 +210,11 @@ def add_segmented_mirror_to_frame_in_scenery(
                 key=surface_key
             )
 
-    # facet-supports
-    # --------------
-    approx_num_facets_on_outer_radius = (
-        config["max_outer_aperture_radius"] / config["facet_inner_hex_radius"]
-    )
-
-    fn_circle = int(np.ceil(2.0 * np.pi * approx_num_facets_on_outer_radius))
-    grid_spacing = (
-        2.0 * config["facet_inner_hex_radius"] + config["gap_between_facets"]
-    )
-
-    # outer bound xy
-    # --------------
-    outer_radius_facet_supports = (
-        config["max_outer_aperture_radius"] - config["facet_inner_hex_radius"]
-    )
-    inner_radius_facet_supports = (
-        config["min_inner_aperture_radius"] + config["facet_inner_hex_radius"]
-    )
-
-    if config["outer_aperture_shape_hex"] == 1:
-        aperture_outer_polygon = geometry.regular_polygon.make_vertices_xy(
-            outer_radius=outer_radius_facet_supports, fn=6, rot=np.pi / 6,
-        )
-    else:
-        aperture_outer_polygon = geometry.regular_polygon.make_vertices_xy(
-            outer_radius=outer_radius_facet_supports, fn=fn_circle, rot=0.0,
-        )
+    grid_spacing = (2 * facet_inner_hex_radius) + gap_between_facets
 
     facet_centers = init_facet_centers_xy(
         aperture_outer_polygon=aperture_outer_polygon,
-        aperture_inner_polygon=geometry.regular_polygon.make_vertices_xy(
-            outer_radius=inner_radius_facet_supports, fn=fn_circle,
-        ),
+        aperture_inner_polygon=aperture_inner_polygon,
         grid_spacing=grid_spacing,
         grid_style="hexagonal",
         grid_rotation=np.pi / 2,
@@ -165,25 +224,41 @@ def add_segmented_mirror_to_frame_in_scenery(
 
     facet_centers = set_facet_centers_z(
         facet_centers=facet_centers,
-        focal_length=config["focal_length"],
-        DaviesCotton_over_parabolic_mixing_factor=config[
-            "DaviesCotton_over_parabolic_mixing_factor"
-        ],
-        max_delta=1e-6 * config["focal_length"],
-        max_iterations=1000,
+        focal_length=focal_length,
+        davies_cotton_weight=davies_cotton_weight,
+        parabola_weight=parabola_weight,
+        sphere_weight=sphere_weight,
     )
+
+    if mean_distance_of_facet_centers_to_focal_point_is_focal_length:
+        facet_centers = shift_facet_centers_z_so_mean_distance_of_facet_centers_to_focal_point_is_focal_length(
+            facet_centers=facet_centers,
+            focal_length=focal_length,
+            max_delta=1e-6 * focal_length,
+            max_iterations=1000,
+        )
 
     # orientation
     # -----------
-    focal_point = [0, 0, config["focal_length"]]
+
     facet_id = 0
     for fkey in facet_centers:
+        if facet_rotation == "individual":
+            focal_point = [0, 0, focal_length]
+            rot = init_facet_rotation_with_focal_point(
+                facet_center=facet_centers[fkey], focal_point=focal_point,
+            )
+        elif facet_rotation == "sphere":
+            normal_point = [0, 0, 2 * focal_length]
+            rot = init_facet_rotation_with_normal_point(
+                facet_center=facet_centers[fkey], normal_point=normal_point,
+            )
+        else:
+            raise KeyError
         child = {
             "id": int(facet_id),
             "pos": facet_centers[fkey],
-            "rot": init_facet_rotation(
-                facet_center=facet_centers[fkey], focal_point=focal_point,
-            ),
+            "rot": rot,
             "obj": facet_object_key,
             "mtl": facet_mtl_to_boundary_layers_map,
         }
@@ -227,23 +302,31 @@ def init_facet_centers_xy(
     mask_inside_outer = polygon.mask_vertices_inside(
         vertices=_grid, polygon=aperture_outer_polygon
     )
-    mask_inside_inner = polygon.mask_vertices_inside(
-        vertices=_grid, polygon=aperture_inner_polygon
-    )
-    mask_outside_inner = np.logical_not(mask_inside_inner)
-    mask = np.logical_and(mask_inside_outer, mask_outside_inner)
+    if aperture_inner_polygon is None:
+        mask = mask_inside_outer
+    else:
+        mask_inside_inner = polygon.mask_vertices_inside(
+            vertices=_grid, polygon=aperture_inner_polygon
+        )
+        mask_outside_inner = np.logical_not(mask_inside_inner)
+        mask = np.logical_and(mask_inside_outer, mask_outside_inner)
     return polygon.keep_vertices_in_mask(vertices=_grid, mask=mask)
 
 
 def set_facet_centers_z(
     facet_centers,
     focal_length,
-    DaviesCotton_over_parabolic_mixing_factor,
-    max_delta,
-    max_iterations=1000,
+    davies_cotton_weight,
+    parabola_weight,
+    sphere_weight,
 ):
     assert focal_length > 0.0
-    assert 0 <= DaviesCotton_over_parabolic_mixing_factor <= 1.0
+
+    assert 0 <= davies_cotton_weight <= 1.0
+    assert 0 <= parabola_weight <= 1.0
+    assert 0 <= sphere_weight <= 1.0
+    assert davies_cotton_weight + parabola_weight + sphere_weight == 1.0
+
     for fkey in facet_centers:
         davies_cotton_z = geometry.sphere.surface_height(
             x=facet_centers[fkey][0],
@@ -255,12 +338,26 @@ def set_facet_centers_z(
             y=facet_centers[fkey][1],
             focal_length=focal_length,
         )
-        a = DaviesCotton_over_parabolic_mixing_factor
-        facet_z = a * davies_cotton_z + (1 - a) * prabola_z
-        facet_centers[fkey][2] = facet_z
+        sphere_z = geometry.sphere.surface_height(
+            x=facet_centers[fkey][0],
+            y=facet_centers[fkey][1],
+            curvature_radius=2.0*focal_length,
+        )
+        facet_centers[fkey][2] = (
+            davies_cotton_z * davies_cotton_weight
+            + prabola_z * parabola_weight
+            + sphere_z * sphere_weight
+        )
 
-    # fine tune z
-    # -----------
+    return facet_centers
+
+
+def shift_facet_centers_z_so_mean_distance_of_facet_centers_to_focal_point_is_focal_length(
+    facet_centers,
+    focal_length,
+    max_delta,
+    max_iterations=1000,
+):
     focal_point = [0.0, 0.0, focal_length]
     i = 0
     while True:
@@ -292,12 +389,52 @@ def vertices_add(vertices, vertex):
     return vertices
 
 
-def init_facet_rotation(
+def init_facet_rotation_with_normal_point(
+    facet_center, normal_point, direction_incoming_light=[0.0, 0.0, -1.0],
+):
+    axis, angle = facet_rotation_axis_and_angle(
+        facet_center=facet_center,
+        target_point=normal_point,
+        direction_incoming_light=direction_incoming_light,
+    )
+
+    if np.abs(angle) > 0.0:
+        return {
+            "repr": "axis_angle",
+            "axis": axis.tolist(),
+            "angle_deg": float(np.rad2deg(angle)),
+        }
+    else:
+        return {"repr": "tait_bryan", "xyz_deg": [0, 0, 0]}
+
+
+def init_facet_rotation_with_focal_point(
     facet_center, focal_point, direction_incoming_light=[0.0, 0.0, -1.0],
 ):
-    facet_center = np.array(facet_center)
+    axis, angle = facet_rotation_axis_and_angle(
+        facet_center=facet_center,
+        target_point=focal_point,
+        direction_incoming_light=direction_incoming_light,
+    )
+    angle = 0.5 * angle
 
-    focal_point = np.array(focal_point)
+    if np.abs(angle) > 0.0:
+        return {
+            "repr": "axis_angle",
+            "axis": axis.tolist(),
+            "angle_deg": float(np.rad2deg(angle)),
+        }
+    else:
+        return {"repr": "tait_bryan", "xyz_deg": [0, 0, 0]}
+
+
+def facet_rotation_axis_and_angle(
+    facet_center,
+    target_point,
+    direction_incoming_light=[0.0, 0.0, -1.0],
+):
+    facet_center = np.array(facet_center)
+    target_point = np.array(target_point)
 
     direction_incoming_light = np.array(direction_incoming_light)
     _direction_of_light_travel_norm = np.linalg.norm(direction_incoming_light)
@@ -305,23 +442,18 @@ def init_facet_rotation(
     direction_incoming_light /= _direction_of_light_travel_norm
     direction_of_light_coming_from = -1.0 * direction_incoming_light
 
-    direction_facet_to_target = -facet_center + focal_point
+    direction_facet_to_target = -facet_center + target_point
     direction_facet_to_target_norm = np.linalg.norm(direction_facet_to_target)
     assert direction_facet_to_target_norm > 0.0
     direction_facet_to_target /= direction_facet_to_target_norm
 
-    rotation_angle = -0.5 * np.arccos(
+    rotation_angle = -1.0 * np.arccos(
         np.dot(direction_facet_to_target, direction_of_light_coming_from)
     )
-
-    if np.abs(rotation_angle) > 0.0:
+    if rotation_angle == 0.0:
+        rotation_axis = None
+    else:
         rotation_axis = np.cross(
             direction_facet_to_target, direction_of_light_coming_from
         )
-        return {
-            "repr": "axis_angle",
-            "axis": rotation_axis.tolist(),
-            "angle_deg": float(np.rad2deg(rotation_angle)),
-        }
-    else:
-        return {"repr": "tait_bryan", "xyz_deg": [0, 0, 0]}
+    return rotation_axis, rotation_angle
