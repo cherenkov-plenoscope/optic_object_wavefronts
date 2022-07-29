@@ -3,6 +3,7 @@ from .. import geometry
 from .. import primitives
 from .. import polygon
 import numpy as np
+import os
 
 
 def make_geometry(
@@ -124,6 +125,7 @@ def make_geometry(
 def init(
     camera_geometry, ref="light_field_sensor_camera_module",
 ):
+    join = os.path.join
     cg = camera_geometry
     camera = mesh.init()
 
@@ -134,7 +136,7 @@ def init(
             outer_radius=cg["photo_sensor"]["body"]["outer_radius"],
             fn=6,
             rot=np.pi / 6,
-            ref=ref + "/photo_sensor_{:06d}".format(gi),
+            ref=join(ref, "photo_sensor_{:06d}".format(gi)),
             prevent_many_faces_share_same_vertex=False,
         )
         photo_sensor = mesh.translate(
@@ -148,7 +150,7 @@ def init(
         outer_radius=cg["lens"]["outer_radius"],
         curvature_radius=cg["lens"]["curvature_radius"],
         fn=cg["lens"]["fn"],
-        ref=ref + "/lens",
+        ref=join(ref, "lens"),
     )
     camera = mesh.merge(
         camera, mesh.translate(lens, cg["lens"]["position"]),
@@ -160,7 +162,7 @@ def init(
         outer_radius=cg["housing"]["outer_radius_outside"],
         inner_radius=cg["housing"]["outer_radius_inside"],
         height=cg["housing"]["height"],
-        ref=ref + "/housing",
+        ref=join(ref, "housing"),
     )
 
     camera = mesh.merge(
