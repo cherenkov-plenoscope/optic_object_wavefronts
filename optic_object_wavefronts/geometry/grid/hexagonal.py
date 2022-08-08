@@ -77,7 +77,7 @@ def estimate_spacing_for_small_hexagons_in_big_hexagon(
 
 
 def init_unit_cells_from_centers(centers, spacing, rot=0.0):
-    rot += 2.0 * np.pi * 1/12
+    rot += 2.0 * np.pi * 1 / 12
     unit_cell_radius = 0.5 * spacing * (2.0 / np.sqrt(3))
     unit_cells = {}
     for key in centers:
@@ -111,31 +111,33 @@ def init_unit_cells_from_centers(centers, spacing, rot=0.0):
                                       \
                                        \
         """
-        for h in np.linspace(0,5,6):
+        for h in np.linspace(0, 5, 6):
             if h == 0:
                 vkey = "{:d}_{:d}_{:s}".format(v, w, "A")
             elif h == 1:
                 vkey = "{:d}_{:d}_{:s}".format(v, w, "B")
             elif h == 2:
-                vkey = "{:d}_{:d}_{:s}".format(v-1, w, "A")
+                vkey = "{:d}_{:d}_{:s}".format(v - 1, w, "A")
             elif h == 3:
-                vkey = "{:d}_{:d}_{:s}".format(v, w-1, "B")
+                vkey = "{:d}_{:d}_{:s}".format(v, w - 1, "B")
             elif h == 4:
-                vkey = "{:d}_{:d}_{:s}".format(v, w-1, "A")
+                vkey = "{:d}_{:d}_{:s}".format(v, w - 1, "A")
             elif h == 5:
-                vkey = "{:d}_{:d}_{:s}".format(v+1, w-1, "B")
+                vkey = "{:d}_{:d}_{:s}".format(v + 1, w - 1, "B")
             else:
                 raise RuntimeError("Expected six corners.")
 
             if vkey in unit_cells:
                 continue
             else:
-                phi = h/6.0 * (2.0 * np.pi) + rot
-                vertex = np.array([
-                    unit_cell_radius * np.cos(phi) + centers[key][0],
-                    unit_cell_radius * np.sin(phi) + centers[key][1],
-                    0.0,
-                ])
+                phi = h / 6.0 * (2.0 * np.pi) + rot
+                vertex = np.array(
+                    [
+                        unit_cell_radius * np.cos(phi) + centers[key][0],
+                        unit_cell_radius * np.sin(phi) + centers[key][1],
+                        0.0,
+                    ]
+                )
                 unit_cells[vkey] = vertex
     return unit_cells
 
@@ -168,8 +170,7 @@ def find_hull_of_unit_cells(unit_cells, centers, spacing):
 
     while True:
         current_U_vertex_neighbors = U_tree.query_ball_point(
-            x=U_vertices[current_U_vertex],
-            r=1.1 * spacing,
+            x=U_vertices[current_U_vertex], r=1.1 * spacing,
         )
 
         # remove current_U_vertex itself

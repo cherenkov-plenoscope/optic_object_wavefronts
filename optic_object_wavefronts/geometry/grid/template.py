@@ -2,6 +2,7 @@ import numpy as np
 import collections
 import os
 
+
 def init(fN, vector_A, vector_B, ref="grid", spacing=1.0):
     """
     Parameters
