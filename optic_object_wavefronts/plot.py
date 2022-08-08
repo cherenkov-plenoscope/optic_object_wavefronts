@@ -9,6 +9,18 @@ from mpl_toolkits.mplot3d.art3d import (
 import numpy as np
 
 
+def ax_add_polygon(ax, polygon, style, closed=True):
+    keys = list(polygon.keys())
+    for ii in range(len(polygon) - 1):
+        s = polygon[keys[ii]]
+        e = polygon[keys[ii + 1]]
+        ax.plot([s[0], e[0]], [s[1], e[1]], style)
+    if closed:
+        s = polygon[keys[-1]]
+        e = polygon[keys[0]]
+        ax.plot([s[0], e[0]], [s[1], e[1]], style)
+
+
 def ax_add_face(
     ax,
     vertices,

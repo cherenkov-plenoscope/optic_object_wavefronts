@@ -1,6 +1,6 @@
 import numpy as np
 import collections
-
+import os
 
 def init(fN, vector_A, vector_B, ref="grid", spacing=1.0):
     """
@@ -20,6 +20,6 @@ def init(fN, vector_A, vector_B, ref="grid", spacing=1.0):
     grid = collections.OrderedDict()
     for dA in np.arange(-fN, fN + 1, 1):
         for dB in np.arange(-fN, fN + 1, 1):
-            key = (ref, (dA, dB))
+            key = os.path.join(ref, "{:d}_{:d}".format(dA, dB))
             grid[key] = spacing * (dA * vector_A + dB * vector_B)
     return grid

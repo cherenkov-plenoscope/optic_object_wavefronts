@@ -2,6 +2,9 @@ import numpy as np
 import os
 import collections
 from . import template
+from ... import polygon
+import scipy
+from scipy import spatial
 
 
 HEXA = np.array([1.0, 0.0, 0.0])
@@ -71,3 +74,136 @@ def estimate_spacing_for_small_hexagons_in_big_hexagon(
         num_outer_diagonals * outer_diagonal_weight + num_radii * radii_weight
     )
     return spacing
+
+
+def init_unit_cells_from_centers(centers, spacing, rot=0.0):
+    rot += 2.0 * np.pi * 1/12
+    unit_cell_radius = 0.5 * spacing * (2.0 / np.sqrt(3))
+    unit_cells = {}
+    for key in centers:
+        basename = os.path.basename(key)
+        v_str, w_str = str.split(basename, "_")
+        v = int(v_str)
+        w = int(w_str)
+
+        """
+               \
+                \
+                 \     A-------B
+                  \   /         \                     ___
+                   \ /           \                ___/
+            A-------B    -1, 1    A-------B   ___/
+           /         \           /         \ /
+          /           \         /           \
+         B    -1, 0    A-------B     0, 1    A
+          \           /         \           /
+           \         /           \         /
+            A-------B     0, 0    A-------B
+           /         \           /         \
+          /           \         /           \
+         B     0,-1    A-------B     1, 0    A
+          \           /         \           /
+           \         /           \         /
+            A-------B     1,-1    A-------B
+                     \           / \
+                      \         /   \
+                       A-------B     \
+                                      \
+                                       \
+        """
+        for h in np.linspace(0,5,6):
+            if h == 0:
+                vkey = "{:d}_{:d}_{:s}".format(v, w, "A")
+            elif h == 1:
+                vkey = "{:d}_{:d}_{:s}".format(v, w, "B")
+            elif h == 2:
+                vkey = "{:d}_{:d}_{:s}".format(v-1, w, "A")
+            elif h == 3:
+                vkey = "{:d}_{:d}_{:s}".format(v, w-1, "B")
+            elif h == 4:
+                vkey = "{:d}_{:d}_{:s}".format(v, w-1, "A")
+            elif h == 5:
+                vkey = "{:d}_{:d}_{:s}".format(v+1, w-1, "B")
+            else:
+                raise RuntimeError("Expected six corners.")
+
+            if vkey in unit_cells:
+                continue
+            else:
+                phi = h/6.0 * (2.0 * np.pi) + rot
+                vertex = np.array([
+                    unit_cell_radius * np.cos(phi) + centers[key][0],
+                    unit_cell_radius * np.sin(phi) + centers[key][1],
+                    0.0,
+                ])
+                unit_cells[vkey] = vertex
+    return unit_cells
+
+
+def find_hull_of_unit_cells(unit_cells, centers, spacing):
+    assert spacing >= 0.0
+    assert len(unit_cells) >= len(centers)
+
+    U_keys, U_vertices = polygon.to_keys_and_numpy_array(polygon=unit_cells)
+    C_keys, C_vertices = polygon.to_keys_and_numpy_array(polygon=centers)
+    U_tree = scipy.spatial.cKDTree(data=U_vertices)
+    C_tree = scipy.spatial.cKDTree(data=C_vertices)
+
+    _ff = U_tree.query_ball_tree(other=C_tree, r=1.1 * spacing)
+    U_num_neighbors_in_C = [len(neighbors) for neighbors in _ff]
+
+    num_unit_cell_vertices = len(U_keys)
+
+    # seed vertex
+    current_U_vertex = -1
+    for i in range(num_unit_cell_vertices):
+        if U_num_neighbors_in_C[i] == 1:
+            current_U_vertex = i
+            break
+    assert current_U_vertex >= 0, "Can not find seed-vertex in unit_cells."
+
+    hull = collections.OrderedDict()
+    hull[current_U_vertex] = U_vertices[current_U_vertex]
+    last_vertex = -1
+
+    while True:
+        current_U_vertex_neighbors = U_tree.query_ball_point(
+            x=U_vertices[current_U_vertex],
+            r=1.1 * spacing,
+        )
+
+        # remove current_U_vertex itself
+        current_U_vertex_neighbors.remove(current_U_vertex)
+
+        # remove last_vertex
+        if last_vertex in current_U_vertex_neighbors:
+            current_U_vertex_neighbors.remove(last_vertex)
+
+        if len(current_U_vertex_neighbors) == 1:
+            # choose the only option
+            next_vertex = current_U_vertex_neighbors[0]
+        elif len(current_U_vertex_neighbors) == 2:
+            # choose the one with less neighbors
+            a = current_U_vertex_neighbors[0]
+            b = current_U_vertex_neighbors[1]
+            if U_num_neighbors_in_C[a] <= U_num_neighbors_in_C[b]:
+                next_vertex = a
+            else:
+                next_vertex = b
+        else:
+            raise RuntimeError
+
+        if next_vertex in hull:
+            # we closed the cycle
+            break
+        else:
+            hull[next_vertex] = U_vertices[next_vertex]
+            last_vertex = int(current_U_vertex)
+            current_U_vertex = int(next_vertex)
+
+    # rename keys
+    hull_with_original_unit_cell_vertex_keys = {}
+    for i in hull:
+        hull_with_original_unit_cell_vertex_keys[U_keys[i]] = hull[i]
+
+    return hull_with_original_unit_cell_vertex_keys
