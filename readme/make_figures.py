@@ -67,7 +67,11 @@ for obj_key in objs:
 
     fig, ax3d = oow.plot.fig_ax_3d(figsize=(4, 4), dpi=320)
     oow.plot.ax_add_mesh_3d(
-        ax=ax3d, mesh=mesh, face_alpha=0.9, face_color="w", face_edge_width=0.3,
+        ax=ax3d,
+        mesh=mesh,
+        face_alpha=0.9,
+        face_color="w",
+        face_edge_width=0.3,
     )
     oow.plot.ax_aspect_equal_3d(ax=ax3d)
     ax3d.view_init(elev=30, azim=50)

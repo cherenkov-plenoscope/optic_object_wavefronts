@@ -188,8 +188,8 @@ def add_segmented_mirror_to_frame_in_scenery(
 
     # add objects
     # -----------
-    assert facet_object_key not in scenery["objects"]
-    scenery["objects"][facet_object_key] = facet
+    assert facet_object_key not in scenery["geometry"]["objects"]
+    scenery["geometry"]["objects"][facet_object_key] = facet
 
     # add media
     # ---------

@@ -24,8 +24,7 @@ def init(default_medium="vacuum"):
             "boundary_layers": {},
             "default_medium": default_medium,
         },
-        "objects": {},
-        "tree": {"children": []},
+        "geometry": {"objects": {}, "relations": {"children": []},},
     }
     scenery["materials"]["media"][default_medium] = materials.medium(
         key=default_medium
@@ -45,17 +44,30 @@ def write_to_merlict(scenery, path):
             tarout=tarout, file_name="README.md", file_bytes=str.encode(RM),
         )
 
+        # geometry
+        # --------
+        tar_append_dir(tarout, "geometry")
+
         # objects
-        # -------
-        tar_append_dir(tarout, "objects")
-        for okey in scenery["objects"]:
-            wfr = obj.init_from_mesh(mesh=scenery["objects"][okey])
+        tar_append_dir(tarout, "geometry/objects")
+        for okey in scenery["geometry"]["objects"]:
+            wfr = obj.init_from_mesh(mesh=scenery["geometry"]["objects"][okey])
             wavefront_str = obj.dumps(obj=wfr)
             tar_append_file(
                 tarout=tarout,
-                file_name="objects/{:s}.obj".format(okey),
+                file_name="geometry/objects/{:s}.obj".format(okey),
                 file_bytes=str.encode(wavefront_str),
             )
+
+        # relations
+        relations_json_str = json_numpy.dumps(
+            scenery["geometry"]["relations"], indent=0
+        )
+        tar_append_file(
+            tarout=tarout,
+            file_name="geometry/relations.json",
+            file_bytes=str.encode(relations_json_str),
+        )
 
         # materials
         # ---------
@@ -105,15 +117,6 @@ def write_to_merlict(scenery, path):
             tarout=tarout,
             file_name="materials/default_medium.txt",
             file_bytes=str.encode(default_medium_str),
-        )
-
-        # tree of references to objects
-        # -----------------------------
-        tree_json_str = json_numpy.dumps(scenery["tree"], indent=0)
-        tar_append_file(
-            tarout=tarout,
-            file_name="tree.json",
-            file_bytes=str.encode(tree_json_str),
         )
 
 
