@@ -12,6 +12,13 @@ OFFs are indexed from zero, OBJs are indexed from one.
 import io
 
 
+def init():
+    """
+    Returns an empty dict-structure for an object.
+    """
+    return {"v": [], "f": []}
+
+
 def dumps(off, float_format="{:e}"):
     """
     Returns an off-string dumped from an off-dictionary.
@@ -49,7 +56,7 @@ def loads(s):
     lines = str.splitlines(s)
     num_lines = len(lines)
 
-    off = {"v": [], "f": []}
+    off = init()
     num_vertices = 0
     num_faces = 0
     num_edges = 0
