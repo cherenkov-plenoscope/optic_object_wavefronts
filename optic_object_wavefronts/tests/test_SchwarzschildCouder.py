@@ -1,6 +1,6 @@
 import optic_object_wavefronts as oow
-from optic_object_wavefronts import plot
 import numpy as np
+import pytest
 
 c = {
     "M1": {
@@ -47,7 +47,7 @@ FN_POLYGON = 71
 FN_HEX_GRID = 17
 
 
-def test_init():
+def make_telescope():
     m1 = oow.primitives.schwarzschild_couder_cap.init(
         outer_polygon=oow.geometry.regular_polygon.make_vertices_xy(
             outer_radius=c["M1"]["outer_radius"],
@@ -104,8 +104,19 @@ def test_init():
         oow.mesh.translate(det, np.array([0.0, 0.0, c["DET"]["z"]])),
     )
 
+    return telescope
+
+
+def test_make_telescope_and_export_obj():
+    telescope = make_telescope()
     oow.mesh.write_to_obj(mesh=telescope, path="tiny_telescope.obj")
 
+
+@pytest.mark.import_matplotlib
+def test_make_telescope_and_plot():
+    from optic_object_wavefronts import plot
+
+    telescope = make_telescope()
     fig, ax3d = oow.plot.fig_ax_3d(figsize=(10, 10), dpi=320)
     oow.plot.ax_add_mesh_3d(
         ax=ax3d,

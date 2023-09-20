@@ -24,4 +24,4 @@ jobs:
           python -m pip install .
       - name: Test with pytest
         run: |
-          pytest .
+          pytest . -k 'not import_matplotlib'
