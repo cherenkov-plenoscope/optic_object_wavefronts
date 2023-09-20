@@ -79,7 +79,11 @@ def weave_hexagon_edges(mesh, outer_radius, margin_width_on_edge, ref):
         for fkey in i_vertices:
             if i_vertices[fkey][1] > 0.99 * inner_radius_hexagon:
                 i_combi_vertices[fkey] = np.array(
-                    [i_vertices[fkey][0], i_vertices[fkey][2], 0.0,]
+                    [
+                        i_vertices[fkey][0],
+                        i_vertices[fkey][2],
+                        0.0,
+                    ]
                 )
 
         i_faces = delaunay.make_faces_xy(

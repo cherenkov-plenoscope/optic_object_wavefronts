@@ -7,7 +7,11 @@ import os
 
 
 def init(
-    outer_radius=1.0, length=1.0, fn=6, rot=0.0, ref="cylinder",
+    outer_radius=1.0,
+    length=1.0,
+    fn=6,
+    rot=0.0,
+    ref="cylinder",
 ):
     """
     Returns a cylinder-object.

@@ -3,7 +3,7 @@ import numpy as np
 
 def surface_height(x, y, focal_length):
     r = np.hypot(x, y)
-    return r ** 2 / (4.0 * focal_length)
+    return r**2 / (4.0 * focal_length)
 
 
 def surface_normal(x, y, focal_length):

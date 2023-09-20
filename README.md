@@ -1,40 +1,94 @@
+#######################
 Optic Object Wavefronts
-=======================
+#######################
+|TestStatus| |PyPiStatus| |BlackStyle| |PackStyleBlack|
+
+|ImgBlender|
+
+
 A python-library to create triangle-meshes with vertex-normals of optics such as lenses and mirrors.
 Use common computer-aided-design for all easy, non optical components where surface-normals do not matter.
 But when surface-normals matter, use this library to creatre meshes with accurate vertex-normals.
 
-![A spherical mirror with surface-normals](readme/mirror_render_blender.jpg)
 
+**********
+Primitives
+**********
 
 Disc
-----
-![disc](readme/Disc.jpg)
+====
+
+|ImgDisc|
+
+.. |ImgDisc| image:: https://github.com/cherenkov-plenoscope/optic_object_wavefronts/blob/main/readme/Disc.jpg?raw=True
+
 
 Cylinder
---------
-![disc](readme/Cylinder.jpg)
+========
+
+|ImgCylinder|
+
+.. |ImgCylinder| image:: https://github.com/cherenkov-plenoscope/optic_object_wavefronts/blob/main/readme/Cylinder.jpg?raw=True
+
 
 SphericalCapRegular
--------------------
-![disc](readme/SphericalCapRegular.jpg)
+===================
+
+|ImgSphericalCapRegular|
+
+.. |ImgSphericalCapRegular| image:: https://github.com/cherenkov-plenoscope/optic_object_wavefronts/blob/main/readme/SphericalCapRegular.jpg?raw=True
+
 
 SphericalCapHexagonal
----------------------
-![disc](readme/SphericalCapHexagonal.jpg)
+=====================
+
+|ImgSphericalCapHexagonal|
+
+.. |ImgSphericalCapHexagonal| image:: https://github.com/cherenkov-plenoscope/optic_object_wavefronts/blob/main/readme/SphericalCapHexagonal.jpg?raw=True
+
 
 SphericalCapPixels
-------------------
-![disc](readme/SphericalCapPixels.jpg)
+==================
+
+|ImgSphericalCapPixels|
+
+.. |ImgSphericalCapPixels| image:: https://github.com/cherenkov-plenoscope/optic_object_wavefronts/blob/main/readme/SphericalCapPixels.jpg?raw=True
+
 
 SphericalLens
-------------
-![disc](readme/SphericalLens.jpg)
+=============
+
+|ImgSphericalLens|
+
+.. |ImgSphericalLens| image:: https://github.com/cherenkov-plenoscope/optic_object_wavefronts/blob/main/readme/SphericalLens.jpg?raw=True
+
 
 SphericalLensHexagonal
-----------------------
-![disc](readme/SphericalLensHexagonal.jpg)
+======================
+
+|ImgSphericalLensHexagonal|
+
+.. |ImgSphericalLensHexagonal| image:: https://github.com/cherenkov-plenoscope/optic_object_wavefronts/blob/main/readme/SphericalLensHexagonal.jpg?raw=True
+
 
 SphericalPlanarLensHexagonal
--------------------------------
-![disc](readme/SphericalPlanarLensHexagonal.jpg)
+======================
+
+|ImgSphericalPlanarLensHexagonal|
+
+.. |ImgSphericalPlanarLensHexagonal| image:: https://github.com/cherenkov-plenoscope/optic_object_wavefronts/blob/main/readme/SphericalPlanarLensHexagonal.jpg?raw=True
+
+
+.. |BlackStyle| image:: https://img.shields.io/badge/code%20style-black-000000.svg
+    :target: https://github.com/psf/black
+
+.. |TestStatus| image:: https://github.com/cherenkov-plenoscope/optic_object_wavefronts/actions/workflows/test.yml/badge.svg?branch=main
+    :target: https://github.com/cherenkov-plenoscope/optic_object_wavefronts/actions/workflows/test.yml
+
+.. |PyPiStatus| image:: https://img.shields.io/pypi/v/optic_object_wavefronts
+    :target: https://pypi.org/project/optic_object_wavefronts
+
+.. |PackStyleBlack| image:: https://img.shields.io/badge/pack%20style-black-000000.svg
+    :target: https://github.com/cherenkov-plenoscope/black_pack
+
+.. |ImgBlender| image:: https://github.com/cherenkov-plenoscope/optic_object_wavefronts/blob/main/readme/mirror_render_blender.jpg?raw=True

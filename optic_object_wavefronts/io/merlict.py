@@ -24,7 +24,10 @@ def init(default_medium="vacuum"):
             "boundary_layers": {},
             "default_medium": default_medium,
         },
-        "geometry": {"objects": {}, "relations": {"children": []},},
+        "geometry": {
+            "objects": {},
+            "relations": {"children": []},
+        },
     }
     scenery["materials"]["media"][default_medium] = materials.medium(
         key=default_medium
@@ -34,14 +37,15 @@ def init(default_medium="vacuum"):
 
 def write_to_merlict(scenery, path):
     with tarfile.open(path, mode="w") as tarout:
-
         # README
         # ------
         RM = "Scenery\n"
         RM += "=======\n"
 
         tar_append_file(
-            tarout=tarout, file_name="README.md", file_bytes=str.encode(RM),
+            tarout=tarout,
+            file_name="README.md",
+            file_bytes=str.encode(RM),
         )
 
         # geometry
@@ -78,7 +82,8 @@ def write_to_merlict(scenery, path):
         tar_append_dir(tarout, "materials/media")
         for mkey in scenery["materials"]["media"]:
             medium_json_str = json_numpy.dumps(
-                scenery["materials"]["media"][mkey], indent=4,
+                scenery["materials"]["media"][mkey],
+                indent=4,
             )
             tar_append_file(
                 tarout=tarout,
@@ -91,7 +96,8 @@ def write_to_merlict(scenery, path):
         tar_append_dir(tarout, "materials/surfaces")
         for skey in scenery["materials"]["surfaces"]:
             surface_json_str = json_numpy.dumps(
-                scenery["materials"]["surfaces"][skey], indent=4,
+                scenery["materials"]["surfaces"][skey],
+                indent=4,
             )
             tar_append_file(
                 tarout=tarout,
@@ -102,7 +108,8 @@ def write_to_merlict(scenery, path):
         # boundary_layers
         # ---------------
         boundary_layers_json_str = json_numpy.dumps(
-            scenery["materials"]["boundary_layers"], indent=4,
+            scenery["materials"]["boundary_layers"],
+            indent=4,
         )
         tar_append_file(
             tarout=tarout,

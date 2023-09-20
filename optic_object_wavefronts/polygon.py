@@ -111,7 +111,8 @@ def get_vertices_inside(vertices, polygon):
     mask_vertices_inside()
     """
     return keep_vertices_in_mask(
-        vertices=vertices, mask=mask_vertices_inside(vertices, polygon),
+        vertices=vertices,
+        mask=mask_vertices_inside(vertices, polygon),
     )
 
 
@@ -133,7 +134,8 @@ def get_vertices_outside(vertices, polygon):
     """
     mask_inside = mask_vertices_inside(vertices, polygon)
     return keep_vertices_in_mask(
-        vertices=vertices, mask=np.logical_not(mask_inside),
+        vertices=vertices,
+        mask=np.logical_not(mask_inside),
     )
 
 

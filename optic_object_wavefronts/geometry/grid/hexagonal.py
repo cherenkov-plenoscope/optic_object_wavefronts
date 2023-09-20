@@ -54,7 +54,8 @@ def init_from_spacing(spacing=1.0, ref="hex", fN=10):
 
 
 def estimate_spacing_for_small_hexagons_in_big_hexagon(
-    big_hexagon_outer_radius, num_small_hexagons_on_diagonal_of_big_hexagon,
+    big_hexagon_outer_radius,
+    num_small_hexagons_on_diagonal_of_big_hexagon,
 ):
     assert big_hexagon_outer_radius > 0.0
 
@@ -170,7 +171,8 @@ def find_hull_of_unit_cells(unit_cells, centers, spacing):
 
     while True:
         current_U_vertex_neighbors = U_tree.query_ball_point(
-            x=U_vertices[current_U_vertex], r=1.1 * spacing,
+            x=U_vertices[current_U_vertex],
+            r=1.1 * spacing,
         )
 
         # remove current_U_vertex itself

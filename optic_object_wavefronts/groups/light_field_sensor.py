@@ -77,7 +77,8 @@ def make_geometry(
         fN=grid_fn,
     )
     camera_directions = polygon.get_vertices_inside(
-        vertices=camera_directions, polygon=field_of_view_polygon,
+        vertices=camera_directions,
+        polygon=field_of_view_polygon,
     )
     c["camera"]["centers"] = {}
     for ci, ckey in enumerate(camera_directions):

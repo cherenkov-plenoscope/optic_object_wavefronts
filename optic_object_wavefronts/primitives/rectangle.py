@@ -6,7 +6,9 @@ import collections
 
 
 def init(
-    x_width=4 / 3, y_width=1, ref="rectangle",
+    x_width=4 / 3,
+    y_width=1,
+    ref="rectangle",
 ):
     """
     Returns a rectangle-object.

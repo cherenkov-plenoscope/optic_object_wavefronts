@@ -63,7 +63,8 @@ def estimate_curvature_radius(
 
 
 def estimate_thickness(
-    curvature_radius, aperture_radius,
+    curvature_radius,
+    aperture_radius,
 ):
     """
     Returns the thickness of a bi-convex lens
@@ -81,7 +82,9 @@ def estimate_thickness(
 
 
 def estimate_focal_length(
-    curvature_radius, thickness, refractive_index,
+    curvature_radius,
+    thickness,
+    refractive_index,
 ):
     """
     Returns the expected focal-length of a bi-convex lens according to the

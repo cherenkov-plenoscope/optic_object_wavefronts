@@ -165,7 +165,11 @@ def ax_add_mesh_3d(
                 stop = start + normal
 
                 polygons.append(
-                    [start, stop, stop,]
+                    [
+                        start,
+                        stop,
+                        stop,
+                    ]
                 )
 
                 edgecolors.append(vertex_normal_color)

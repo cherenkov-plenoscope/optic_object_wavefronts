@@ -5,7 +5,10 @@ import collections
 
 
 def init(
-    outer_radius, inner_radius, height, ref="pipe_hexagonal",
+    outer_radius,
+    inner_radius,
+    height,
+    ref="pipe_hexagonal",
 ):
     """
     A hexagonal pipe with inner, and outer walls.

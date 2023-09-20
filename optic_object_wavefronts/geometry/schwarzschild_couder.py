@@ -4,15 +4,15 @@ import numpy as np
 def surface_height(x, y, k, c, a1, a2, a3, a4, a5, a6, a7, a8):
     r = np.hypot(x, y)
     z = 0.0
-    z += (c * r ** 2) / (1 + np.sqrt((1 - (1 + k) * c ** 2 * r ** 2)))
-    z += a1 * r ** 2
-    z += a2 * r ** 4
-    z += a3 * r ** 6
-    z += a4 * r ** 8
-    z += a5 * r ** 10
-    z += a6 * r ** 12
-    z += a7 * r ** 14
-    z += a8 * r ** 16
+    z += (c * r**2) / (1 + np.sqrt((1 - (1 + k) * c**2 * r**2)))
+    z += a1 * r**2
+    z += a2 * r**4
+    z += a3 * r**6
+    z += a4 * r**8
+    z += a5 * r**10
+    z += a6 * r**12
+    z += a7 * r**14
+    z += a8 * r**16
     return z
 
 

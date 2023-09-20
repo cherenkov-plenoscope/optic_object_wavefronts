@@ -58,7 +58,11 @@ def make_geometry(
         c["housing"]["outer_radius_outside"] - c["housing"]["wall_width"]
     )
     c["housing"]["position"] = np.array(
-        [0.0, 0.0, photo_sensor_plane_distance - c["housing"]["height"],]
+        [
+            0.0,
+            0.0,
+            photo_sensor_plane_distance - c["housing"]["height"],
+        ]
     )
 
     c["lens"] = {}
@@ -123,7 +127,8 @@ def make_geometry(
 
 
 def init(
-    camera_geometry, ref="light_field_sensor_camera_module",
+    camera_geometry,
+    ref="light_field_sensor_camera_module",
 ):
     join = os.path.join
     cg = camera_geometry
@@ -140,7 +145,8 @@ def init(
             prevent_many_faces_share_same_vertex=False,
         )
         photo_sensor = mesh.translate(
-            photo_sensor, cg["photo_sensor"]["grid"]["positions"][gkey],
+            photo_sensor,
+            cg["photo_sensor"]["grid"]["positions"][gkey],
         )
         camera = mesh.merge(camera, photo_sensor)
 
@@ -152,7 +158,10 @@ def init(
         fn=cg["lens"]["fn"],
         ref=join(ref, "lens"),
     )
-    camera = mesh.merge(camera, mesh.translate(lens, cg["lens"]["position"]),)
+    camera = mesh.merge(
+        camera,
+        mesh.translate(lens, cg["lens"]["position"]),
+    )
 
     # housing
     # -------
@@ -164,7 +173,8 @@ def init(
     )
 
     camera = mesh.merge(
-        camera, mesh.translate(pipe, cg["housing"]["position"]),
+        camera,
+        mesh.translate(pipe, cg["housing"]["position"]),
     )
 
     return camera

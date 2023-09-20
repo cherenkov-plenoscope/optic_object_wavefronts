@@ -11,7 +11,7 @@ def surface_height(x, y, curvature_radius):
     _assert_valid(distance_to_z_axis, curvature_radius)
     sig = np.sign(curvature_radius)
     h = np.abs(curvature_radius) - np.sqrt(
-        curvature_radius ** 2 - distance_to_z_axis ** 2
+        curvature_radius**2 - distance_to_z_axis**2
     )
     return sig * h
 

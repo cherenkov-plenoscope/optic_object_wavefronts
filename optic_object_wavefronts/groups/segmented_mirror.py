@@ -45,18 +45,23 @@ def add_segmented_mirror_to_frame_in_scenery_heritage(
     )
     if config["outer_aperture_shape_hex"] == 1:
         aperture_outer_polygon = geometry.regular_polygon.make_vertices_xy(
-            outer_radius=outer_radius_facet_supports, fn=6, rot=np.pi / 6,
+            outer_radius=outer_radius_facet_supports,
+            fn=6,
+            rot=np.pi / 6,
         )
     else:
         aperture_outer_polygon = geometry.regular_polygon.make_vertices_xy(
-            outer_radius=outer_radius_facet_supports, fn=fn_circle, rot=0.0,
+            outer_radius=outer_radius_facet_supports,
+            fn=fn_circle,
+            rot=0.0,
         )
 
     inner_radius_facet_supports = (
         config["min_inner_aperture_radius"] + config["facet_inner_hex_radius"]
     )
     aperture_inner_polygon = geometry.regular_polygon.make_vertices_xy(
-        outer_radius=inner_radius_facet_supports, fn=fn_circle,
+        outer_radius=inner_radius_facet_supports,
+        fn=fn_circle,
     )
 
     return add_segmented_mirror_to_frame_in_scenery(
@@ -243,12 +248,14 @@ def add_segmented_mirror_to_frame_in_scenery(
         if facet_rotation == "individual":
             focal_point = [0, 0, focal_length]
             rot = init_facet_rotation_with_focal_point(
-                facet_center=facet_centers[fkey], focal_point=focal_point,
+                facet_center=facet_centers[fkey],
+                focal_point=focal_point,
             )
         elif facet_rotation == "sphere":
             normal_point = [0, 0, 2 * focal_length]
             rot = init_facet_rotation_with_normal_point(
-                facet_center=facet_centers[fkey], normal_point=normal_point,
+                facet_center=facet_centers[fkey],
+                normal_point=normal_point,
             )
         else:
             raise KeyError
@@ -350,13 +357,17 @@ def set_facet_centers_z(
 
 
 def shift_facet_centers_z_so_mean_distance_of_facet_centers_to_focal_point_is_focal_length(
-    facet_centers, focal_length, max_delta, max_iterations=1000,
+    facet_centers,
+    focal_length,
+    max_delta,
+    max_iterations=1000,
 ):
     focal_point = [0.0, 0.0, focal_length]
     i = 0
     while True:
         delta = focal_length - vertices_mean_distance_to_vertex(
-            vertices=facet_centers, vertex=focal_point,
+            vertices=facet_centers,
+            vertex=focal_point,
         )
         if delta < max_delta:
             break
@@ -384,7 +395,9 @@ def vertices_add(vertices, vertex):
 
 
 def init_facet_rotation_with_normal_point(
-    facet_center, normal_point, direction_incoming_light=[0.0, 0.0, -1.0],
+    facet_center,
+    normal_point,
+    direction_incoming_light=[0.0, 0.0, -1.0],
 ):
     axis, angle = facet_rotation_axis_and_angle(
         facet_center=facet_center,
@@ -403,7 +416,9 @@ def init_facet_rotation_with_normal_point(
 
 
 def init_facet_rotation_with_focal_point(
-    facet_center, focal_point, direction_incoming_light=[0.0, 0.0, -1.0],
+    facet_center,
+    focal_point,
+    direction_incoming_light=[0.0, 0.0, -1.0],
 ):
     axis, angle = facet_rotation_axis_and_angle(
         facet_center=facet_center,
@@ -423,7 +438,9 @@ def init_facet_rotation_with_focal_point(
 
 
 def facet_rotation_axis_and_angle(
-    facet_center, target_point, direction_incoming_light=[0.0, 0.0, -1.0],
+    facet_center,
+    target_point,
+    direction_incoming_light=[0.0, 0.0, -1.0],
 ):
     facet_center = np.array(facet_center)
     target_point = np.array(target_point)
