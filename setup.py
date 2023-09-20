@@ -20,16 +20,24 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/x-rst",
     author="Sebastian Achim Mueller",
-    author_email="",
+    author_email="sebastian-achim.mueller@mpi-hd.mpg.de",
     url="https://github.com/cherenkov-plenoscope/optic_object_wavefronts",
-    packages=["optic_object_wavefronts"],
+    packages=[
+        "optic_object_wavefronts",
+        "optic_object_wavefronts.optics",
+        "optic_object_wavefronts.io",
+        "optic_object_wavefronts.primitives",
+        "optic_object_wavefronts.groups",
+        "optic_object_wavefronts.geometry",
+        "optic_object_wavefronts.geometry.grid",
+        "optic_object_wavefronts.materials",
+    ],
     package_data={
         "optic_object_wavefronts": [
-            "materials/media/*",
-            "materials/surfaces/*",
+            os.path.join("materials", "media", "*"),
+            os.path.join("materials", "surfaces", "*"),
         ]
     },
-    python_requires=">=3",
     install_requires=[
         "shapely",
     ],

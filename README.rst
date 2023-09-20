@@ -72,7 +72,7 @@ SphericalLensHexagonal
 
 
 SphericalPlanarLensHexagonal
-======================
+============================
 
 |ImgSphericalPlanarLensHexagonal|
 
