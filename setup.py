@@ -40,6 +40,7 @@ setuptools.setup(
     },
     install_requires=[
         "shapely",
+        "json-numpy-sebastian-achim-mueller>=0.1.1",
     ],
     classifiers=[
         "Programming Language :: Python :: 3",
