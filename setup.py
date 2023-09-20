@@ -40,6 +40,7 @@ setuptools.setup(
     },
     install_requires=[
         "shapely",
+        "scipy",
         "json-numpy-sebastian-achim-mueller>=0.1.1",
     ],
     classifiers=[
