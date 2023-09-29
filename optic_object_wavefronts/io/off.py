@@ -10,6 +10,7 @@ OFFs do not have groups or materials like OBJs.
 OFFs are indexed from zero, OBJs are indexed from one.
 """
 import io
+import numpy as np
 
 
 def init():
@@ -17,6 +18,39 @@ def init():
     Returns an empty dict-structure for an object.
     """
     return {"v": [], "f": []}
+
+
+def diff(a, b, eps=1e-6):
+    diffs = []
+    if len(a["v"]) != len(b["v"]):
+        diffs.append(("len(v)", len(a["v"]), len(b["v"])))
+    else:
+        for i in range(len(a["v"])):
+            av = np.array(a["v"][i])
+            bv = np.array(b["v"][i])
+            delta = np.linalg.norm(av - bv)
+            if delta > eps:
+                diffs.append(
+                    (
+                        "v[{:d}]: delta > {:e}".format(i, eps),
+                        a["v"][i],
+                        b["v"][i],
+                    )
+                )
+    if len(a["f"]) != len(b["f"]):
+        diffs.append(("len(f)", len(a["f"]), len(b["f"])))
+    else:
+        for i in range(len(a["f"])):
+            for dim in [0, 1, 2]:
+                if a["f"][i][dim] != b["f"][i][dim]:
+                    diffs.append(
+                        (
+                            "f[{:d}][{:d}]".format(i, dim),
+                            a["f"][i][dim],
+                            b["f"][i][dim],
+                        )
+                    )
+    return diffs
 
 
 def dumps(off, float_format="{:e}"):
