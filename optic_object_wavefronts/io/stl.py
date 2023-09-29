@@ -11,7 +11,7 @@ import io
 import numpy as np
 
 
-def dtype():
+def _dtype():
     return [
         ("normal.x", np.float32),
         ("normal.y", np.float32),
@@ -30,34 +30,30 @@ def dtype():
 
 
 def diff(a, b, eps=1e-6):
+    diffs = []
     if len(a) != len(b):
-        return ("length", len(a), len(b))
+        diffs.append(("len", len(a), len(b)))
 
     for i in range(len(a)):
-        for key, _ in dtype():
+        for key, _ in _dtype():
             if key == "attribute_byte_count":
                 continue
             if np.abs(a[key][i] - b[key][i]) > eps:
-                return (
-                    "facet: {:d}, key: {:s}".format(i, key),
-                    a[key][i],
-                    b[key][i],
+                diffs.append(
+                    (
+                        "facet: {:d}, key: {:s}".format(i, key),
+                        a[key][i],
+                        b[key][i],
+                    )
                 )
-    return None
-
-
-def is_almost_equal(a, b, eps=1e-6):
-    if not diff(a=a, b=b, eps=eps):
-        return True
-    else:
-        return False
+    return diffs
 
 
 def init(size=0):
     """
     Returns
     """
-    return np.core.records.recarray(shape=size, dtype=dtype())
+    return np.core.records.recarray(shape=size, dtype=_dtype())
 
 
 def loads(s, mode="ascii"):
@@ -78,7 +74,7 @@ def dumps(stl, mode="ascii"):
         raise KeyError("mode must be either 'ascii' or 'binary'.")
 
 
-def gather_lines_of_facet(ss):
+def _gather_lines_of_facet(ss):
     out = []
     while True:
         line = ss.readline()
@@ -122,7 +118,7 @@ def _loads_ascii(s):
             break
         if "facet normal" in line:
             fll = [line]
-            fll += gather_lines_of_facet(ss)
+            fll += _gather_lines_of_facet(ss)
             n, v = _facet_from_facet_lines(flines=fll)
 
             facets.append((n, v))
@@ -202,7 +198,7 @@ def _loads_binary(s):
     ss.seek(0)
     _header = ss.read(80)
     num_triangles = np.frombuffer(ss.read(4), dtype=np.uint32)[0]
-    return np.frombuffer(ss.read(50 * num_triangles), dtype=dtype())
+    return np.frombuffer(ss.read(50 * num_triangles), dtype=_dtype())
 
 
 def _dumps_binary(stl):
