@@ -9,43 +9,8 @@ def init():
     return {
         "v": [],
         "vn": [],
-        "materials": {},
+        "mtl": {},
     }
-
-
-def init_from_mesh(mesh):
-    """
-    The mesh has hashable keys to address vertices and normals.
-    The object-wavefront replaces those with numeric indices.
-    """
-    v_dict = {}
-    for vi, vkey in enumerate(mesh["vertices"]):
-        v_dict[vkey] = vi
-    vn_dict = {}
-    for vni, vnkey in enumerate(mesh["vertex_normals"]):
-        vn_dict[vnkey] = vni
-
-    obj = init()
-
-    for vkey in mesh["vertices"]:
-        obj["v"].append(mesh["vertices"][vkey])
-    for vnkey in mesh["vertex_normals"]:
-        obj["vn"].append(mesh["vertex_normals"][vnkey])
-
-    for mkey in mesh["materials"]:
-        mtl_faces = mesh["materials"][mkey]
-        obj["materials"][mkey] = []
-
-        for fkey in mtl_faces:
-            vs = []
-            for dim in range(3):
-                vs.append(v_dict[mtl_faces[fkey]["vertices"][dim]])
-            vns = []
-            for dim in range(3):
-                vns.append(vn_dict[mtl_faces[fkey]["vertex_normals"][dim]])
-            obj["materials"][mkey].append({"v": vs, "vn": vns})
-
-    return obj
 
 
 def dumps(obj):
@@ -59,9 +24,9 @@ def dumps(obj):
         s.write("vn {:f} {:f} {:f}\n".format(vn[0], vn[1], vn[2]))
     s.write("# faces\n")
 
-    for mtl in obj["materials"]:
+    for mtl in obj["mtl"]:
         s.write("usemtl {:s}\n".format(mtl))
-        for f in obj["materials"][mtl]:
+        for f in obj["mtl"][mtl]:
             s.write(
                 "f {:d}//{:d} {:d}//{:d} {:d}//{:d}\n".format(
                     1 + f["v"][0],
@@ -113,7 +78,7 @@ def loads(s):
         line = ss.readline()
         if not line:
             if mtl_is_open:
-                obj["materials"][mtlkey] = mtl
+                obj["mtl"][mtlkey] = mtl
             break
         if str.startswith(line, "#"):
             continue
@@ -128,7 +93,7 @@ def loads(s):
 
         if str.startswith(line, "usemtl "):
             if mtl_is_open:
-                obj["materials"][mtlkey] = mtl
+                obj["mtl"][mtlkey] = mtl
             else:
                 mtl_is_open = True
 
@@ -197,20 +162,20 @@ def diff(a, b, v_eps=1e-6, vn_eps_rad=1e-6):
                         bvn,
                     )
                 )
-    for amtlkey in a["materials"]:
-        if amtlkey not in b["materials"]:
+    for amtlkey in a["mtl"]:
+        if amtlkey not in b["mtl"]:
             diffs.append(("mtl", amtlkey, None))
 
-    for bmtlkey in b["materials"]:
-        if bmtlkey not in a["materials"]:
+    for bmtlkey in b["mtl"]:
+        if bmtlkey not in a["mtl"]:
             diffs.append(("mtl", None, bmtlkey))
         else:
-            amtl = a["materials"][bmtlkey]
-            bmtl = b["materials"][bmtlkey]
+            amtl = a["mtl"][bmtlkey]
+            bmtl = b["mtl"][bmtlkey]
             if len(amtl) != len(bmtl):
                 diffs.append(
                     (
-                        "len(materials[{:s}])".format(bmtlkey),
+                        "len(mtl[{:s}])".format(bmtlkey),
                         len(amtl),
                         len(bmtl),
                     )
@@ -225,7 +190,7 @@ def diff(a, b, v_eps=1e-6, vn_eps_rad=1e-6):
                             if aface[key][dim] != bface[key][dim]:
                                 diffs.append(
                                     (
-                                        'materials["{:s}"][{:d}][{:s}][{:d}]'.format(
+                                        'mtl["{:s}"][{:d}][{:s}][{:d}]'.format(
                                             bmtlkey, fi, key, dim
                                         ),
                                         aface[key][dim],
@@ -235,7 +200,7 @@ def diff(a, b, v_eps=1e-6, vn_eps_rad=1e-6):
     return diffs
 
 
-def init_from_off(off, mtl="material_name"):
+def init_from_off(off, mtl="mtl_name"):
     """
     Returns a wavefron-dictionary from an Object-File-Format-dictionary.
 
@@ -271,7 +236,7 @@ def init_from_vertices_and_faces_only(vertices, faces, mtl="material_name"):
     unique_vns, unique_vn_map = _group_normals(all_vns)
 
     wavefront = init()
-    wavefront["materials"][mtl] = []
+    wavefront["mtl"][mtl] = []
 
     for v in vertices:
         wavefront["v"].append(v)
@@ -289,7 +254,7 @@ def init_from_vertices_and_faces_only(vertices, faces, mtl="material_name"):
         fvn = [unique_vn_i, unique_vn_i, unique_vn_i]
 
         ff["vn"] = fvn
-        wavefront["materials"][mtl].append(ff)
+        wavefront["mtl"][mtl].append(ff)
 
     return wavefront
 

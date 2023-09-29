@@ -177,4 +177,6 @@ def test_baker_nunn():
         oow.mesh.translate(f_surface, np.array([0.0, 0.0, z_focus_surfcae])),
     )
 
-    oow.mesh.write_to_obj(mesh=baker_nunn, path="baker_nunn.obj")
+    with open("baker_nunn.obj", "wt") as f:
+        bake_nunn_obj = oow.io.reduce_mesh_to_obj(baker_nunn)
+        f.write(oow.io.obj.dumps(bake_nunn_obj))

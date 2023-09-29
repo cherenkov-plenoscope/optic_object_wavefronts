@@ -36,7 +36,10 @@ setuptools.setup(
         "optic_object_wavefronts": [
             os.path.join("materials", "media", "*"),
             os.path.join("materials", "surfaces", "*"),
-        ]
+        ],
+        "optic_object_wavefronts.io": [
+            os.path.join("tests", "resources", "*"),
+        ],
     },
     install_requires=[
         "shapely",

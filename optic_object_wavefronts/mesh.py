@@ -96,23 +96,3 @@ def remove_unused_vertices_and_vertex_normals(mesh):
             out["vertex_normals"][vnkey] = mesh["vertex_normals"][vnkey]
 
     return out
-
-
-def write_to_obj(mesh, path, header=True):
-    """
-    Writes the mesh to a wavefront-file at path.
-
-    Parameters
-    ----------
-    mesh : dict
-            The mesh.
-    path : str
-            The output path.
-    header : bool
-            Add a header with version-number.
-    """
-    obj = io.obj.init_from_mesh(mesh=mesh)
-    with open(path, "wt") as fout:
-        if header:
-            fout.write("# {:s} v{:s}\n".format(__name__, version.__version__))
-        fout.write(io.obj.dumps(obj=obj))

@@ -109,7 +109,10 @@ def make_telescope():
 
 def test_make_telescope_and_export_obj():
     telescope = make_telescope()
-    oow.mesh.write_to_obj(mesh=telescope, path="tiny_telescope.obj")
+    telescope_obj = oow.io.reduce_mesh_to_obj(telescope)
+
+    with open("tiny_telescope.obj", "wt") as f:
+        f.write(oow.io.obj.dumps(telescope_obj))
 
 
 @pytest.mark.import_matplotlib

@@ -18,7 +18,7 @@ def test_oby_io():
     with tempfile.TemporaryDirectory(prefix="optic_object_wavefronts_") as tmp:
         tmp_path = os.path.join(tmp, "my_thing.obj")
 
-        my_thing_obj = oow.io.obj.init_from_mesh(my_thing_mesh)
+        my_thing_obj = oow.io.reduce_mesh_to_obj(my_thing_mesh)
 
         with open(tmp_path, "wt") as f:
             f.write(oow.io.obj.dumps(my_thing_obj))
@@ -30,5 +30,13 @@ def test_oby_io():
 
         if diff:
             print(diff)
-
         assert len(diff) == 0
+
+    my_thing_mesh_back = oow.io.restore_mesh_from_obj(my_thing_obj_back)
+    my_thing_obj_back_back = oow.io.reduce_mesh_to_obj(my_thing_mesh_back)
+
+    diff = oow.io.obj.diff(my_thing_obj, my_thing_obj_back_back)
+
+    if diff:
+        print(diff)
+    assert len(diff) == 0

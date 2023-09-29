@@ -125,7 +125,7 @@ def ax_add_mesh_3d(
     vertex_normal_alpha=1.0,
     zorder=1,
 ):
-    obj = oow.io.obj.init_from_mesh(mesh=mesh)
+    obj = oow.io.reduce_mesh_to_obj(mesh)
 
     vertices = [(v[0], v[1], v[2]) for v in obj["v"]]
 
@@ -135,8 +135,8 @@ def ax_add_mesh_3d(
     facecolors = []
     edgecolors = []
     linewidths = []
-    for material in obj["materials"]:
-        for face in obj["materials"][material]:
+    for material in obj["mtl"]:
+        for face in obj["mtl"][material]:
             polygons.append(
                 [
                     vertices[face["v"][0]],
@@ -155,8 +155,8 @@ def ax_add_mesh_3d(
 
     # normals
     # -------
-    for material in obj["materials"]:
-        for face in obj["materials"][material]:
+    for material in obj["mtl"]:
+        for face in obj["mtl"][material]:
             for n in range(3):
                 normal = vertex_normal_length * np.array(
                     obj["vn"][face["vn"][n]]
