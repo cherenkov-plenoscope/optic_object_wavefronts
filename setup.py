@@ -25,7 +25,6 @@ setuptools.setup(
     packages=[
         "optic_object_wavefronts",
         "optic_object_wavefronts.optics",
-        "optic_object_wavefronts.io",
         "optic_object_wavefronts.primitives",
         "optic_object_wavefronts.groups",
         "optic_object_wavefronts.geometry",
@@ -37,13 +36,11 @@ setuptools.setup(
             os.path.join("materials", "media", "*"),
             os.path.join("materials", "surfaces", "*"),
         ],
-        "optic_object_wavefronts.io": [
-            os.path.join("tests", "resources", "*"),
-        ],
     },
     install_requires=[
         "shapely",
         "scipy",
+        "triangle_mesh_io",
         "json-numpy-sebastian-achim-mueller>=0.1.1",
     ],
     classifiers=[

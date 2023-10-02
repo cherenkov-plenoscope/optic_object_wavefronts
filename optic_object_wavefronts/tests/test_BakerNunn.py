@@ -1,4 +1,5 @@
 import optic_object_wavefronts as oow
+import triangle_mesh_io as tmi
 import numpy as np
 import collections
 
@@ -178,5 +179,5 @@ def test_baker_nunn():
     )
 
     with open("baker_nunn.obj", "wt") as f:
-        bake_nunn_obj = oow.io.reduce_mesh_to_obj(baker_nunn)
-        f.write(oow.io.obj.dumps(bake_nunn_obj))
+        bake_nunn_obj = oow.export.reduce_mesh_to_obj(baker_nunn)
+        f.write(tmi.obj.dumps(bake_nunn_obj))

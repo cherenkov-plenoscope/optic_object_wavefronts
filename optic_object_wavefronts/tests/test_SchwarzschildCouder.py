@@ -1,4 +1,5 @@
 import optic_object_wavefronts as oow
+import triangle_mesh_io as tmi
 import numpy as np
 import pytest
 
@@ -109,10 +110,10 @@ def make_telescope():
 
 def test_make_telescope_and_export_obj():
     telescope = make_telescope()
-    telescope_obj = oow.io.reduce_mesh_to_obj(telescope)
+    telescope_obj = oow.export.reduce_mesh_to_obj(telescope)
 
     with open("tiny_telescope.obj", "wt") as f:
-        f.write(oow.io.obj.dumps(telescope_obj))
+        f.write(tmi.obj.dumps(telescope_obj))
 
 
 @pytest.mark.import_matplotlib

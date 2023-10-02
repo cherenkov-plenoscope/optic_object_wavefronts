@@ -125,7 +125,7 @@ def ax_add_mesh_3d(
     vertex_normal_alpha=1.0,
     zorder=1,
 ):
-    obj = oow.io.reduce_mesh_to_obj(mesh)
+    obj = oow.export.reduce_mesh_to_obj(mesh)
 
     vertices = [(v[0], v[1], v[2]) for v in obj["v"]]
 

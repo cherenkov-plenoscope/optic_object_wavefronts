@@ -1,7 +1,5 @@
-from . import off
-from . import obj
-from . import stl
-from .. import mesh
+import triangle_mesh_io as tmi
+from . import mesh
 import copy
 
 
@@ -17,16 +15,16 @@ def reduce_mesh_to_obj(m):
     for vni, vnkey in enumerate(m["vertex_normals"]):
         vn_dict[vnkey] = vni
 
-    ob = obj.init()
+    obj = tmi.obj.init()
 
     for vkey in m["vertices"]:
-        ob["v"].append(m["vertices"][vkey])
+        obj["v"].append(m["vertices"][vkey])
     for vnkey in m["vertex_normals"]:
-        ob["vn"].append(m["vertex_normals"][vnkey])
+        obj["vn"].append(m["vertex_normals"][vnkey])
 
     for mkey in m["materials"]:
         mtl_faces = m["materials"][mkey]
-        ob["mtl"][mkey] = []
+        obj["mtl"][mkey] = []
 
         for fkey in mtl_faces:
             vs = []
@@ -35,9 +33,9 @@ def reduce_mesh_to_obj(m):
             vns = []
             for dim in range(3):
                 vns.append(vn_dict[mtl_faces[fkey]["vertex_normals"][dim]])
-            ob["mtl"][mkey].append({"v": vs, "vn": vns})
+            obj["mtl"][mkey].append({"v": vs, "vn": vns})
 
-    return ob
+    return obj
 
 
 def restore_mesh_from_obj(o):
@@ -75,16 +73,16 @@ def reduce_mesh_to_off(m, materials=None):
     Reduces a mesh into an off.
     Offs do not have surface-normals.
     """
-    ob = mesh_to_obj(m)
-    of = off.init()
+    obj = reduce_mesh_to_obj(m)
+    off = tmi.off.init()
 
-    of["v"] = copy.copy(ob["v"])
+    off["v"] = copy.copy(obj["v"])
 
     if not materials:
-        materials = list(ob["mtl"].keys())
+        materials = list(obj["mtl"].keys())
 
     for mtl in materials:
-        for obface in ob["mtl"][mtl]:
-            of["f"].append(obface["v"])
+        for obface in obj["mtl"][mtl]:
+            off["f"].append(obface["v"])
 
-    return of
+    return off
