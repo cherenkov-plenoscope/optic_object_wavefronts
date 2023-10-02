@@ -1,7 +1,6 @@
 import copy
 import collections
 import numpy as np
-from . import io
 from . import version
 
 
