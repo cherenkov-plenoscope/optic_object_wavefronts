@@ -77,10 +77,25 @@ def estimate_spacing_for_small_hexagons_in_big_hexagon(
     return spacing
 
 
-def init_unit_cells_from_centers(centers, spacing, rot=0.0):
+def init_voronoi_cells_from_centers(centers, centers_spacing, rot=0.0):
+    """
+    Estimate the voronoi-cells of a hexagonal grid.
+
+    Parameters
+    ----------
+    centers : dict of str -> 3D np.array
+        The centers of the unit cells of a hexagonal grid.
+    centers_spacing : float
+        Distance between neighboring centers.
+
+    Returns
+    -------
+    voronoi_cells : dict of str -> 3D np.array
+        The unit cells of a hexagonal grid.
+    """
     rot += 2.0 * np.pi * 1 / 12
-    unit_cell_radius = 0.5 * spacing * (2.0 / np.sqrt(3))
-    unit_cells = {}
+    unit_cell_radius = 0.5 * centers_spacing * (2.0 / np.sqrt(3))
+    voronoi_cells = {}
     for key in centers:
         basename = os.path.basename(key)
         v_str, w_str = str.split(basename, "_")
@@ -128,7 +143,7 @@ def init_unit_cells_from_centers(centers, spacing, rot=0.0):
             else:
                 raise RuntimeError("Expected six corners.")
 
-            if vkey in unit_cells:
+            if vkey in voronoi_cells:
                 continue
             else:
                 phi = h / 6.0 * (2.0 * np.pi) + rot
@@ -139,16 +154,41 @@ def init_unit_cells_from_centers(centers, spacing, rot=0.0):
                         0.0,
                     ]
                 )
-                unit_cells[vkey] = vertex
-    return unit_cells
+                voronoi_cells[vkey] = vertex
+    return voronoi_cells
 
 
-def find_hull_of_unit_cells(unit_cells, centers, spacing):
-    assert spacing >= 0.0
-    assert len(unit_cells) >= len(centers)
+def find_hull_of_voronoi_cells(voronoi_cells, centers, centers_spacing):
+    """
+    Estimate the hull which encloses Voronoi cells.
 
-    U_keys, U_vertices = polygon.to_keys_and_numpy_array(polygon=unit_cells)
-    C_keys, C_vertices = polygon.to_keys_and_numpy_array(polygon=centers)
+    Parameters
+    ----------
+    voronoi_cells : dict of str -> 3D np.array
+        The Voronoi cells of a hexagonal grid.
+    centers : dict of str -> 3D np.array
+        The centers of the Voronoi cells in a hexagonal grid.
+    centers_spacing : float
+        Distance between neighboring centers.
+
+    Returns
+    -------
+    hull : dict of str -> 3D np.array
+    """
+    assert centers_spacing >= 0.0
+    assert len(voronoi_cells) >= len(centers)
+
+    spacing = centers_spacing * (2.0 / np.sqrt(3)) * 0.5
+
+    U_keys, U_vertices_3d = polygon.to_keys_and_numpy_array(
+        polygon=voronoi_cells
+    )
+    C_keys, C_vertices_3d = polygon.to_keys_and_numpy_array(polygon=centers)
+
+    # project in xy-plane
+    U_vertices = U_vertices_3d[:, 0:2]
+    C_vertices = C_vertices_3d[:, 0:2]
+
     U_tree = scipy.spatial.cKDTree(data=U_vertices)
     C_tree = scipy.spatial.cKDTree(data=C_vertices)
 
@@ -163,7 +203,7 @@ def find_hull_of_unit_cells(unit_cells, centers, spacing):
         if U_num_neighbors_in_C[i] == 1:
             current_U_vertex = i
             break
-    assert current_U_vertex >= 0, "Can not find seed-vertex in unit_cells."
+    assert current_U_vertex >= 0, "Can not find seed-vertex in voronoi_cells."
 
     hull = collections.OrderedDict()
     hull[current_U_vertex] = U_vertices[current_U_vertex]
@@ -200,7 +240,7 @@ def find_hull_of_unit_cells(unit_cells, centers, spacing):
             # we closed the cycle
             break
         else:
-            hull[next_vertex] = U_vertices[next_vertex]
+            hull[next_vertex] = U_vertices_3d[next_vertex]
             last_vertex = int(current_U_vertex)
             current_U_vertex = int(next_vertex)
 
