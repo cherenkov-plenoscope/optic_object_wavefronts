@@ -2,7 +2,6 @@ from .version import __version__
 from . import mesh
 from . import delaunay
 from . import primitives
-from . import groups
 from . import optics
 from . import geometry
 from . import polygon
