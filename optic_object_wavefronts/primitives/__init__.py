@@ -12,3 +12,4 @@ from . import spherical_cap_pixels
 from . import schwarzschild_couder_cap
 from . import pipe_hexagonal
 from . import rectangle
+from . import light_field_eye

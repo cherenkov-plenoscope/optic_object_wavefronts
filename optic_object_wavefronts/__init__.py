@@ -6,5 +6,4 @@ from . import groups
 from . import optics
 from . import geometry
 from . import polygon
-from . import materials
 from . import export
