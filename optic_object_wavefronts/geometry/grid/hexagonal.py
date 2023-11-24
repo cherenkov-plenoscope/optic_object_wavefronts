@@ -206,7 +206,7 @@ def find_hull_of_voronoi_cells(voronoi_cells, centers, centers_spacing):
     assert current_U_vertex >= 0, "Can not find seed-vertex in voronoi_cells."
 
     hull = collections.OrderedDict()
-    hull[current_U_vertex] = U_vertices[current_U_vertex]
+    hull[current_U_vertex] = U_vertices_3d[current_U_vertex]
     last_vertex = -1
 
     while True:
