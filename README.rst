@@ -1,7 +1,7 @@
 #######################
 Optic Object Wavefronts
 #######################
-|TestStatus| |PyPiStatus| |BlackStyle| |PackStyleBlack|
+|TestStatus| |PyPiStatus| |BlackStyle| |BlackPackStyle| |MITLicenseBadge|
 
 |ImgBlender|
 
@@ -88,7 +88,10 @@ SphericalPlanarLensHexagonal
 .. |PyPiStatus| image:: https://img.shields.io/pypi/v/optic_object_wavefronts
     :target: https://pypi.org/project/optic_object_wavefronts
 
-.. |PackStyleBlack| image:: https://img.shields.io/badge/pack%20style-black-000000.svg
+.. |BlackPackStyle| image:: https://img.shields.io/badge/pack%20style-black-000000.svg
     :target: https://github.com/cherenkov-plenoscope/black_pack
+
+.. |MITLicenseBadge| image:: https://img.shields.io/badge/License-MIT-yellow.svg
+    :target: https://opensource.org/licenses/MIT
 
 .. |ImgBlender| image:: https://github.com/cherenkov-plenoscope/optic_object_wavefronts/blob/main/readme/mirror_render_blender.jpg?raw=True
