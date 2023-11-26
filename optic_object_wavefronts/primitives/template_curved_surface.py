@@ -62,8 +62,17 @@ def init(
 
     for k in hex_vertices_valid:
         mes["vertices"][k] = hex_vertices_valid[k]
+
+    outer_polygon = delaunay.fill_polygon_xy(
+        poly=outer_polygon,
+        vertices=mes["vertices"],
+    )
     for k in outer_polygon:
         mes["vertices"][k] = outer_polygon[k]
+    inner_polygon = delaunay.fill_polygon_xy(
+        poly=inner_polygon,
+        vertices=mes["vertices"],
+    )
     if inner_polygon is not None:
         for k in inner_polygon:
             mes["vertices"][k] = inner_polygon[k]
@@ -106,4 +115,4 @@ def init(
         for fkey in fkeys_to_be_removed:
             mes["materials"][mtl_key].pop(fkey)
 
-    return mes
+    return mesh.remove_unused_vertices_and_vertex_normals(mesh=mes)
