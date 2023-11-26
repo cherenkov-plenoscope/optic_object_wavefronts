@@ -139,7 +139,7 @@ def get_vertices_outside(vertices, polygon):
     )
 
 
-def mask_face_inside(vertices, faces, polygon):
+def mask_face_inside(vertices, faces, polygon, scale=0.999):
     """
     Returns a list of bools, one pool for each face, to mask if it is
     inside the polygon.
@@ -153,6 +153,9 @@ def mask_face_inside(vertices, faces, polygon):
             Faces a addressed by keys themselves in a dict.
     polygon : dict
             The vertices of a polygon addressed by keys in a dict.
+    scale : float (default 0.999)
+            Scale the face by this factor before checking if it is inside a
+            polygon.
     """
 
     shapely_poly = to_shapely_polygon(polygon)
@@ -167,19 +170,22 @@ def mask_face_inside(vertices, faces, polygon):
         vb = vertices[vkey_b]
         vc = vertices[vkey_c]
 
-        mid_ab = 0.5 * (va + vb)
-        mid_bc = 0.5 * (vb + vc)
-        mid_ca = 0.5 * (vc + va)
+        vm = (va + vb + vc) / 3.0
+        vam = scale * (va - vm)
+        vbm = scale * (vb - vm)
+        vcm = scale * (vc - vm)
+        vai = vam + vm
+        vbi = vbm + vm
+        vci = vcm + vm
 
-        _point_ab = shapely.geometry.Point(mid_ab[0], mid_ab[1])
-        _point_bc = shapely.geometry.Point(mid_bc[0], mid_bc[1])
-        _point_ca = shapely.geometry.Point(mid_ca[0], mid_ca[1])
+        _point_a = shapely.geometry.Point(vai[0], vai[1])
+        _point_b = shapely.geometry.Point(vbi[0], vbi[1])
+        _point_c = shapely.geometry.Point(vci[0], vci[1])
+        hit_a = shapely_poly.contains(_point_a)
+        hit_b = shapely_poly.contains(_point_b)
+        hit_c = shapely_poly.contains(_point_c)
 
-        hit_ab = shapely_poly.contains(_point_ab)
-        hit_bc = shapely_poly.contains(_point_bc)
-        hit_ca = shapely_poly.contains(_point_ca)
-
-        if np.sum([hit_ab, hit_bc, hit_ca]) > 1:
+        if np.sum([hit_a, hit_b, hit_c]) > 1:
             mask.append(True)
         else:
             mask.append(False)
