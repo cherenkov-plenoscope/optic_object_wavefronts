@@ -24,3 +24,9 @@ class Line:
             return self.at(parameter)
         else:
             None
+
+    def closest_distence(self, point):
+        point = np.array(point)
+        param = self.parameter_for_closest_distance_to_point(point)
+        clspoint = self.at(param)
+        return np.linalg.norm(point - clspoint)

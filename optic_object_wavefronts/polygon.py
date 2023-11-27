@@ -6,6 +6,7 @@ import numpy as np
 import shapely
 import collections
 from shapely import geometry as shapely_geometry
+from scipy import spatial as scipy_spatial
 
 
 def to_keys_and_numpy_array(polygon):
@@ -246,3 +247,31 @@ def translate(polygon, translation):
         pos = np.array(polygon[key])
         out[key] = pos + translation
     return out
+
+
+def remove_first_from_second_when_too_close(first, second, eps=1e-6):
+    fkeys, fxyz = _keys_xyz(first)
+    skeys, sxyz = _keys_xyz(second)
+    stree = scipy_spatial.cKDTree(data=sxyz)
+
+    smatches = set()
+    for fkey in first:
+        fv = first[fkey]
+        smatch = stree.query_ball_point(x=np.array(fv), r=eps)
+        for sm in smatch:
+            smatches.add(sm)
+
+    out = {}
+    for sm in range(len(sxyz)):
+        if sm not in smatches:
+            out[skeys[sm]] = sxyz[sm]
+    return out
+
+
+def _keys_xyz(vertices):
+    keys = []
+    xyzs = []
+    for key in vertices:
+        keys.append(key)
+        xyzs.append(vertices[key])
+    return keys, np.array(xyzs)

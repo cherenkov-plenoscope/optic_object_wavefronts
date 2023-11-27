@@ -1,4 +1,5 @@
 import optic_object_wavefronts as oow
+import numpy as np
 
 
 def test_min_max_distance():
@@ -32,3 +33,20 @@ def test_min_max_distance():
 
     assert keys[1] == "ring/000002"
     assert dists[1] == 1.1
+
+
+def test_remove():
+    first = {"a": [0.0, 0, 0], "b": [1.0, 1, 1]}
+    second = {"y": [1.0, 2, 3], "x": [1.0, 1, 1], "z": [-1.0, 2, 3]}
+
+    out = oow.polygon.remove_first_from_second_when_too_close(
+        first=first,
+        second=second,
+        eps=1e-6,
+    )
+
+    assert len(out) == 2
+
+    for key in out:
+        assert key in second
+        np.testing.assert_array_almost_equal(out[key], second[key])

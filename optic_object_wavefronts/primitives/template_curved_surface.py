@@ -16,6 +16,7 @@ def init(
     inner_polygon=None,
     fn_hex_grid=10,
     ref="curved_surface",
+    eps=1e-6,
 ):
     """
     Returns an object that describes a curved 2d surface. The user provides
@@ -64,6 +65,13 @@ def init(
     for k in hex_vertices_valid:
         mes["vertices"][k] = hex_vertices_valid[k]
 
+    # outer_polygon
+    # -------------
+    mes["vertices"] = polygon.remove_first_from_second_when_too_close(
+        first=outer_polygon,
+        second=mes["vertices"],
+        eps=eps,
+    )
     outer_polygon = delaunay.fill_polygon_xy(
         poly=outer_polygon,
         vertices=mes["vertices"],
@@ -74,6 +82,13 @@ def init(
         mes["vertices"][k] = outer_polygon[k]
 
     if inner_polygon is not None:
+        # inner_polygon
+        # -------------
+        mes["vertices"] = polygon.remove_first_from_second_when_too_close(
+            first=inner_polygon,
+            second=mes["vertices"],
+            eps=eps,
+        )
         inner_polygon = delaunay.fill_polygon_xy(
             poly=inner_polygon,
             vertices=mes["vertices"],

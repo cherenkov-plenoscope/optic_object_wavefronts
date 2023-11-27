@@ -43,7 +43,9 @@ def make_faces_xy(vertices, ref):
     return faces
 
 
-def fill_polygon_xy(poly, vertices, ref="poly"):
+def fill_polygon_xy(
+    poly, vertices, ref="poly", eps=1e-6, max_iterations=10 * 1000
+):
     """
     Inserts additional vertives into the polygon 'poly' in order to make
     sure that the points along the polygon are closer to each other than to
@@ -60,6 +62,13 @@ def fill_polygon_xy(poly, vertices, ref="poly"):
         A closed loop polygon
     vertices : dict (str, 3d array)
         Vertices of the mesh (excluding the vertices of the polygon)
+    eps : float
+        Do not fill point into segement of polygon when the new point is
+        closer than 'eps' to either the start or the stop vertex of the
+        segement.
+    max_iterations : int
+        Raise RuntimeError when more than 'max_iterations' are needed to
+        insert new mid-points into the polygon.
 
     Returns
     -------
@@ -67,6 +76,28 @@ def fill_polygon_xy(poly, vertices, ref="poly"):
         Same vertices as in the input poly but with additional vertices in
         between when needed.
     """
+    num_iterations = 0
+    while True:
+        if num_iterations > max_iterations:
+            raise RuntimeError("Did not expect this many iterations.")
+
+        next_poly = _fill_middle_in_polygon_segment_xy(
+            poly=poly,
+            vertices=vertices,
+            ref=ref,
+            eps=eps,
+        )
+
+        if len(next_poly) == len(poly):
+            break
+        else:
+            poly = next_poly
+        num_iterations += 1
+
+    return poly
+
+
+def _fill_middle_in_polygon_segment_xy(poly, vertices, ref="poly", eps=1e-6):
     vxy = np.zeros(shape=(len(vertices), 2), dtype=float)
     vnames = []
     for i, vkey in enumerate(vertices):
@@ -94,6 +125,10 @@ def fill_polygon_xy(poly, vertices, ref="poly"):
         )
         matches = list(matches_start.union(matches_stop))
 
+        # add segment's start point to output in any case
+        iii, outkey = bumb_index(iii=iii, ref=ref)
+        outpoly[outkey] = poly[start_vkey]
+
         inter_match = []
         inter_paras = []
         for vmatch in matches:
@@ -104,19 +139,13 @@ def fill_polygon_xy(poly, vertices, ref="poly"):
         inter_match = np.array(inter_match)
         inter_paras = np.array(inter_paras)
 
-        # sort based on segment parameter
-        sarg = np.argsort(inter_paras)
-        inter_match = inter_match[sarg]
-        inter_paras = inter_paras[sarg]
-
-        iii, outkey = bumb_index(iii=iii, ref=ref)
-        outpoly[outkey] = poly[start_vkey]
-        for i in range(len(inter_match)):
-            interpoint_2d = segment.at(parameter=inter_paras[i])
-            iii, outkey = bumb_index(iii=iii, ref=ref)
-            outpoly[outkey] = np.array(
-                [interpoint_2d[0], interpoint_2d[1], 0.0]
-            )
+        if len(inter_match) > 0:
+            imiddle = np.argmin(np.abs(inter_paras - 0.5 * segment.length))
+            segment_parameter = inter_paras[imiddle]
+            if eps < segment_parameter < segment.length - eps:
+                ivert = segment.at(parameter=segment_parameter)
+                iii, outkey = bumb_index(iii=iii, ref=ref)
+                outpoly[outkey] = np.array([ivert[0], ivert[1], 0.0])
 
     return outpoly
 
