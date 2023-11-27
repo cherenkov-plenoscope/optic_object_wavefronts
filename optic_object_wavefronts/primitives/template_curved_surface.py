@@ -70,6 +70,7 @@ def init(
         ref=determine_polygons_ref(outer_polygon),
     )
     for k in outer_polygon:
+        assert k not in mes["vertices"], "{:s} alread in vertices.".format(k)
         mes["vertices"][k] = outer_polygon[k]
 
     if inner_polygon is not None:
@@ -79,6 +80,7 @@ def init(
             ref=determine_polygons_ref(inner_polygon),
         )
         for k in inner_polygon:
+            assert k not in mes["vertices"], "{:s} alread in vertices.".format(k)
             mes["vertices"][k] = inner_polygon[k]
 
     for k in mes["vertices"]:
