@@ -1,9 +1,10 @@
 import numpy as np
 import os
+import collections
 import scipy
 from scipy import spatial as scipy_spatial
 from . import polygon
-import collections
+from . import geometry
 
 
 def make_faces_xy(vertices, ref):
@@ -81,7 +82,7 @@ def fill_polygon_xy(poly, vertices):
         vstart = poly[start_vkey]
         vstop = poly[stop_key]
 
-        segment = Line(start=vstart[0:2], stop=vstop[0:2])
+        segment = geometry.line.Line(start=vstart[0:2], stop=vstop[0:2])
 
         matches_start = set(
             tree.query_ball_point(x=vstart[0:2], r=segment.length)
@@ -118,27 +119,6 @@ def fill_polygon_xy(poly, vertices):
 
     outpoly[stop_key] = poly[stop_key]
     return outpoly
-
-
-class Line:
-    def __init__(self, start, stop):
-        self.support = start
-        self.length = np.linalg.norm(stop - start)
-        self.direction = (stop - start) / self.length
-
-    def parameter_for_closest_distance_to_point(self, point):
-        d = np.dot(self.direction, point)
-        return d - np.dot(self.support, self.direction)
-
-    def at(self, parameter):
-        return self.support + parameter * self.direction
-
-    def projection_of_point(self, point):
-        parameter = self.parameter_for_closest_distance_to_point(point)
-        if 0 <= parameter <= self.length:
-            return self.at(parameter)
-        else:
-            None
 
 
 def cycle_segment_keys(keys, i):

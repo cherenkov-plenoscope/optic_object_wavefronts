@@ -1,0 +1,22 @@
+import numpy as np
+
+
+class Line:
+    def __init__(self, start, stop):
+        self.support = start
+        self.length = np.linalg.norm(stop - start)
+        self.direction = (stop - start) / self.length
+
+    def parameter_for_closest_distance_to_point(self, point):
+        d = np.dot(self.direction, point)
+        return d - np.dot(self.support, self.direction)
+
+    def at(self, parameter):
+        return self.support + parameter * self.direction
+
+    def projection_of_point(self, point):
+        parameter = self.parameter_for_closest_distance_to_point(point)
+        if 0 <= parameter <= self.length:
+            return self.at(parameter)
+        else:
+            None

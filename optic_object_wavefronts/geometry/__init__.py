@@ -1,6 +1,7 @@
 """
 Collect equations of geometric primitives
 """
+from . import line
 from . import plane
 from . import sphere
 from . import ellipse
