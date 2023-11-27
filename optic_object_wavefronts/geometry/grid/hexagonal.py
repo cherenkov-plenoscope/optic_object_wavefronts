@@ -1,5 +1,5 @@
 import numpy as np
-import os
+import posixpath
 import collections
 from . import template
 from ... import polygon
@@ -20,7 +20,7 @@ def init_from_outer_radius(outer_radius=1.0, ref="hex", fn=10):
             bound_upper = -dA + N
             bound_lower = -dA - N
             if dB <= bound_upper and dB >= bound_lower:
-                vkey = os.path.join(ref, "{:d}_{:d}".format(dA, dB))
+                vkey = posixpath.join(ref, "{:d}_{:d}".format(dA, dB))
                 vertices[vkey] = (dA * HEXA + dB * HEXB) * spacing
     return vertices
 
@@ -97,7 +97,7 @@ def init_voronoi_cells_from_centers(centers, centers_spacing, rot=0.0):
     unit_cell_radius = 0.5 * centers_spacing * (2.0 / np.sqrt(3))
     voronoi_cells = {}
     for key in centers:
-        basename = os.path.basename(key)
+        basename = posixpath.basename(key)
         v_str, w_str = str.split(basename, "_")
         v = int(v_str)
         w = int(w_str)
