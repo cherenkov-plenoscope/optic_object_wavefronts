@@ -1,5 +1,5 @@
 import numpy as np
-import os
+import posixpath
 import collections
 from .. import mesh
 from . import template_cylinder
@@ -21,7 +21,7 @@ def init(
         outer_radius=outer_radius,
         inner_radius=inner_radius,
         curvature_radius=-1.0 * curvature_radius_top,
-        ref=os.path.join(ref, "top"),
+        ref=posixpath.join(ref, "top"),
         fn_polygon=fn_polygon,
         fn_hex_grid=fn_hex_grid,
         rot=rot,
@@ -30,7 +30,7 @@ def init(
         outer_radius=outer_radius,
         inner_radius=inner_radius,
         curvature_radius=-1.0 * curvature_radius_bot,
-        ref=os.path.join(ref, "bot"),
+        ref=posixpath.join(ref, "bot"),
         fn_polygon=fn_polygon,
         fn_hex_grid=fn_hex_grid,
         rot=(2 * np.pi) / (2 * fn_polygon) + rot,
@@ -43,7 +43,7 @@ def init(
         # tmp_v[2] = tmp_v[2] + 0.5 * float(offset)
         lens["vertices"][vkey] = tmp_v
 
-    top_mtl_key = os.path.join(ref, "top")
+    top_mtl_key = posixpath.join(ref, "top")
     lens["materials"][top_mtl_key] = collections.OrderedDict()
     for fkey in top["materials"][top_mtl_key]:
         lens["materials"][top_mtl_key][fkey] = top["materials"][top_mtl_key][
@@ -58,7 +58,7 @@ def init(
         tmp_v[2] = tmp_v[2] - float(offset)
         lens["vertices"][vkey] = tmp_v
 
-    bot_mtl_key = os.path.join(ref, "bot")
+    bot_mtl_key = posixpath.join(ref, "bot")
     lens["materials"][bot_mtl_key] = collections.OrderedDict()
     for fkey in bot["materials"][bot_mtl_key]:
         lens["materials"][bot_mtl_key][fkey] = bot["materials"][bot_mtl_key][
@@ -70,18 +70,18 @@ def init(
 
     lens = template_cylinder.weave_cylinder_faces(
         mesh=lens,
-        vkey_lower=os.path.join(ref, "bot", "outer_bound"),
-        vkey_upper=os.path.join(ref, "top", "outer_bound"),
-        ref=os.path.join(ref, "outer"),
+        vkey_lower=posixpath.join(ref, "bot", "outer_bound"),
+        vkey_upper=posixpath.join(ref, "top", "outer_bound"),
+        ref=posixpath.join(ref, "outer"),
         norm_sign=+1.0,
     )
 
     if inner_radius is not None:
         lens = template_cylinder.weave_cylinder_faces(
             mesh=lens,
-            vkey_lower=os.path.join(ref, "bot", "inner_bound"),
-            vkey_upper=os.path.join(ref, "top", "inner_bound"),
-            ref=os.path.join(ref + "inner"),
+            vkey_lower=posixpath.join(ref, "bot", "inner_bound"),
+            vkey_upper=posixpath.join(ref, "top", "inner_bound"),
+            ref=posixpath.join(ref, "inner"),
             norm_sign=-1.0,
         )
 

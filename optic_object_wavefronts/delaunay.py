@@ -1,5 +1,6 @@
 import numpy as np
 import os
+import posixpath
 import collections
 import scipy
 from scipy import spatial as scipy_spatial
@@ -42,7 +43,7 @@ def make_faces_xy(vertices, ref):
     return faces
 
 
-def fill_polygon_xy(poly, vertices):
+def fill_polygon_xy(poly, vertices, ref="poly"):
     """
     Inserts additional vertives into the polygon 'poly' in order to make
     sure that the points along the polygon are closer to each other than to
@@ -77,6 +78,7 @@ def fill_polygon_xy(poly, vertices):
     outpoly = collections.OrderedDict()
 
     vkeys = list(poly.keys())
+    iii = 0
     for s in range(len(vkeys)):
         start_vkey, stop_key = cycle_segment_keys(vkeys, s)
         vstart = poly[start_vkey]
@@ -107,17 +109,15 @@ def fill_polygon_xy(poly, vertices):
         inter_match = inter_match[sarg]
         inter_paras = inter_paras[sarg]
 
-        outpoly[start_vkey] = poly[start_vkey]
+        iii, outkey = bumb_index(iii=iii, ref=ref)
+        outpoly[outkey] = poly[start_vkey]
         for i in range(len(inter_match)):
-            inter_vkey = start_vkey + "/projection/{:s}".format(
-                vnames[inter_match[i]]
-            )
             interpoint_2d = segment.at(parameter=inter_paras[i])
-            outpoly[inter_vkey] = np.array(
+            iii, outkey = bumb_index(iii=iii, ref=ref)
+            outpoly[outkey] = np.array(
                 [interpoint_2d[0], interpoint_2d[1], 0.0]
             )
 
-    outpoly[stop_key] = poly[stop_key]
     return outpoly
 
 
@@ -132,3 +132,7 @@ def cycle_segment(num, i):
     j = i + 1
     j = j % num
     return i, j
+
+
+def bumb_index(iii, ref):
+    return iii + 1, posixpath.join(ref, "{:06d}".format(iii))

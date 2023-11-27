@@ -1,5 +1,5 @@
 import numpy as np
-import os
+import posixpath
 import collections
 from .. import mesh
 
@@ -20,7 +20,7 @@ def weave_cylinder_faces(mesh, ref, vkey_lower, vkey_upper, norm_sign=1.0):
     assert num_v_lower == num_v_upper
     n = num_v_upper
 
-    side_mtl = os.path.join(ref, "side")
+    side_mtl = posixpath.join(ref, "side")
     mesh["materials"][side_mtl] = collections.OrderedDict()
 
     for ni in range(n):
@@ -29,29 +29,29 @@ def weave_cylinder_faces(mesh, ref, vkey_lower, vkey_upper, norm_sign=1.0):
         if n_b == n:
             n_b = 0
         n_c = int(ni)
-        va_key = os.path.join(vkey_upper, "{:06d}".format(n_a))
+        va_key = posixpath.join(vkey_upper, "{:06d}".format(n_a))
         va = np.array(mesh["vertices"][va_key])
-        vb_key = os.path.join(vkey_upper, "{:06d}".format(n_b))
+        vb_key = posixpath.join(vkey_upper, "{:06d}".format(n_b))
         vb = np.array(mesh["vertices"][vb_key])
-        vc_key = os.path.join(vkey_lower, "{:06d}".format(n_c))
+        vc_key = posixpath.join(vkey_lower, "{:06d}".format(n_c))
         vc = np.array(mesh["vertices"][vc_key])
         va[2] = 0.0
         vb[2] = 0.0
         vc[2] = 0.0
 
-        rst_vna_key = os.path.join(ref, "side", "top", "{:06d}".format(n_a))
+        rst_vna_key = posixpath.join(ref, "side", "top", "{:06d}".format(n_a))
         if rst_vna_key not in mesh["vertex_normals"]:
             mesh["vertex_normals"][rst_vna_key] = (
                 norm_sign * va / np.linalg.norm(va)
             )
 
-        rst_vnb_key = os.path.join(ref, "side", "top", "{:06d}".format(n_b))
+        rst_vnb_key = posixpath.join(ref, "side", "top", "{:06d}".format(n_b))
         if rst_vnb_key not in mesh["vertex_normals"]:
             mesh["vertex_normals"][rst_vnb_key] = (
                 norm_sign * vb / np.linalg.norm(vb)
             )
 
-        rsb_vnc_key = os.path.join(ref, "side", "bot", "{:06d}".format(n_c))
+        rsb_vnc_key = posixpath.join(ref, "side", "bot", "{:06d}".format(n_c))
         if rsb_vnc_key not in mesh["vertex_normals"]:
             mesh["vertex_normals"][rsb_vnc_key] = (
                 norm_sign * vc / np.linalg.norm(vc)
@@ -78,29 +78,29 @@ def weave_cylinder_faces(mesh, ref, vkey_lower, vkey_upper, norm_sign=1.0):
         n_c = int(ni + 1)
         if n_c == n:
             n_c = 0
-        va_key = os.path.join(vkey_lower, "{:06d}".format(n_a))
+        va_key = posixpath.join(vkey_lower, "{:06d}".format(n_a))
         va = np.array(mesh["vertices"][va_key])
-        vb_key = os.path.join(vkey_lower, "{:06d}".format(n_b))
+        vb_key = posixpath.join(vkey_lower, "{:06d}".format(n_b))
         vb = np.array(mesh["vertices"][vb_key])
-        vc_key = os.path.join(vkey_upper, "{:06d}".format(n_c))
+        vc_key = posixpath.join(vkey_upper, "{:06d}".format(n_c))
         vc = np.array(mesh["vertices"][vc_key])
         va[2] = 0.0
         vb[2] = 0.0
         vc[2] = 0.0
 
-        rsb_vna_key = os.path.join(ref, "side", "bot", "{:06d}".format(n_a))
+        rsb_vna_key = posixpath.join(ref, "side", "bot", "{:06d}".format(n_a))
         if rsb_vna_key not in mesh["vertex_normals"]:
             mesh["vertex_normals"][rsb_vna_key] = (
                 norm_sign * va / np.linalg.norm(va)
             )
 
-        rsb_vnb_key = os.path.join(ref, "side", "bot", "{:06d}".format(n_b))
+        rsb_vnb_key = posixpath.join(ref, "side", "bot", "{:06d}".format(n_b))
         if rsb_vnb_key not in mesh["vertex_normals"]:
             mesh["vertex_normals"][rsb_vnb_key] = (
                 norm_sign * vb / np.linalg.norm(vb)
             )
 
-        rst_vnc_key = os.path.join(ref, "side", "top", "{:06d}".format(n_c))
+        rst_vnc_key = posixpath.join(ref, "side", "top", "{:06d}".format(n_c))
         if rst_vnc_key not in mesh["vertex_normals"]:
             mesh["vertex_normals"][rst_vnc_key] = (
                 norm_sign * vc / np.linalg.norm(vc)
@@ -156,18 +156,18 @@ def init(
 
     cyl = weave_cylinder_faces(
         mesh=cyl,
-        vkey_lower=os.path.join(ref, "bot", "outer_bound"),
-        vkey_upper=os.path.join(ref, "top", "outer_bound"),
-        ref=os.path.join(ref, "outer"),
+        vkey_lower=posixpath.join(ref, "bot", "outer_bound"),
+        vkey_upper=posixpath.join(ref, "top", "outer_bound"),
+        ref=posixpath.join(ref, "outer"),
         norm_sign=+1.0,
     )
 
     if weave_inner_polygon:
         cyl = weave_cylinder_faces(
             mesh=cyl,
-            vkey_lower=os.path.join(ref, "bot", "inner_bound"),
-            vkey_upper=os.path.join(ref, "top", "inner_bound"),
-            ref=os.path.join(ref, "inner"),
+            vkey_lower=posixpath.join(ref, "bot", "inner_bound"),
+            vkey_upper=posixpath.join(ref, "top", "inner_bound"),
+            ref=posixpath.join(ref, "inner"),
             norm_sign=-1.0,
         )
 

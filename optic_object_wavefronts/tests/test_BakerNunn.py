@@ -1,6 +1,7 @@
 import optic_object_wavefronts as oow
 import triangle_mesh_io as tmi
 import numpy as np
+import posixpath
 import collections
 
 
@@ -91,44 +92,44 @@ def test_baker_nunn():
 
     # focus-surface
     focus_surface_bound = collections.OrderedDict()
-    focus_surface_bound[("f_srf", 0)] = [
+    focus_surface_bound[posixpath.join("f_srf", "000000")] = [
         focus_surface_width / 2,
         focus_surface_height / 2,
         0.0,
     ]
-    focus_surface_bound[("f_srf", 1)] = [
+    focus_surface_bound[posixpath.join("f_srf", "000001")] = [
         -focus_surface_width / 2,
         focus_surface_height / 2,
         0.0,
     ]
-    focus_surface_bound[("f_srf", 2)] = [
+    focus_surface_bound[posixpath.join("f_srf", "000002")] = [
         -focus_surface_width / 2,
         -focus_surface_height / 2,
         0.0,
     ]
-    focus_surface_bound[("f_srf", 3)] = [
+    focus_surface_bound[posixpath.join("f_srf", "000003")] = [
         focus_surface_width / 2,
         -focus_surface_height / 2,
         0.0,
     ]
 
     focus_shield_bound = collections.OrderedDict()
-    focus_shield_bound[("f_shi", 0)] = [
+    focus_shield_bound[posixpath.join("f_shi", "000000")] = [
         focus_shield_width / 2,
         focus_shield_height / 2,
         0.0,
     ]
-    focus_shield_bound[("f_shi", 1)] = [
+    focus_shield_bound[posixpath.join("f_shi", "000001")] = [
         -focus_shield_width / 2,
         focus_shield_height / 2,
         0.0,
     ]
-    focus_shield_bound[("f_shi", 2)] = [
+    focus_shield_bound[posixpath.join("f_shi", "000002")] = [
         -focus_shield_width / 2,
         -focus_shield_height / 2,
         0.0,
     ]
-    focus_shield_bound[("f_shi", 3)] = [
+    focus_shield_bound[posixpath.join("f_shi", "000003")] = [
         focus_shield_width / 2,
         -focus_shield_height / 2,
         0.0,

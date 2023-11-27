@@ -1,6 +1,6 @@
 from .. import geometry
 from . import spherical_cap
-import os
+import posixpath
 import collections
 
 
@@ -16,7 +16,7 @@ def init(
     outer_polygon = geometry.regular_polygon.make_vertices_xy(
         outer_radius=outer_radius,
         fn=fn_polygon,
-        ref=os.path.join(ref, "outer_bound"),
+        ref=posixpath.join(ref, "outer_bound"),
         rot=rot,
     )
 
@@ -24,7 +24,7 @@ def init(
         inner_polygon = geometry.regular_polygon.make_vertices_xy(
             outer_radius=inner_radius,
             fn=fn_polygon,
-            ref=os.path.join(ref, "inner_bound"),
+            ref=posixpath.join(ref, "inner_bound"),
             rot=rot,
         )
     else:

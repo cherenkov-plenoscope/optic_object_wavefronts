@@ -1,6 +1,6 @@
 from .. import mesh
 import numpy as np
-import os
+import posixpath
 import collections
 
 
@@ -22,7 +22,7 @@ def init(
     height : float
         Height of the pipe.
     """
-    join = os.path.join
+    join = posixpath.join
 
     assert outer_radius > 0
     assert inner_radius > 0

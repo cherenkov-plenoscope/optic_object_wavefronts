@@ -1,7 +1,7 @@
 from .. import mesh
 from .. import geometry
 import numpy as np
-import os
+import posixpath
 import collections
 
 
@@ -25,7 +25,7 @@ def init(
     ref : str
             Key for the material.
     """
-    join = os.path.join
+    join = posixpath.join
     rect = mesh.init()
     rect["vertices"][join(ref, "0")] = 0.5 * np.array([+x_width, +y_width, 0])
     rect["vertices"][join(ref, "1")] = 0.5 * np.array([-x_width, +y_width, 0])

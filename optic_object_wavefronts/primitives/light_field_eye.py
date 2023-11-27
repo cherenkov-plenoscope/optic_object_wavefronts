@@ -3,7 +3,7 @@ from .. import geometry
 from .. import primitives
 from .. import polygon
 import numpy as np
-import os
+import posixpath
 
 
 def make_geometry(
@@ -12,9 +12,9 @@ def make_geometry(
     housing_height,
     lens_curvature_radius,
     lens_fn,
-    photo_sensor_num_on_diagonal,
-    photo_sensor_gap,
-    photo_sensor_plane_distance,
+    photosensor_num_on_diagonal,
+    photosensor_gap,
+    photosensor_plane_distance,
 ):
     """
     Parameters
@@ -29,12 +29,12 @@ def make_geometry(
         Curvature radius of biconvex lens. Same curvature on both sides.
     lens_fn : int
         Resolution of lens.
-    photo_sensor_num_on_diagonal : int
+    photosensor_num_on_diagonal : int
         Number of photo-sensors on the long diagonal insisde the hexagonal
         housing.
-    photo_sensor_gap : float
+    photosensor_gap : float
         Gap between photo-sensors.
-    photo_sensor_plane_distance : float
+    photosensor_plane_distance : float
         Distance from lens'
     ref : str
         Name to reference multiple modules.
@@ -42,12 +42,12 @@ def make_geometry(
     assert housing_outer_radius > 0.0
     assert housing_wall_width > 0.0
     assert housing_height > 0.0
-    assert photo_sensor_plane_distance > 0.0
-    assert housing_height <= photo_sensor_plane_distance
+    assert photosensor_plane_distance > 0.0
+    assert housing_height <= photosensor_plane_distance
 
     assert lens_fn > 0
     assert lens_curvature_radius > 0.0
-    assert photo_sensor_gap >= 0.0
+    assert photosensor_gap >= 0.0
 
     c = {}
     c["housing"] = {}
@@ -61,7 +61,7 @@ def make_geometry(
         [
             0.0,
             0.0,
-            photo_sensor_plane_distance - c["housing"]["height"],
+            photosensor_plane_distance - c["housing"]["height"],
         ]
     )
 
@@ -71,25 +71,25 @@ def make_geometry(
     c["lens"]["fn"] = lens_fn
     c["lens"]["position"] = np.array([0, 0, 0])
 
-    c["photo_sensor"] = {}
-    c["photo_sensor"]["grid"] = {}
-    c["photo_sensor"]["grid"]["gap"] = photo_sensor_gap
-    c["photo_sensor"]["grid"]["num_on_diagonal"] = photo_sensor_num_on_diagonal
-    c["photo_sensor"]["grid"]["distance_to_lens"] = photo_sensor_plane_distance
+    c["photosensor"] = {}
+    c["photosensor"]["grid"] = {}
+    c["photosensor"]["grid"]["gap"] = photosensor_gap
+    c["photosensor"]["grid"]["num_on_diagonal"] = photosensor_num_on_diagonal
+    c["photosensor"]["grid"]["distance_to_lens"] = photosensor_plane_distance
 
-    c["photo_sensor"]["grid"][
+    c["photosensor"]["grid"][
         "spacing"
     ] = geometry.grid.hexagonal.estimate_spacing_for_small_hexagons_in_big_hexagon(
         big_hexagon_outer_radius=c["housing"]["outer_radius_inside"],
-        num_small_hexagons_on_diagonal_of_big_hexagon=c["photo_sensor"][
-            "grid"
-        ]["num_on_diagonal"],
+        num_small_hexagons_on_diagonal_of_big_hexagon=c["photosensor"]["grid"][
+            "num_on_diagonal"
+        ],
     )
 
     grid_positions_xy = geometry.grid.hexagonal.init_from_spacing(
-        spacing=c["photo_sensor"]["grid"]["spacing"],
+        spacing=c["photosensor"]["grid"]["spacing"],
         ref="_",
-        fN=c["photo_sensor"]["grid"]["num_on_diagonal"],
+        fN=c["photosensor"]["grid"]["num_on_diagonal"],
     )
     grid_positions_xy = polygon.rotate_z(grid_positions_xy, 0)
     grid_positions_xy = polygon.get_vertices_inside(
@@ -102,26 +102,26 @@ def make_geometry(
         ),
     )
     for gkey in grid_positions_xy:
-        grid_positions_xy[gkey][2] = c["photo_sensor"]["grid"][
+        grid_positions_xy[gkey][2] = c["photosensor"]["grid"][
             "distance_to_lens"
         ]
-    c["photo_sensor"]["grid"]["positions"] = grid_positions_xy
+    c["photosensor"]["grid"]["positions"] = grid_positions_xy
 
-    c["photo_sensor"]["bound"] = {}
-    c["photo_sensor"]["bound"]["inner_radius"] = (
-        1 / 2 * c["photo_sensor"]["grid"]["spacing"]
+    c["photosensor"]["bound"] = {}
+    c["photosensor"]["bound"]["inner_radius"] = (
+        1 / 2 * c["photosensor"]["grid"]["spacing"]
     )
-    c["photo_sensor"]["bound"]["outer_radius"] = (
-        2 / np.sqrt(3) * c["photo_sensor"]["bound"]["inner_radius"]
+    c["photosensor"]["bound"]["outer_radius"] = (
+        2 / np.sqrt(3) * c["photosensor"]["bound"]["inner_radius"]
     )
 
-    c["photo_sensor"]["body"] = {}
-    c["photo_sensor"]["body"]["inner_radius"] = (
-        c["photo_sensor"]["bound"]["inner_radius"]
-        - 0.5 * c["photo_sensor"]["grid"]["gap"]
+    c["photosensor"]["body"] = {}
+    c["photosensor"]["body"]["inner_radius"] = (
+        c["photosensor"]["bound"]["inner_radius"]
+        - 0.5 * c["photosensor"]["grid"]["gap"]
     )
-    c["photo_sensor"]["body"]["outer_radius"] = (
-        2 / np.sqrt(3) * c["photo_sensor"]["body"]["inner_radius"]
+    c["photosensor"]["body"]["outer_radius"] = (
+        2 / np.sqrt(3) * c["photosensor"]["body"]["inner_radius"]
     )
     return c
 
@@ -130,25 +130,25 @@ def init(
     camera_geometry,
     ref="light_field_sensor_camera_module",
 ):
-    join = os.path.join
+    join = posixpath.join
     cg = camera_geometry
     camera = mesh.init()
 
     # grid for photo-sensors
     # ----------------------
-    for gi, gkey in enumerate(cg["photo_sensor"]["grid"]["positions"]):
-        photo_sensor = primitives.disc.init(
-            outer_radius=cg["photo_sensor"]["body"]["outer_radius"],
+    for gi, gkey in enumerate(cg["photosensor"]["grid"]["positions"]):
+        photosensor = primitives.disc.init(
+            outer_radius=cg["photosensor"]["body"]["outer_radius"],
             fn=6,
             rot=np.pi / 6,
-            ref=join(ref, "photo_sensor_{:06d}".format(gi)),
+            ref=join(ref, "photosensor_{:06d}".format(gi)),
             prevent_many_faces_share_same_vertex=False,
         )
-        photo_sensor = mesh.translate(
-            photo_sensor,
-            cg["photo_sensor"]["grid"]["positions"][gkey],
+        photosensor = mesh.translate(
+            photosensor,
+            cg["photosensor"]["grid"]["positions"][gkey],
         )
-        camera = mesh.merge(camera, photo_sensor)
+        camera = mesh.merge(camera, photosensor)
 
     # lens
     # ----

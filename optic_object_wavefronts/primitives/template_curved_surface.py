@@ -2,8 +2,9 @@ from .. import mesh
 from .. import delaunay
 from .. import geometry
 from .. import polygon
+import posixpath
 import numpy as np
-import os
+import posixpath
 import collections
 
 
@@ -46,7 +47,7 @@ def init(
     hex_vertices = geometry.grid.hexagonal.init_from_outer_radius(
         outer_radius=outer_radius_xy * 1.5,
         fn=fn_hex_grid,
-        ref=os.path.join(ref, "grid"),
+        ref=posixpath.join(ref, "grid"),
     )
 
     hex_vertices_valid = polygon.get_vertices_inside(
@@ -66,14 +67,17 @@ def init(
     outer_polygon = delaunay.fill_polygon_xy(
         poly=outer_polygon,
         vertices=mes["vertices"],
+        ref=determine_polygons_ref(outer_polygon),
     )
     for k in outer_polygon:
         mes["vertices"][k] = outer_polygon[k]
-    inner_polygon = delaunay.fill_polygon_xy(
-        poly=inner_polygon,
-        vertices=mes["vertices"],
-    )
+
     if inner_polygon is not None:
+        inner_polygon = delaunay.fill_polygon_xy(
+            poly=inner_polygon,
+            vertices=mes["vertices"],
+            ref=determine_polygons_ref(inner_polygon),
+        )
         for k in inner_polygon:
             mes["vertices"][k] = inner_polygon[k]
 
@@ -116,3 +120,10 @@ def init(
             mes["materials"][mtl_key].pop(fkey)
 
     return mesh.remove_unused_vertices_and_vertex_normals(mesh=mes)
+
+
+def determine_polygons_ref(poly):
+    dirnames = [posixpath.dirname(p) for p in poly]
+    dirnames = list(set(dirnames))
+    assert len(dirnames) == 1
+    return dirnames[0]

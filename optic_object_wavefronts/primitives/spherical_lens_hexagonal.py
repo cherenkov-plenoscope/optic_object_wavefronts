@@ -1,5 +1,5 @@
 import numpy as np
-import os
+import posixpath
 import collections
 from .. import mesh
 from . import cylinder
@@ -24,13 +24,13 @@ def init(
     top = spherical_cap_hexagonal.init(
         outer_radius=outer_radius,
         curvature_radius=-1.0 * curvature_radius,
-        ref=os.path.join(ref, "top"),
+        ref=posixpath.join(ref, "top"),
         fn=fn,
     )
     bot = spherical_cap_hexagonal.init(
         outer_radius=outer_radius,
         curvature_radius=1.0 * curvature_radius,
-        ref=os.path.join(ref, "bot"),
+        ref=posixpath.join(ref, "bot"),
         fn=fn,
     )
 
@@ -42,7 +42,7 @@ def init(
         tmp_v = np.array(top["vertices"][vkey])
         tmp_v[2] = tmp_v[2] + float(cap_height)
         lens["vertices"][vkey] = tmp_v
-    top_mtl_key = os.path.join(ref, "top")
+    top_mtl_key = posixpath.join(ref, "top")
     lens["materials"][top_mtl_key] = collections.OrderedDict()
     for fkey in top["materials"][top_mtl_key]:
         lens["materials"][top_mtl_key][fkey] = top["materials"][top_mtl_key][
@@ -55,7 +55,7 @@ def init(
         tmp_v = np.array(bot["vertices"][vkey])
         tmp_v[2] = tmp_v[2] - float(cap_height)
         lens["vertices"][vkey] = tmp_v
-    bot_mtl_key = os.path.join(ref, "bot")
+    bot_mtl_key = posixpath.join(ref, "bot")
     lens["materials"][bot_mtl_key] = collections.OrderedDict()
     for fkey in bot["materials"][bot_mtl_key]:
         lens["materials"][bot_mtl_key][fkey] = bot["materials"][bot_mtl_key][
@@ -70,7 +70,7 @@ def init(
         mesh=lens,
         outer_radius=outer_radius,
         margin_width_on_edge=0.1 * hexagonal_grid_spacing,
-        ref=os.path.join(ref, "side"),
+        ref=posixpath.join(ref, "side"),
     )
 
     return lens

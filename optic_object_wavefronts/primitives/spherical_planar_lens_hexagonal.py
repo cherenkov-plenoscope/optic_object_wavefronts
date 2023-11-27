@@ -2,7 +2,7 @@ from . import spherical_cap_hexagonal
 from . import disc
 from .. import mesh
 import numpy as np
-import os
+import posixpath
 import collections
 
 
@@ -13,7 +13,7 @@ def init(
     fn=10,
     ref="spherical_planar_lens_hexagonal",
 ):
-    join = os.path.join
+    join = posixpath.join
     front = spherical_cap_hexagonal.init(
         outer_radius=outer_radius,
         curvature_radius=curvature_radius,
@@ -45,7 +45,7 @@ def init(
         ref=join(ref, "side"),
     )
 
-    mtl_side_key = os.path.join(ref, "side")
+    mtl_side_key = posixpath.join(ref, "side")
     mtl_side = facet["materials"][mtl_side_key]
     new_mtl_side = collections.OrderedDict()
     for fkey in mtl_side:

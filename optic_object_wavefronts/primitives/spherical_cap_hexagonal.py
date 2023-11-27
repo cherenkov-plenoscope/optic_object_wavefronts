@@ -3,7 +3,7 @@ from .. import delaunay
 from .. import geometry
 import copy
 import numpy as np
-import os
+import posixpath
 import collections
 
 
@@ -11,7 +11,7 @@ def init(outer_radius, curvature_radius, fn=10, ref="spherical_cap_hexagonal"):
     cap = mesh.init()
 
     cap["vertices"] = geometry.grid.hexagonal.init_from_outer_radius(
-        outer_radius=outer_radius, fn=fn, ref=os.path.join(ref, "inner")
+        outer_radius=outer_radius, fn=fn, ref=posixpath.join(ref, "inner")
     )
 
     # elevate z-axis
@@ -93,7 +93,7 @@ def weave_hexagon_edges(mesh, outer_radius, margin_width_on_edge, ref):
         i_normal = np.array(
             [np.cos(-phi + rot_perp), np.sin(-phi + rot_perp), 0.0]
         )
-        i_vnkey = os.path.join(ref, "{:06d}".format(irotz))
+        i_vnkey = posixpath.join(ref, "{:06d}".format(irotz))
 
         mesh["vertex_normals"][i_vnkey] = i_normal
 

@@ -3,7 +3,7 @@ from . import disc
 from . import template_cylinder
 import numpy as np
 import collections
-import os
+import posixpath
 
 
 def init(
@@ -34,13 +34,13 @@ def init(
     """
     top = disc.init(
         outer_radius=outer_radius,
-        ref=os.path.join(ref, "top"),
+        ref=posixpath.join(ref, "top"),
         fn=fn,
         rot=rot,
     )
     bot = disc.init(
         outer_radius=outer_radius,
-        ref=os.path.join(ref, "bot"),
+        ref=posixpath.join(ref, "bot"),
         fn=fn,
         rot=(2 * np.pi) / (2 * fn) + rot,
     )
@@ -54,7 +54,7 @@ def init(
     for vnkey in top["vertex_normals"]:
         cyl["vertex_normals"][vnkey] = np.array([0, 0, 1])
 
-    mtl_top = os.path.join(ref, "top")
+    mtl_top = posixpath.join(ref, "top")
     cyl["materials"][mtl_top] = collections.OrderedDict()
     for fkey in top["materials"][mtl_top]:
         cyl["materials"][mtl_top][fkey] = top["materials"][mtl_top][fkey]
@@ -64,16 +64,16 @@ def init(
     for vnkey in bot["vertex_normals"]:
         cyl["vertex_normals"][vnkey] = np.array([0, 0, -1])
 
-    mtl_bot = os.path.join(ref, "bot")
+    mtl_bot = posixpath.join(ref, "bot")
     cyl["materials"][mtl_bot] = collections.OrderedDict()
     for fkey in bot["materials"][mtl_bot]:
         cyl["materials"][mtl_bot][fkey] = bot["materials"][mtl_bot][fkey]
 
     cyl = template_cylinder.weave_cylinder_faces(
         mesh=cyl,
-        vkey_lower=os.path.join(ref, "bot", "outer_bound"),
-        vkey_upper=os.path.join(ref, "top", "outer_bound"),
-        ref=os.path.join(ref, "outer"),
+        vkey_lower=posixpath.join(ref, "bot", "outer_bound"),
+        vkey_upper=posixpath.join(ref, "top", "outer_bound"),
+        ref=posixpath.join(ref, "outer"),
     )
 
     return cyl

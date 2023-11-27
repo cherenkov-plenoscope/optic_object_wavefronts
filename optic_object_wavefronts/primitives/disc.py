@@ -2,7 +2,7 @@ from .. import mesh
 from .. import geometry
 from .. import delaunay
 import numpy as np
-import os
+import posixpath
 import collections
 
 
@@ -38,7 +38,7 @@ def init(
     disc = mesh.init()
     disc["vertices"] = geometry.regular_polygon.make_vertices_xy(
         outer_radius=outer_radius,
-        ref=os.path.join(ref, "outer_bound"),
+        ref=posixpath.join(ref, "outer_bound"),
         fn=fn,
         rot=rot,
     )
@@ -50,20 +50,22 @@ def init(
         while next_fn >= 6:
             inner_vertices = geometry.regular_polygon.make_vertices_xy(
                 outer_radius=next_radius,
-                ref=os.path.join(ref, "aux"),
+                ref=posixpath.join(ref, "aux"),
                 fn=next_fn,
                 rot=rot,
             )
 
             for inner_vkey in inner_vertices:
-                _vkey = os.path.join(ref, "aux", "{:06d}".format(v_inner_idx))
+                _vkey = posixpath.join(
+                    ref, "aux", "{:06d}".format(v_inner_idx)
+                )
                 disc["vertices"][_vkey] = inner_vertices[inner_vkey]
                 v_inner_idx += 1
 
             next_radius = 0.9 * next_radius
             next_fn = int(np.round(next_fn / 3))
 
-    vnkey = os.path.join(ref, "0")
+    vnkey = posixpath.join(ref, "0")
     disc["vertex_normals"][vnkey] = np.array([0.0, 0.0, 1.0])
 
     delfaces = delaunay.make_faces_xy(vertices=disc["vertices"], ref="")
