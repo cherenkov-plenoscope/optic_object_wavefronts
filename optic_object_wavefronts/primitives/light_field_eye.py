@@ -127,11 +127,11 @@ def make_geometry(
 
 
 def init(
-    camera_geometry,
-    ref="light_field_sensor_camera_module",
+    geometry,
+    ref="eye",
 ):
     join = posixpath.join
-    cg = camera_geometry
+    cg = geometry
     camera = mesh.init()
 
     # grid for photo-sensors
