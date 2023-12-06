@@ -17,6 +17,7 @@ def init(
     fn_hex_grid=10,
     ref="curved_surface",
     eps=1e-6,
+    vs_hex_grid=None,
 ):
     """
     Returns an object that describes a curved 2d surface. The user provides
@@ -36,18 +37,31 @@ def init(
     outer_polygon : 2D-polygon-dict
             The inner bound of the surface.
     fn_hex_grid : int
-            Density of hexagonal grid in the surface.
+            Number of vertices along the radius in grid. Must be None when
+            vs_hex_grid is used instead.
+    vs_hex_grid : float (mutual excludes fn_hex_grid)
+            Spacing of vertices in the grid.
     ref : string
             The name of the surface.
     """
     outer_limits = polygon.limits(outer_polygon)
-    outer_radius_xy = np.max(
+    safe_outer_radius_xy = 1.5 * np.max(
         [np.max(np.abs(outer_limits[0])), np.max(np.abs(outer_limits[1]))]
     )
 
+    if vs_hex_grid is None:
+        assert fn_hex_grid is not None
+        _outer_radius = safe_outer_radius_xy
+        _fn_hex_grid = fn_hex_grid
+    else:
+        assert vs_hex_grid > 0.0
+        assert fn_hex_grid is None
+        _fn_hex_grid = np.ceil(safe_outer_radius_xy / vs_hex_grid)
+        _outer_radius = vs_hex_grid * _fn_hex_grid
+
     hex_vertices = geometry.grid.hexagonal.init_from_outer_radius(
-        outer_radius=outer_radius_xy * 1.5,
-        fn=fn_hex_grid,
+        outer_radius=_outer_radius,
+        fn=_fn_hex_grid,
         ref=posixpath.join(ref, "grid"),
     )
 
