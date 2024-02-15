@@ -26,10 +26,8 @@ setuptools.setup(
         "optic_object_wavefronts",
         "optic_object_wavefronts.optics",
         "optic_object_wavefronts.primitives",
-        "optic_object_wavefronts.groups",
         "optic_object_wavefronts.geometry",
         "optic_object_wavefronts.geometry.grid",
-        "optic_object_wavefronts.materials",
     ],
     package_data={
         "optic_object_wavefronts": [
