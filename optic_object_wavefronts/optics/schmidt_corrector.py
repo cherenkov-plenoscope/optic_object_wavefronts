@@ -29,6 +29,9 @@ def init_config(
     mirror_radius_of_curvature_R=-800,
     relative_focus_delta=1.0,
 ):
+    """
+    cite: sacek2024telescope
+    """
     assert mirror_radius_of_curvature_R < 0.0
     assert corrector_aperture_radius_d > 0.0
     assert 0.0 < relative_focus_delta <= 2.0
