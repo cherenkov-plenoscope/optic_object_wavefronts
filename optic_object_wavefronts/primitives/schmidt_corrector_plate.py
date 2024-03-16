@@ -10,23 +10,22 @@ from . import schmidt_corrector_surface
 def init(
     outer_polygon,
     inner_polygon,
-    schmidt_corrector,
+    schmidt_corrector_curvature_config,
     offset,
     fn_hex_grid,
     ref="schmidt_corrector_plate",
-    inner_radius=None,
 ):
     top = schmidt_corrector_surface.init(
         outer_polygon=outer_polygon,
         schmidt_corrector_curvature_config=schmidt_corrector_curvature_config,
         inner_polygon=inner_polygon,
         fn_hex_grid=fn_hex_grid,
-        ref=posixpath.join(ref, "to_mirror"),
+        ref=posixpath.join(ref, "top"),
     )
     bot = plane.init(
         outer_polygon=outer_polygon,
         inner_polygon=inner_polygon,
-        ref=posixpath.join(ref, "to_object"),
+        ref=posixpath.join(ref, "bot"),
         fn_hex_grid=fn_hex_grid,
     )
 
@@ -34,7 +33,6 @@ def init(
 
     for vkey in top["vertices"]:
         tmp_v = np.array(top["vertices"][vkey])
-        # tmp_v[2] = tmp_v[2] + 0.5 * float(offset)
         lens["vertices"][vkey] = tmp_v
 
     top_mtl_key = posixpath.join(ref, "top")
@@ -70,11 +68,11 @@ def init(
         norm_sign=+1.0,
     )
 
-    if inner_radius is not None:
+    if inner_polygon is not None:
         lens = template_cylinder.weave_cylinder_faces(
             mesh=lens,
-            vkey_lower=posixpath.join(ref, "bot", "inner_bound"),
-            vkey_upper=posixpath.join(ref, "top", "inner_bound"),
+            vkey_lower=posixpath.join(ref, "to_object", "inner_bound"),
+            vkey_upper=posixpath.join(ref, "to_mirror", "inner_bound"),
             ref=posixpath.join(ref, "inner"),
             norm_sign=-1.0,
         )
