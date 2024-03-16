@@ -9,3 +9,4 @@ from . import parabola
 from . import regular_polygon
 from . import grid
 from . import schwarzschild_couder
+from . import schmidt_corrector

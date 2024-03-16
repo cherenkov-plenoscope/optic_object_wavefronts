@@ -1,6 +1,7 @@
 from . import template_curved_surface
 from . import template_cylinder
 from . import disc
+from . import plane
 from . import cylinder
 from . import spherical_cap
 from . import spherical_cap_regular
@@ -13,3 +14,5 @@ from . import schwarzschild_couder_cap
 from . import pipe_hexagonal
 from . import rectangle
 from . import light_field_eye
+from . import schmidt_corrector_surface
+from . import schmidt_corrector_plate
