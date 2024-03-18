@@ -4,8 +4,8 @@ from .. import geometry
 from .. import polygon
 import posixpath
 import numpy as np
-import posixpath
 import collections
+import copy
 
 
 def init(
@@ -18,6 +18,7 @@ def init(
     ref="curved_surface",
     eps=1e-6,
     vs_hex_grid=None,
+    fill_concave=False,
 ):
     """
     Returns an object that describes a curved 2d surface. The user provides
@@ -34,7 +35,7 @@ def init(
     curvature_surface_normal_function : function
             Takes arguments x, y, and **curvature_config.
             Is expected to return the surface-normal.
-    outer_polygon : 2D-polygon-dict
+    inner_polygon : 2D-polygon-dict
             The inner bound of the surface.
     fn_hex_grid : int
             Number of vertices along the radius in grid. Must be None when
@@ -81,38 +82,38 @@ def init(
 
     # outer_polygon
     # -------------
-    mes["vertices"] = polygon.remove_first_from_second_when_too_close(
-        first=outer_polygon,
-        second=mes["vertices"],
-        eps=eps,
-    )
-    outer_polygon = delaunay.fill_polygon_xy(
-        poly=outer_polygon,
-        vertices=mes["vertices"],
-        ref=determine_polygons_ref(outer_polygon),
-    )
+    if fill_concave:
+        mes["vertices"] = polygon.remove_first_from_second_when_too_close(
+            first=outer_polygon,
+            second=mes["vertices"],
+            eps=eps,
+        )
+        outer_polygon = delaunay.fill_polygon_xy(
+            poly=outer_polygon,
+            vertices=mes["vertices"],
+            ref=determine_polygons_ref(outer_polygon),
+        )
     for k in outer_polygon:
-        assert k not in mes["vertices"], "{:s} alread in vertices.".format(k)
-        mes["vertices"][k] = outer_polygon[k]
+        vkey = posixpath.join(ref, k)
+        mes["vertices"][vkey] = copy.deepcopy(outer_polygon[k])
 
     if inner_polygon is not None:
         # inner_polygon
         # -------------
-        mes["vertices"] = polygon.remove_first_from_second_when_too_close(
-            first=inner_polygon,
-            second=mes["vertices"],
-            eps=eps,
-        )
-        inner_polygon = delaunay.fill_polygon_xy(
-            poly=inner_polygon,
-            vertices=mes["vertices"],
-            ref=determine_polygons_ref(inner_polygon),
-        )
-        for k in inner_polygon:
-            assert k not in mes["vertices"], "{:s} alread in vertices.".format(
-                k
+        if fill_concave:
+            mes["vertices"] = polygon.remove_first_from_second_when_too_close(
+                first=inner_polygon,
+                second=mes["vertices"],
+                eps=eps,
             )
-            mes["vertices"][k] = inner_polygon[k]
+            inner_polygon = delaunay.fill_polygon_xy(
+                poly=inner_polygon,
+                vertices=mes["vertices"],
+                ref=determine_polygons_ref(inner_polygon),
+            )
+        for k in inner_polygon:
+            vkey = posixpath.join(ref, k)
+            mes["vertices"][vkey] = copy.deepcopy(inner_polygon[k])
 
     for k in mes["vertices"]:
         mes["vertices"][k][2] = curvature_height_function(

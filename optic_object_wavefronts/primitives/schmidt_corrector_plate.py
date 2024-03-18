@@ -14,19 +14,22 @@ def init(
     offset,
     fn_hex_grid,
     ref="schmidt_corrector_plate",
+    fill_concave=False,
 ):
     top = schmidt_corrector_surface.init(
         outer_polygon=outer_polygon,
-        schmidt_corrector_curvature_config=schmidt_corrector_curvature_config,
         inner_polygon=inner_polygon,
+        schmidt_corrector_curvature_config=schmidt_corrector_curvature_config,
         fn_hex_grid=fn_hex_grid,
         ref=posixpath.join(ref, "top"),
+        fill_concave=fill_concave,
     )
     bot = plane.init(
         outer_polygon=outer_polygon,
         inner_polygon=inner_polygon,
         ref=posixpath.join(ref, "bot"),
         fn_hex_grid=fn_hex_grid,
+        fill_concave=fill_concave,
     )
 
     lens = mesh.init()
@@ -71,8 +74,8 @@ def init(
     if inner_polygon is not None:
         lens = template_cylinder.weave_cylinder_faces(
             mesh=lens,
-            vkey_lower=posixpath.join(ref, "to_object", "inner_bound"),
-            vkey_upper=posixpath.join(ref, "to_mirror", "inner_bound"),
+            vkey_lower=posixpath.join(ref, "bot", "inner_bound"),
+            vkey_upper=posixpath.join(ref, "top", "inner_bound"),
             ref=posixpath.join(ref, "inner"),
             norm_sign=-1.0,
         )

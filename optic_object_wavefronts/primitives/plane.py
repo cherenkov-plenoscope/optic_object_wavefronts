@@ -8,6 +8,7 @@ def init(
     inner_polygon=None,
     fn_hex_grid=10,
     ref="plane",
+    fill_concave=False,
 ):
     return template_curved_surface.init(
         outer_polygon=outer_polygon,
@@ -17,4 +18,5 @@ def init(
         inner_polygon=inner_polygon,
         fn_hex_grid=fn_hex_grid,
         ref=ref,
+        fill_concave=fill_concave,
     )

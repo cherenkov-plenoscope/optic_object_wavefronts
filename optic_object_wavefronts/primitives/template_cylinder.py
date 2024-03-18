@@ -20,7 +20,7 @@ def weave_cylinder_faces(mesh, ref, vkey_lower, vkey_upper, norm_sign=1.0):
     assert num_v_lower == num_v_upper
     n = num_v_upper
 
-    side_mtl = posixpath.join(ref, "side")
+    side_mtl = ref
     mesh["materials"][side_mtl] = collections.OrderedDict()
 
     for ni in range(n):
@@ -39,19 +39,19 @@ def weave_cylinder_faces(mesh, ref, vkey_lower, vkey_upper, norm_sign=1.0):
         vb[2] = 0.0
         vc[2] = 0.0
 
-        rst_vna_key = posixpath.join(ref, "side", "top", "{:06d}".format(n_a))
+        rst_vna_key = posixpath.join(ref, "top", "{:06d}".format(n_a))
         if rst_vna_key not in mesh["vertex_normals"]:
             mesh["vertex_normals"][rst_vna_key] = (
                 norm_sign * va / np.linalg.norm(va)
             )
 
-        rst_vnb_key = posixpath.join(ref, "side", "top", "{:06d}".format(n_b))
+        rst_vnb_key = posixpath.join(ref, "top", "{:06d}".format(n_b))
         if rst_vnb_key not in mesh["vertex_normals"]:
             mesh["vertex_normals"][rst_vnb_key] = (
                 norm_sign * vb / np.linalg.norm(vb)
             )
 
-        rsb_vnc_key = posixpath.join(ref, "side", "bot", "{:06d}".format(n_c))
+        rsb_vnc_key = posixpath.join(ref, "bot", "{:06d}".format(n_c))
         if rsb_vnc_key not in mesh["vertex_normals"]:
             mesh["vertex_normals"][rsb_vnc_key] = (
                 norm_sign * vc / np.linalg.norm(vc)
@@ -88,19 +88,19 @@ def weave_cylinder_faces(mesh, ref, vkey_lower, vkey_upper, norm_sign=1.0):
         vb[2] = 0.0
         vc[2] = 0.0
 
-        rsb_vna_key = posixpath.join(ref, "side", "bot", "{:06d}".format(n_a))
+        rsb_vna_key = posixpath.join(ref, "bot", "{:06d}".format(n_a))
         if rsb_vna_key not in mesh["vertex_normals"]:
             mesh["vertex_normals"][rsb_vna_key] = (
                 norm_sign * va / np.linalg.norm(va)
             )
 
-        rsb_vnb_key = posixpath.join(ref, "side", "bot", "{:06d}".format(n_b))
+        rsb_vnb_key = posixpath.join(ref, "bot", "{:06d}".format(n_b))
         if rsb_vnb_key not in mesh["vertex_normals"]:
             mesh["vertex_normals"][rsb_vnb_key] = (
                 norm_sign * vb / np.linalg.norm(vb)
             )
 
-        rst_vnc_key = posixpath.join(ref, "side", "top", "{:06d}".format(n_c))
+        rst_vnc_key = posixpath.join(ref, "top", "{:06d}".format(n_c))
         if rst_vnc_key not in mesh["vertex_normals"]:
             mesh["vertex_normals"][rst_vnc_key] = (
                 norm_sign * vc / np.linalg.norm(vc)
