@@ -11,6 +11,15 @@ Use common computer-aided-design for all easy, non optical components where surf
 But when surface-normals matter, use this library to creatre meshes with accurate vertex-normals.
 
 
+*******
+Install
+*******
+
+.. code-block:: bash
+
+    pip install optic-object-wavefronts
+
+
 **********
 Primitives
 **********
