@@ -77,7 +77,7 @@ def estimate_spacing_for_small_hexagons_in_big_hexagon(
     return spacing
 
 
-def init_voronoi_cells_from_centers(centers, centers_spacing, rot=0.0):
+def init_voronoi_cells_from_centers(centers, centers_spacing, rot=0.0, return_edges=False):
     """
     Estimate the voronoi-cells of a hexagonal grid.
 
@@ -96,6 +96,8 @@ def init_voronoi_cells_from_centers(centers, centers_spacing, rot=0.0):
     rot += 2.0 * np.pi * 1 / 12
     unit_cell_radius = 0.5 * centers_spacing * (2.0 / np.sqrt(3))
     voronoi_cells = {}
+    edges = {}
+
     for key in centers:
         basename = posixpath.basename(key)
         v_str, w_str = str.split(basename, "_")
@@ -127,6 +129,7 @@ def init_voronoi_cells_from_centers(centers, centers_spacing, rot=0.0):
                                       \
                                        \
         """
+        edges[key] = []
         for h in np.linspace(0, 5, 6):
             if h == 0:
                 vkey = "{:d}_{:d}_{:s}".format(v, w, "A")
@@ -143,6 +146,8 @@ def init_voronoi_cells_from_centers(centers, centers_spacing, rot=0.0):
             else:
                 raise RuntimeError("Expected six corners.")
 
+            edges[key].append(vkey)
+
             if vkey in voronoi_cells:
                 continue
             else:
@@ -155,7 +160,11 @@ def init_voronoi_cells_from_centers(centers, centers_spacing, rot=0.0):
                     ]
                 )
                 voronoi_cells[vkey] = vertex
-    return voronoi_cells
+
+    if return_edges:
+        return voronoi_cells, edges
+    else:
+        voronoi_cells
 
 
 def find_hull_of_voronoi_cells(voronoi_cells, centers, centers_spacing):
