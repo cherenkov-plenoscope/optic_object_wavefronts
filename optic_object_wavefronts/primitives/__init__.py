@@ -16,3 +16,5 @@ from . import rectangle
 from . import light_field_eye
 from . import schmidt_corrector_surface
 from . import schmidt_corrector_plate
+from . import parabolic_cap
+from . import parabolic_cap_regular
