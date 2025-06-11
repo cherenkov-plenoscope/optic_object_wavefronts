@@ -7,9 +7,7 @@ from . import spherical_cap_hexagonal
 
 
 def estimate_height_of_cap(curvature_radius, outer_radius):
-    return curvature_radius - np.sqrt(
-        curvature_radius**2 - outer_radius**2
-    )
+    return curvature_radius - np.sqrt(curvature_radius**2 - outer_radius**2)
 
 
 def init(
