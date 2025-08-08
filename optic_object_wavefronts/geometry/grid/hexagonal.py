@@ -77,7 +77,9 @@ def estimate_spacing_for_small_hexagons_in_big_hexagon(
     return spacing
 
 
-def init_voronoi_cells_from_centers(centers, centers_spacing, rot=0.0, return_edges=False):
+def init_voronoi_cells_from_centers(
+    centers, centers_spacing, rot=0.0, return_edges=False
+):
     """
     Estimate the voronoi-cells of a hexagonal grid.
 

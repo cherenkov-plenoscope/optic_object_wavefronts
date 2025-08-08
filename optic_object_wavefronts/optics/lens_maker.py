@@ -2,6 +2,7 @@
 The lens-maker-equation for a bi-convex, lens with equal
 curvature-radii on both caps.
 """
+
 import numpy as np
 
 

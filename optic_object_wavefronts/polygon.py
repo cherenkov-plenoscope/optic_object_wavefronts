@@ -2,6 +2,7 @@
 Polygons here are an ordered collection of vertices which are addressed
 by keys in an ordered.dict.
 """
+
 import numpy as np
 import shapely
 import collections
