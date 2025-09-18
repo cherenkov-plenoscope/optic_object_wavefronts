@@ -38,7 +38,7 @@ setuptools.setup(
     install_requires=[
         "shapely",
         "scipy",
-        "triangle_mesh_io",
+        "triangle_mesh_io>=0.1.3",
         "json-numpy-sebastian-achim-mueller>=0.1.1",
     ],
     classifiers=[
